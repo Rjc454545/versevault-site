@@ -1,0 +1,1868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VerseVault - Faith-Based Cognitive Wellness | Building On The Faith Ministry</title>
+    <meta name="description" content="Strengthen your mind and spirit with Scripture-based cognitive exercises. Designed for seniors, caregivers, and those facing memory challenges.">
+    
+    <!-- Stripe Integration -->
+    <script src="https://js.stripe.com/v3/"></script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Header Styles */
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            border: 4px solid #FF8C00;
+            box-shadow: 0 0 0 4px #FFD700;
+        }
+        
+        .header h1 {
+            color: #764ba2;
+            font-size: 48px;
+            margin-bottom: 10px;
+        }
+        
+        .scripture-verse {
+            font-style: italic;
+            color: #666;
+            font-size: 18px;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #FFD700;
+        }
+        
+        .language-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            border: 2px solid #FF8C00;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        /* Welcome/Disclaimer Modal */
+        .welcome-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            padding: 20px;
+        }
+        
+        .welcome-modal {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 6px solid #FF8C00;
+            box-shadow: 0 0 0 6px #FFD700, 0 20px 60px rgba(0,0,0,0.5);
+        }
+        
+        .welcome-modal h2 {
+            color: #764ba2;
+            font-size: 36px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .welcome-modal h3 {
+            color: #FF8C00;
+            font-size: 24px;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            border-bottom: 3px solid #FFD700;
+            padding-bottom: 10px;
+        }
+        
+        .welcome-modal p {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .welcome-modal ul {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .welcome-modal li {
+            font-size: 16px;
+            line-height: 1.8;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .benefits-list {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #FFD700;
+            margin: 20px 0;
+        }
+        
+        .disclaimer-box {
+            background: #fff3cd;
+            border: 3px solid #ff9966;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        
+        .disclaimer-box strong {
+            color: #cc0000;
+            font-size: 18px;
+        }
+        
+        .acceptance-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 30px 0;
+            padding: 20px;
+            background: #e8f5e9;
+            border-radius: 10px;
+            border: 3px solid #4caf50;
+        }
+        
+        .acceptance-checkbox input[type="checkbox"] {
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+        }
+        
+        .acceptance-checkbox label {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            cursor: pointer;
+        }
+        
+        .accept-btn {
+            width: 100%;
+            padding: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            cursor: not-allowed;
+            opacity: 0.5;
+            transition: all 0.3s;
+        }
+        
+        .accept-btn.enabled {
+            cursor: pointer;
+            opacity: 1;
+            border: 4px solid #FFD700;
+        }
+        
+        .accept-btn.enabled:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(118, 75, 162, 0.4);
+        }
+        
+        /* Trial Banner */
+        .trial-banner {
+            background: linear-gradient(135deg, #ff9966 0%, #ff5e62 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            border: 4px solid #FFD700;
+        }
+        
+        /* Card Styles */
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            border: 4px solid #FF8C00;
+            box-shadow: 0 0 0 4px #FFD700, 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        /* Exercise Grid */
+        .exercise-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .exercise-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 4px solid #FF8C00;
+            box-shadow: 0 0 0 4px #FFD700;
+        }
+        
+        .exercise-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 0 0 4px #FFD700, 0 15px 35px rgba(0,0,0,0.3);
+        }
+        
+        .exercise-card.locked {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        
+        .exercise-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+        }
+        
+        .exercise-title {
+            font-size: 22px;
+            font-weight: bold;
+            color: #764ba2;
+            margin-bottom: 10px;
+        }
+        
+        .exercise-count {
+            color: #666;
+            font-size: 16px;
+        }
+        
+        /* Button Styles */
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 3px solid transparent;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #FFD700;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #333;
+            border-color: #FF8C00;
+        }
+        
+        .btn-warning {
+            background: #FF8C00;
+            color: white;
+            border-color: #FFD700;
+        }
+        
+        .btn-success {
+            background: #4caf50;
+            color: white;
+            border-color: #FFD700;
+        }
+        
+        /* Input Styles */
+        input, select {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 3px solid #ddd;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        /* Progress Styles */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            border: 4px solid #FF8C00;
+            box-shadow: 0 0 0 4px #FFD700;
+        }
+        
+        .stat-value {
+            font-size: 48px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .stat-label {
+            font-size: 18px;
+            color: #666;
+            font-weight: bold;
+        }
+        
+        /* Activity Screen */
+        .activity-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            border: 4px solid #FF8C00;
+            box-shadow: 0 0 0 4px #FFD700;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .activity-question {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            line-height: 1.6;
+        }
+        
+        .activity-input {
+            width: 100%;
+            padding: 20px;
+            font-size: 24px;
+            text-align: center;
+            border: 3px solid #667eea;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .reference {
+            text-align: center;
+            color: #666;
+            font-style: italic;
+            margin-top: 15px;
+        }
+        
+        .difficulty-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .difficulty-beginner { background: #4caf50; color: white; }
+        .difficulty-intermediate { background: #FF8C00; color: white; }
+        .difficulty-expert { background: #e91e63; color: white; }
+        
+        .feedback {
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 3px solid #4caf50;
+        }
+        
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 3px solid #e91e63;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 { font-size: 32px; }
+            .exercise-grid { grid-template-columns: 1fr; }
+            .modal-content { margin: 20px; padding: 20px; }
+            .language-selector { position: static; margin: 10px auto; display: block; }
+        }
+        
+        .hidden { display: none; }
+        
+        /* Admin Panel */
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .admin-tab {
+            padding: 12px 24px;
+            background: #f0f0f0;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .admin-tab.active {
+            background: #667eea;
+            color: white;
+            border-color: #FFD700;
+        }
+        
+        .admin-content {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid #ddd;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: #667eea;
+            color: white;
+            font-weight: bold;
+        }
+        
+        tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .code-available { background: #d4edda; color: #155724; }
+        .code-used { background: #f8d7da; color: #721c24; }
+        
+        .lifetime-badge {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            font-size: 18px;
+            margin-top: 15px;
+            border: 3px solid #FF8C00;
+        }
+    </style>
+</head>
+<body>
+    <!-- Welcome/Disclaimer Modal - MUST ACCEPT BEFORE ENTERING -->
+    <div id="welcomeOverlay" class="welcome-overlay">
+        <div class="welcome-modal">
+            <h2>📖 Welcome to VerseVault™</h2>
+            <p style="text-align: center; font-size: 20px; color: #764ba2; font-weight: bold; font-style: italic;">
+                "Thy word have I hid in mine heart, that I might not sin against thee." - Psalms 119:11
+            </p>
+            
+            <h3>🧠 About VerseVault</h3>
+            <p>
+                <strong>VerseVault</strong> is a faith-based cognitive wellness application created by <strong>Building On The Faith Ministry</strong> 
+                and <strong>Elder Robert Chalk Jr.</strong> to help people strengthen their minds and spirits through Scripture memorization 
+                and biblical activities.
+            </p>
+            <p>
+                Our mission is to serve <strong>seniors, caregivers, families, and individuals facing memory challenges</strong> including 
+                those affected by Alzheimer's disease, dementia, and age-related cognitive decline.
+            </p>
+            
+            <h3>💪 Health & Cognitive Benefits</h3>
+            <div class="benefits-list">
+                <p><strong>Regular use of VerseVault may help with:</strong></p>
+                <ul>
+                    <li><strong>Memory Enhancement</strong> - Scripture memorization exercises strengthen short-term and long-term memory</li>
+                    <li><strong>Mental Stimulation</strong> - Engaging biblical puzzles and activities keep the mind active and alert</li>
+                    <li><strong>Focus & Concentration</strong> - Verse completion exercises improve attention span and mental clarity</li>
+                    <li><strong>Cognitive Flexibility</strong> - Multiple activity types challenge different areas of brain function</li>
+                    <li><strong>Emotional Well-being</strong> - Faith-based content provides comfort, hope, and spiritual strength</li>
+                    <li><strong>Social Connection</strong> - Family plans enable shared activities and meaningful intergenerational bonding</li>
+                    <li><strong>Mental Resilience</strong> - Progressive difficulty levels promote continued cognitive growth</li>
+                    <li><strong>Alzheimer's Support</strong> - Structured memory activities specifically designed for those with memory impairments</li>
+                </ul>
+                <p style="margin-top: 15px;">
+                    <em>These activities are designed based on research showing that mental exercises, social engagement, 
+                    and meaningful activity can support cognitive health in aging adults.</em>
+                </p>
+            </div>
+            
+            <h3>⚖️ Important Legal Disclaimers</h3>
+            <div class="disclaimer-box">
+                <p><strong>PLEASE READ CAREFULLY BEFORE USING THIS APPLICATION:</strong></p>
+                
+                <p style="margin-top: 15px;">
+                    <strong>1. NOT A MEDICAL DEVICE OR TREATMENT</strong><br>
+                    VerseVault is an <strong>educational and faith-based application only</strong>. It is <strong>NOT</strong> a medical device, 
+                    medical treatment, therapy, or diagnostic tool. This app does not prevent, treat, cure, or diagnose any medical condition 
+                    including Alzheimer's disease, dementia, or cognitive impairment.
+                </p>
+                
+                <p>
+                    <strong>2. NO MEDICAL ADVICE</strong><br>
+                    The content in this application does not constitute medical, therapeutic, or professional advice. 
+                    <strong>Always consult with qualified healthcare providers</strong> for medical concerns, diagnosis, treatment, 
+                    and care decisions related to Alzheimer's, dementia, or any health condition.
+                </p>
+                
+                <p>
+                    <strong>3. NO GUARANTEES OR CLAIMS</strong><br>
+                    We make <strong>NO guarantees or promises</strong> about results, improvements, health outcomes, or cognitive benefits 
+                    from using this application. Individual results vary, and no specific outcomes are promised or implied.
+                </p>
+                
+                <p>
+                    <strong>4. USER RESPONSIBILITY</strong><br>
+                    You are solely responsible for your own health decisions and use of this application. Use of VerseVault should 
+                    <strong>supplement, not replace</strong>, professional medical care, therapy, or prescribed treatments.
+                </p>
+                
+                <p>
+                    <strong>5. SUPERVISION RECOMMENDED</strong><br>
+                    Caregivers should supervise vulnerable individuals using this application, especially those with advanced 
+                    Alzheimer's or cognitive impairments.
+                </p>
+                
+                <p>
+                    <strong>6. LIMITATION OF LIABILITY</strong><br>
+                    Building On The Faith Ministry, Elder Robert Chalk Jr., and all affiliates are <strong>NOT LIABLE</strong> for any 
+                    damages, injuries, health outcomes, or consequences arising from use or inability to use this application.
+                </p>
+                
+                <p>
+                    <strong>7. EDUCATIONAL PURPOSE ONLY</strong><br>
+                    This application is provided for <strong>educational, spiritual enrichment, and cognitive engagement purposes only</strong>. 
+                    All biblical content is from the King James Version (public domain).
+                </p>
+                
+                <p>
+                    <strong>8. DATA & PRIVACY</strong><br>
+                    Progress data is saved locally in your browser. We do not store personal health information or share your data.
+                </p>
+                
+                <p>
+                    <strong>9. TERMS MAY CHANGE</strong><br>
+                    We reserve the right to modify content, features, and terms at any time without notice.
+                </p>
+                
+                <p style="margin-top: 15px; font-size: 18px;">
+                    <strong style="color: #cc0000;">By using this application, you acknowledge that you have read, understood, 
+                    and agree to all disclaimers and terms stated above.</strong>
+                </p>
+            </div>
+            
+            <div class="acceptance-checkbox">
+                <input type="checkbox" id="acceptTerms" onchange="toggleAcceptButton()" />
+                <label for="acceptTerms">
+                    ✓ I have read and accept all terms, disclaimers, and understand this is NOT medical treatment
+                </label>
+            </div>
+            
+            <button id="acceptButton" class="accept-btn" onclick="acceptAndEnter()" disabled>
+                Enter VerseVault
+            </button>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- Language Selector -->
+        <select id="topLanguageSelector" class="language-selector">
+            <option value="en">🇺🇸 English</option>
+            <option value="es">🇪🇸 Español</option>
+            <option value="fr">🇫🇷 Français</option>
+            <option value="pt">🇧🇷 Português</option>
+            <option value="zh">🇨🇳 中文</option>
+        </select>
+
+        <!-- Main Content -->
+        <div id="loginScreen">
+            <div class="header">
+                <h1>📖 VerseVault</h1>
+                <div class="scripture-verse" id="headerScripture">
+                    Psalms 119:11 - "Thy word have I hid in mine heart, that I might not sin against thee."
+                </div>
+                <p style="margin-top: 20px; font-size: 20px; color: #764ba2; font-weight: bold;">
+                    Faith-Based Cognitive Wellness Application
+                </p>
+            </div>
+            
+            <div class="card">
+                <h2 style="text-align: center; margin-bottom: 30px; color: #764ba2;">Welcome to VerseVault</h2>
+                <input type="text" id="usernameInput" placeholder="Enter Username" />
+                <input type="password" id="passwordInput" placeholder="Enter Password (optional for new accounts)" />
+                <button class="btn btn-primary" style="width: 100%;" onclick="handleLogin()">Sign In / Register</button>
+                <button class="btn btn-success" style="width: 100%; margin-top: 10px;" onclick="showLifetimeCodeModal()">👑 Have a Lifetime Code?</button>
+                <button class="btn btn-warning" style="width: 100%; margin-top: 10px;" onclick="showAdminLogin()">Admin Access</button>
+            </div>
+        </div>
+
+        <!-- Lifetime Code Modal -->
+        <div id="lifetimeCodeModal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; justify-content: center; align-items: center; z-index: 9999;">
+            <div class="card" style="max-width: 500px; margin: 20px;">
+                <h2 style="text-align: center; color: #764ba2; margin-bottom: 20px;">👑 Activate Lifetime Code</h2>
+                <p style="text-align: center; margin-bottom: 20px;">Enter your username and lifetime access code below:</p>
+                <input type="text" id="lifetimeUsername" placeholder="Enter Username" style="margin-bottom: 15px;" />
+                <input type="text" id="lifetimeCode" placeholder="VV-LIFE-2024-XXXX" style="margin-bottom: 15px; text-transform: uppercase;" />
+                <button class="btn btn-success" style="width: 100%;" onclick="activateLifetimeCode()">Activate Code</button>
+                <button class="btn btn-secondary" style="width: 100%; margin-top: 10px;" onclick="closeLifetimeCodeModal()">Cancel</button>
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div id="settingsModal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; overflow-y: auto;">
+            <div class="card" style="max-width: 600px; margin: 20px; max-height: 90vh; overflow-y: auto;">
+                <h2 style="text-align: center; color: #764ba2; margin-bottom: 30px;">⚙️ Settings</h2>
+                
+                <h3 style="color: #FF8C00; margin-bottom: 15px;">Language / Idioma / Langue</h3>
+                <select id="settingsLanguageSelector" style="width: 100%; margin-bottom: 30px;" onchange="changeLanguageFromSettings()">
+                    <option value="en">🇺🇸 English</option>
+                    <option value="es">🇪🇸 Español</option>
+                    <option value="fr">🇫🇷 Français</option>
+                    <option value="pt">🇧🇷 Português</option>
+                    <option value="zh">🇨🇳 中文</option>
+                </select>
+                
+                <h3 style="color: #FF8C00; margin-bottom: 15px;">Account Information</h3>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 30px;">
+                    <p><strong>Username:</strong> <span id="settingsUsername"></span></p>
+                    <p><strong>Account Type:</strong> <span id="settingsAccountType"></span></p>
+                    <p><strong>Member Since:</strong> <span id="settingsMemberSince"></span></p>
+                </div>
+                
+                <h3 style="color: #FF8C00; margin-bottom: 15px;">Subscription Management</h3>
+                <div id="subscriptionSection" style="margin-bottom: 30px;"></div>
+                
+                <button class="btn btn-secondary" style="width: 100%;" onclick="closeSettings()">Close</button>
+            </div>
+        </div>
+
+        <!-- Admin Panel Modal -->
+        <div id="adminModal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; justify-content: center; align-items: center; z-index: 9999; overflow-y: auto;">
+            <div class="card" style="max-width: 900px; margin: 20px; max-height: 90vh; overflow-y: auto;">
+                <h2 style="text-align: center; color: #764ba2; margin-bottom: 30px;">🔐 Admin Panel</h2>
+                
+                <div class="admin-tabs">
+                    <button class="admin-tab active" onclick="showAdminTab('codes')">Lifetime Codes</button>
+                    <button class="admin-tab" onclick="showAdminTab('users')">User Statistics</button>
+                    <button class="admin-tab" onclick="showAdminTab('direct')">Direct Access</button>
+                </div>
+                
+                <div id="adminCodesTab" class="admin-content">
+                    <h3 style="color: #FF8C00; margin-bottom: 15px;">100 Lifetime Access Codes</h3>
+                    <button class="btn btn-success" onclick="exportCodesToCSV()" style="margin-bottom: 15px;">📥 Export to CSV</button>
+                    <div style="max-height: 400px; overflow-y: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Status</th>
+                                    <th>Used By</th>
+                                    <th>Date Used</th>
+                                </tr>
+                            </thead>
+                            <tbody id="codesTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div id="adminUsersTab" class="admin-content hidden">
+                    <h3 style="color: #FF8C00; margin-bottom: 15px;">User Statistics</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="adminTotalUsers">0</div>
+                            <div class="stat-label">Total Users</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="adminTrialUsers">0</div>
+                            <div class="stat-label">Trial Users</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="adminPremiumUsers">0</div>
+                            <div class="stat-label">Premium Users</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="adminLifetimeUsers">0</div>
+                            <div class="stat-label">Lifetime Members</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="adminDirectTab" class="admin-content hidden">
+                    <h3 style="color: #FF8C00; margin-bottom: 15px;">Grant Direct Access</h3>
+                    <p style="margin-bottom: 20px;">Grant lifetime access to any user without requiring a code or payment:</p>
+                    <input type="text" id="directAccessUsername" placeholder="Enter Username" style="margin-bottom: 15px;" />
+                    <button class="btn btn-success" style="width: 100%;" onclick="grantDirectAccess()">Grant Full Lifetime Access</button>
+                    <div style="background: #fff3cd; padding: 15px; border-radius: 10px; margin-top: 20px; border: 2px solid #ffc107;">
+                        <strong>⚠️ Note:</strong> This grants permanent, free access without using any lifetime codes.
+                    </div>
+                </div>
+                
+                <button class="btn btn-secondary" style="width: 100%; margin-top: 20px;" onclick="closeAdmin()">Close Admin Panel</button>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboardScreen" class="hidden">
+            <div class="header">
+                <h1>📖 VerseVault</h1>
+                <div class="scripture-verse" id="dashboardScripture">
+                    Psalms 119:11 - "Thy word have I hid in mine heart, that I might not sin against thee."
+                </div>
+                <p id="welcomeMessage" style="margin-top: 15px; font-size: 24px; font-weight: bold; color: #764ba2;"></p>
+                <div id="lifetimeBadge" class="hidden lifetime-badge">
+                    👑 Lifetime Member
+                </div>
+            </div>
+            
+            <div id="trialBanner" class="trial-banner hidden"></div>
+            
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="statPoints">0</div>
+                    <div class="stat-label">Total Points</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statStreak">0</div>
+                    <div class="stat-label">Day Streak</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statCompleted">0</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2 style="margin-bottom: 20px; color: #764ba2;">Choose Your Exercise</h2>
+                <div id="exerciseGrid" class="exercise-grid"></div>
+            </div>
+            
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn btn-secondary" onclick="showSettings()">⚙️ Settings</button>
+                <button class="btn btn-secondary" onclick="showHelp()">❓ Help</button>
+                <button class="btn btn-warning" onclick="signOut()">🚪 Sign Out</button>
+            </div>
+        </div>
+
+        <!-- Activity Screen -->
+        <div id="activityScreen" class="hidden">
+            <div class="activity-container">
+                <button class="btn btn-secondary" onclick="exitActivity()" style="margin-bottom: 20px;">← Back to Dashboard</button>
+                <div id="activityContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===================================
+        // STRIPE CONFIGURATION
+        // ===================================
+        const stripe = Stripe('pk_live_51SHSek1ylIvYBzQH8GxBGmnLmrVtV49JgfwrqoOxSC7OkMsz4rgdOOQJB9zc9aH3KtnvOT3CodyeofTsQSr99m7H00QyjpJ2UZ');
+        
+        const STRIPE_PRICES = {
+            monthly: 'price_1SMFLR1ylIvYBzQHA0nCdVfZ',    // Premium Monthly - $4.99/month
+            annual: 'price_1SMFO61ylIvYBzQHSMS1vM1z'      // Family Plan - $9.99/month
+        };
+
+        // ===================================
+        // WELCOME MODAL FUNCTIONS
+        // ===================================
+        function toggleAcceptButton() {
+            const checkbox = document.getElementById('acceptTerms');
+            const button = document.getElementById('acceptButton');
+            
+            if (checkbox.checked) {
+                button.disabled = false;
+                button.classList.add('enabled');
+            } else {
+                button.disabled = true;
+                button.classList.remove('enabled');
+            }
+        }
+        
+        function acceptAndEnter() {
+            // Save acceptance to localStorage
+            localStorage.setItem('vv_terms_accepted', 'true');
+            localStorage.setItem('vv_terms_accepted_date', new Date().toISOString());
+            
+            // Hide the welcome modal
+            document.getElementById('welcomeOverlay').style.display = 'none';
+        }
+        
+        // Check if terms already accepted on page load
+        window.addEventListener('DOMContentLoaded', function() {
+            const termsAccepted = localStorage.getItem('vv_terms_accepted');
+            if (termsAccepted === 'true') {
+                document.getElementById('welcomeOverlay').style.display = 'none';
+            }
+        });
+
+        // ===================================
+        // TRANSLATIONS
+        // ===================================
+        const translations = {
+            en: {
+                headerScripture: 'Psalms 119:11 - "Thy word have I hid in mine heart, that I might not sin against thee."',
+                welcome: 'Welcome',
+                trialEnding: 'days left in trial',
+                trialExpired: 'Trial expired - Subscribe to continue',
+                points: 'Total Points',
+                streak: 'Day Streak',
+                completed: 'Completed',
+                settings: 'Settings',
+                help: 'Help',
+                signOut: 'Sign Out',
+                submit: 'Submit Answer',
+                next: 'Next Activity',
+                exit: 'Exit',
+                correct: '✓ Correct!',
+                incorrect: '✗ Incorrect',
+                locked: '🔒 Locked'
+            },
+            es: {
+                headerScripture: 'Salmos 119:11 - "En mi corazón he guardado tus dichos, para no pecar contra ti."',
+                welcome: 'Bienvenido',
+                trialEnding: 'días restantes de prueba',
+                trialExpired: 'Prueba expirada - Suscríbase para continuar',
+                points: 'Puntos Totales',
+                streak: 'Racha de Días',
+                completed: 'Completado',
+                settings: 'Configuración',
+                help: 'Ayuda',
+                signOut: 'Cerrar Sesión',
+                submit: 'Enviar Respuesta',
+                next: 'Siguiente Actividad',
+                exit: 'Salir',
+                correct: '✓ ¡Correcto!',
+                incorrect: '✗ Incorrecto',
+                locked: '🔒 Bloqueado'
+            },
+            fr: {
+                headerScripture: 'Psaumes 119:11 - "Je serre ta parole dans mon cœur, afin de ne pas pécher contre toi."',
+                welcome: 'Bienvenue',
+                trialEnding: 'jours restants d\'essai',
+                trialExpired: 'Essai expiré - Abonnez-vous pour continuer',
+                points: 'Points Totaux',
+                streak: 'Série de Jours',
+                completed: 'Complété',
+                settings: 'Paramètres',
+                help: 'Aide',
+                signOut: 'Se Déconnecter',
+                submit: 'Soumettre la Réponse',
+                next: 'Activité Suivante',
+                exit: 'Quitter',
+                correct: '✓ Correct!',
+                incorrect: '✗ Incorrect',
+                locked: '🔒 Verrouillé'
+            },
+            pt: {
+                headerScripture: 'Salmos 119:11 - "Escondi a tua palavra no meu coração, para eu não pecar contra ti."',
+                welcome: 'Bem-vindo',
+                trialEnding: 'dias restantes no período de teste',
+                trialExpired: 'Período de teste expirado - Inscreva-se para continuar',
+                points: 'Pontos Totais',
+                streak: 'Sequência de Dias',
+                completed: 'Concluído',
+                settings: 'Configurações',
+                help: 'Ajuda',
+                signOut: 'Sair',
+                submit: 'Enviar Resposta',
+                next: 'Próxima Atividade',
+                exit: 'Sair',
+                correct: '✓ Correto!',
+                incorrect: '✗ Incorreto',
+                locked: '🔒 Bloqueado'
+            },
+            zh: {
+                headerScripture: '诗篇 119:11 - "我将你的话藏在心里，免得我得罪你。"',
+                welcome: '欢迎',
+                trialEnding: '试用期剩余天数',
+                trialExpired: '试用期已过 - 订阅以继续',
+                points: '总积分',
+                streak: '连续天数',
+                completed: '已完成',
+                settings: '设置',
+                help: '帮助',
+                signOut: '退出',
+                submit: '提交答案',
+                next: '下一个活动',
+                exit: '退出',
+                correct: '✓ 正确!',
+                incorrect: '✗ 错误',
+                locked: '🔒 已锁定'
+            }
+        };
+
+        let currentLanguage = 'en';
+        
+        // Language selector sync
+        document.getElementById('topLanguageSelector').addEventListener('change', function(e) {
+            currentLanguage = e.target.value;
+            updateLanguage();
+        });
+
+        function updateLanguage() {
+            const t = translations[currentLanguage];
+            document.getElementById('headerScripture').textContent = t.headerScripture;
+            if (document.getElementById('dashboardScripture')) {
+                document.getElementById('dashboardScripture').textContent = t.headerScripture;
+            }
+        }
+
+        // ===================================
+        // CORE DATA STRUCTURES
+        // ===================================
+        
+        // App State
+        let currentUser = null;
+        let currentExercise = null;
+        let currentActivityIndex = 0;
+        let currentScore = 0;
+
+        // 100 Lifetime Access Codes
+        const LIFETIME_CODES = [];
+        for (let i = 1; i <= 100; i++) {
+            const code = `VV-LIFE-2024-${String(i).padStart(4, '0')}`;
+            LIFETIME_CODES.push({ code, used: false, usedBy: null, usedDate: null });
+        }
+
+        // Initialize from localStorage
+        const storedCodes = localStorage.getItem('vv_lifetime_codes');
+        let lifetimeCodes = storedCodes ? JSON.parse(storedCodes) : LIFETIME_CODES;
+
+        const storedUsers = localStorage.getItem('vv_users');
+        let users = storedUsers ? JSON.parse(storedUsers) : {};
+
+        // Save data
+        function saveData() {
+            localStorage.setItem('vv_lifetime_codes', JSON.stringify(lifetimeCodes));
+            localStorage.setItem('vv_users', JSON.stringify(users));
+        }
+
+        // ===================================
+        // EXERCISE TYPES (20 Total)
+        // ===================================
+        const exerciseTypes = [
+            { id: 'fillBlank', name: 'Fill in the Blank', icon: '📝', category: 'Memory' },
+            { id: 'verseMatch', name: 'Verse Matching', icon: '🔗', category: 'Memory' },
+            { id: 'trueFalse', name: 'True or False', icon: '✓✗', category: 'Knowledge' },
+            { id: 'multipleChoice', name: 'Multiple Choice', icon: '📊', category: 'Knowledge' },
+            { id: 'characterQuiz', name: 'Character Quiz', icon: '👤', category: 'Knowledge' },
+            { id: 'placesQuiz', name: 'Places Quiz', icon: '🗺️', category: 'Knowledge' },
+            { id: 'storySequence', name: 'Story Sequencing', icon: '📚', category: 'Memory' },
+            { id: 'numberMemory', name: 'Number Memory', icon: '🔢', category: 'Memory' },
+            { id: 'parables', name: 'Parables', icon: '🌱', category: 'Knowledge' },
+            { id: 'prophets', name: 'Prophet Identification', icon: '👨‍🦳', category: 'Knowledge' },
+            { id: 'miracles', name: 'Miracle Sequencing', icon: '✨', category: 'Memory' },
+            { id: 'timeline', name: 'Timeline Events', icon: '⏰', category: 'Memory' },
+            { id: 'wordRecall', name: 'Word Recall', icon: '💭', category: 'Memory' },
+            { id: 'psalmMemory', name: 'Psalm Memory', icon: '🎵', category: 'Memory' },
+            { id: 'prayer', name: 'Prayer Elements', icon: '🙏', category: 'Knowledge' },
+            { id: 'fruitSpirit', name: 'Fruit of Spirit', icon: '🍇', category: 'Knowledge' },
+            { id: 'commandments', name: 'Commandments', icon: '📜', category: 'Knowledge' },
+            { id: 'genealogy', name: 'Genealogy Memory', icon: '👨‍👩‍👧‍👦', category: 'Memory' },
+            { id: 'beatitudes', name: 'Beatitudes', icon: '😇', category: 'Knowledge' },
+            { id: 'disciples', name: 'Disciples Recognition', icon: '👥', category: 'Knowledge' }
+        ];
+
+        // ===================================
+        // ACTIVITIES DATABASE (600 Total - 30 per exercise)
+        // ===================================
+        const activities = {
+            fillBlank: [
+                // BEGINNER (10)
+                {v:"For God so loved the ___ that he gave his only begotten Son",a:"world",r:"John 3:16",d:"beginner"},
+                {v:"I can do all things through ___ which strengtheneth me",a:"Christ",r:"Philippians 4:13",d:"beginner"},
+                {v:"The Lord is my ___; I shall not want",a:"shepherd",r:"Psalm 23:1",d:"beginner"},
+                {v:"Trust in the Lord with all thine ___",a:"heart",r:"Proverbs 3:5",d:"beginner"},
+                {v:"Be still, and know that I am ___",a:"God",r:"Psalm 46:10",d:"beginner"},
+                {v:"The Lord is my light and my ___",a:"salvation",r:"Psalm 27:1",d:"beginner"},
+                {v:"Give thanks unto the Lord, for he is ___",a:"good",r:"Psalm 107:1",d:"beginner"},
+                {v:"In the beginning ___ created the heaven and the earth",a:"God",r:"Genesis 1:1",d:"beginner"},
+                {v:"God is ___",a:"love",r:"1 John 4:8",d:"beginner"},
+                {v:"Pray without ___",a:"ceasing",r:"1 Thessalonians 5:17",d:"beginner"},
+                // INTERMEDIATE (10)
+                {v:"Cast all your ___ upon him; for he careth for you",a:"care",r:"1 Peter 5:7",d:"intermediate"},
+                {v:"Your word is a ___ unto my feet",a:"lamp",r:"Psalm 119:105",d:"intermediate"},
+                {v:"For we walk by ___, not by sight",a:"faith",r:"2 Corinthians 5:7",d:"intermediate"},
+                {v:"If God is for us, who can be ___ us",a:"against",r:"Romans 8:31",d:"intermediate"},
+                {v:"And we know that in all things God works for the ___",a:"good",r:"Romans 8:28",d:"intermediate"},
+                {v:"Be kind and ___ to one another",a:"compassionate",r:"Ephesians 4:32",d:"intermediate"},
+                {v:"But seek first his kingdom and his ___",a:"righteousness",r:"Matthew 6:33",d:"intermediate"},
+                {v:"The Lord your God is with you, the Mighty Warrior who ___",a:"saves",r:"Zephaniah 3:17",d:"intermediate"},
+                {v:"Do not be anxious about ___",a:"anything",r:"Philippians 4:6",d:"intermediate"},
+                {v:"The Lord goes ___ you",a:"before",r:"Deuteronomy 31:8",d:"intermediate"},
+                // EXPERT (10)
+                {v:"Do not conform to the pattern of this world, but be ___",a:"transformed",r:"Romans 12:2",d:"expert"},
+                {v:"For it is by ___ you have been saved",a:"grace",r:"Ephesians 2:8",d:"expert"},
+                {v:"The Lord will fight for you; you need only to be ___",a:"still",r:"Exodus 14:14",d:"expert"},
+                {v:"But those who hope in the Lord will renew their ___",a:"strength",r:"Isaiah 40:31",d:"expert"},
+                {v:"The Lord is close to the ___",a:"brokenhearted",r:"Psalm 34:18",d:"expert"},
+                {v:"Commit to the Lord whatever you do, and he will establish your ___",a:"plans",r:"Proverbs 16:3",d:"expert"},
+                {v:"Whatever is true, whatever is noble, whatever is ___",a:"right",r:"Philippians 4:8",d:"expert"},
+                {v:"For the Spirit God gave us does not make us timid, but gives us power, love and ___",a:"self-discipline",r:"2 Timothy 1:7",d:"expert"},
+                {v:"Let us not become ___ in doing good",a:"weary",r:"Galatians 6:9",d:"expert"},
+                {v:"Take delight in the Lord, and he will give you the desires of your ___",a:"heart",r:"Psalm 37:4",d:"expert"}
+            ],
+            
+            verseMatch: [
+                // BEGINNER (10)
+                {q:"Match the verse: 'For God so loved the world'",a:"John 3:16",d:"beginner"},
+                {q:"Match the verse: 'The Lord is my shepherd'",a:"Psalm 23:1",d:"beginner"},
+                {q:"Match the verse: 'I can do all things through Christ'",a:"Philippians 4:13",d:"beginner"},
+                {q:"Match the verse: 'In the beginning God created'",a:"Genesis 1:1",d:"beginner"},
+                {q:"Match the verse: 'God is love'",a:"1 John 4:8",d:"beginner"},
+                {q:"Match the verse: 'Trust in the Lord'",a:"Proverbs 3:5",d:"beginner"},
+                {q:"Match the verse: 'Be still and know'",a:"Psalm 46:10",d:"beginner"},
+                {q:"Match the verse: 'Give thanks to the Lord'",a:"Psalm 107:1",d:"beginner"},
+                {q:"Match the verse: 'Pray without ceasing'",a:"1 Thessalonians 5:17",d:"beginner"},
+                {q:"Match the verse: 'The Lord is my light'",a:"Psalm 27:1",d:"beginner"},
+                // INTERMEDIATE (10)
+                {q:"Match the verse: 'Cast all your cares upon him'",a:"1 Peter 5:7",d:"intermediate"},
+                {q:"Match the verse: 'We walk by faith not by sight'",a:"2 Corinthians 5:7",d:"intermediate"},
+                {q:"Match the verse: 'All things work together for good'",a:"Romans 8:28",d:"intermediate"},
+                {q:"Match the verse: 'If God is for us'",a:"Romans 8:31",d:"intermediate"},
+                {q:"Match the verse: 'Seek first the kingdom'",a:"Matthew 6:33",d:"intermediate"},
+                {q:"Match the verse: 'Be kind and compassionate'",a:"Ephesians 4:32",d:"intermediate"},
+                {q:"Match the verse: 'Your word is a lamp'",a:"Psalm 119:105",d:"intermediate"},
+                {q:"Match the verse: 'Do not be anxious'",a:"Philippians 4:6",d:"intermediate"},
+                {q:"Match the verse: 'The Lord goes before you'",a:"Deuteronomy 31:8",d:"intermediate"},
+                {q:"Match the verse: 'The Lord is my strength'",a:"Exodus 15:2",d:"intermediate"},
+                // EXPERT (10)
+                {q:"Match the verse: 'Be transformed by renewing'",a:"Romans 12:2",d:"expert"},
+                {q:"Match the verse: 'By grace you have been saved'",a:"Ephesians 2:8",d:"expert"},
+                {q:"Match the verse: 'The Lord will fight for you'",a:"Exodus 14:14",d:"expert"},
+                {q:"Match the verse: 'Those who hope renew strength'",a:"Isaiah 40:31",d:"expert"},
+                {q:"Match the verse: 'Close to the brokenhearted'",a:"Psalm 34:18",d:"expert"},
+                {q:"Match the verse: 'Commit to the Lord'",a:"Proverbs 16:3",d:"expert"},
+                {q:"Match the verse: 'Think on these things'",a:"Philippians 4:8",d:"expert"},
+                {q:"Match the verse: 'Spirit of power and love'",a:"2 Timothy 1:7",d:"expert"},
+                {q:"Match the verse: 'Not weary in doing good'",a:"Galatians 6:9",d:"expert"},
+                {q:"Match the verse: 'Delight in the Lord'",a:"Psalm 37:4",d:"expert"}
+            ],
+            
+            trueFalse: [
+                // BEGINNER (10)
+                {q:"Jesus was born in Bethlehem",a:"true",d:"beginner"},
+                {q:"Moses parted the Red Sea",a:"true",d:"beginner"},
+                {q:"David fought Goliath with a sword",a:"false",d:"beginner"},
+                {q:"There are 12 apostles",a:"true",d:"beginner"},
+                {q:"Noah built a tower",a:"false",d:"beginner"},
+                {q:"Jesus walked on water",a:"true",d:"beginner"},
+                {q:"Adam and Eve lived in the Garden of Eden",a:"true",d:"beginner"},
+                {q:"Jonah was swallowed by a whale",a:"true",d:"beginner"},
+                {q:"Jesus had 7 brothers",a:"false",d:"beginner"},
+                {q:"Mary was Jesus' mother",a:"true",d:"beginner"},
+                // INTERMEDIATE (10)
+                {q:"Paul was originally named Saul",a:"true",d:"intermediate"},
+                {q:"Daniel was thrown into a lion's den",a:"true",d:"intermediate"},
+                {q:"Peter denied Jesus twice",a:"false",d:"intermediate"},
+                {q:"The first miracle was turning water into wine",a:"true",d:"intermediate"},
+                {q:"Job's wife encouraged him to trust God",a:"false",d:"intermediate"},
+                {q:"Solomon was known for his wisdom",a:"true",d:"intermediate"},
+                {q:"Esther was a queen",a:"true",d:"intermediate"},
+                {q:"Jesus was baptized in the Jordan River",a:"true",d:"intermediate"},
+                {q:"Abraham had 5 sons",a:"false",d:"intermediate"},
+                {q:"Moses saw the burning bush",a:"true",d:"intermediate"},
+                // EXPERT (10)
+                {q:"Paul wrote the book of Hebrews",a:"false",d:"expert"},
+                {q:"There are 66 books in the Bible",a:"true",d:"expert"},
+                {q:"Methuselah lived 969 years",a:"true",d:"expert"},
+                {q:"Jesus was tempted 40 days",a:"true",d:"expert"},
+                {q:"Judas betrayed Jesus for 50 pieces of silver",a:"false",d:"expert"},
+                {q:"The Bible was originally written in English",a:"false",d:"expert"},
+                {q:"John the Baptist baptized Jesus",a:"true",d:"expert"},
+                {q:"Samson's strength was in his hair",a:"true",d:"expert"},
+                {q:"Ruth was the mother-in-law of Naomi",a:"false",d:"expert"},
+                {q:"The Bible has two testaments",a:"true",d:"expert"}
+            ],
+            
+            multipleChoice: [
+                // BEGINNER (10)
+                {q:"Who built the ark?",o:["Noah","Moses","Abraham","David"],a:"Noah",d:"beginner"},
+                {q:"Who was swallowed by a great fish?",o:["Jonah","Daniel","Peter","John"],a:"Jonah",d:"beginner"},
+                {q:"Who was Jesus' mother?",o:["Mary","Martha","Elizabeth","Ruth"],a:"Mary",d:"beginner"},
+                {q:"Where was Jesus born?",o:["Bethlehem","Nazareth","Jerusalem","Egypt"],a:"Bethlehem",d:"beginner"},
+                {q:"Who fought Goliath?",o:["David","Saul","Jonathan","Samuel"],a:"David",d:"beginner"},
+                {q:"How many apostles did Jesus choose?",o:["12","7","10","5"],a:"12",d:"beginner"},
+                {q:"Who led Israel out of Egypt?",o:["Moses","Aaron","Joshua","David"],a:"Moses",d:"beginner"},
+                {q:"What did God create first?",o:["Light","Earth","Sky","Water"],a:"Light",d:"beginner"},
+                {q:"Who was the first man?",o:["Adam","Noah","Abraham","Moses"],a:"Adam",d:"beginner"},
+                {q:"Who denied Jesus three times?",o:["Peter","John","James","Thomas"],a:"Peter",d:"beginner"},
+                // INTERMEDIATE (10)
+                {q:"Who was known for wisdom?",o:["Solomon","David","Samuel","Isaiah"],a:"Solomon",d:"intermediate"},
+                {q:"Who was thrown in a lion's den?",o:["Daniel","David","Joseph","Samson"],a:"Daniel",d:"intermediate"},
+                {q:"How many days did Jesus fast?",o:["40","30","50","70"],a:"40",d:"intermediate"},
+                {q:"Who walked on water?",o:["Jesus","Peter","Both","Neither"],a:"Both",d:"intermediate"},
+                {q:"Who was the first king of Israel?",o:["Saul","David","Solomon","Samuel"],a:"Saul",d:"intermediate"},
+                {q:"What was Paul's original name?",o:["Saul","Simon","Stephen","Samuel"],a:"Saul",d:"intermediate"},
+                {q:"Who was a tax collector?",o:["Matthew","Mark","Luke","John"],a:"Matthew",d:"intermediate"},
+                {q:"Where did Jesus perform his first miracle?",o:["Cana","Nazareth","Bethlehem","Capernaum"],a:"Cana",d:"intermediate"},
+                {q:"Who betrayed Jesus?",o:["Judas","Peter","Thomas","Matthew"],a:"Judas",d:"intermediate"},
+                {q:"Who was Moses' brother?",o:["Aaron","Joshua","Caleb","Hur"],a:"Aaron",d:"intermediate"},
+                // EXPERT (10)
+                {q:"How many books are in the New Testament?",o:["27","39","66","22"],a:"27",d:"expert"},
+                {q:"Who wrote most of the Psalms?",o:["David","Solomon","Moses","Asaph"],a:"David",d:"expert"},
+                {q:"What is the shortest verse in the Bible?",o:["Jesus wept","God is love","Pray always","Be still"],a:"Jesus wept",d:"expert"},
+                {q:"Who lived 969 years?",o:["Methuselah","Adam","Noah","Seth"],a:"Methuselah",d:"expert"},
+                {q:"How many plagues on Egypt?",o:["10","7","12","40"],a:"10",d:"expert"},
+                {q:"Who was a judge and prophet?",o:["Samuel","Saul","David","Solomon"],a:"Samuel",d:"expert"},
+                {q:"What is the last book of Bible?",o:["Revelation","Jude","3 John","Acts"],a:"Revelation",d:"expert"},
+                {q:"Who wrote Revelation?",o:["John","Paul","Peter","James"],a:"John",d:"expert"},
+                {q:"How many days was Lazarus dead?",o:["4","3","7","2"],a:"4",d:"expert"},
+                {q:"Who climbed a tree to see Jesus?",o:["Zacchaeus","Peter","John","James"],a:"Zacchaeus",d:"expert"}
+            ],
+            
+            characterQuiz: [
+                // BEGINNER (10)
+                {q:"Who was the first man created?",a:"Adam",d:"beginner"},
+                {q:"Who was the mother of Jesus?",a:"Mary",d:"beginner"},
+                {q:"Who built the ark?",a:"Noah",d:"beginner"},
+                {q:"Who defeated Goliath?",a:"David",d:"beginner"},
+                {q:"Who was swallowed by a fish?",a:"Jonah",d:"beginner"},
+                {q:"Who led Israel out of Egypt?",a:"Moses",d:"beginner"},
+                {q:"Who was the strongest man?",a:"Samson",d:"beginner"},
+                {q:"Who was Jesus' earthly father?",a:"Joseph",d:"beginner"},
+                {q:"Who was thrown into lions' den?",a:"Daniel",d:"beginner"},
+                {q:"Who denied Jesus three times?",a:"Peter",d:"beginner"},
+                // INTERMEDIATE (10)
+                {q:"Who was known for great wisdom?",a:"Solomon",d:"intermediate"},
+                {q:"Who was the first king of Israel?",a:"Saul",d:"intermediate"},
+                {q:"Who was Paul before conversion?",a:"Saul",d:"intermediate"},
+                {q:"Who was the oldest man in Bible?",a:"Methuselah",d:"intermediate"},
+                {q:"Who was faithful Job's wife?",a:"Wife of Job",d:"intermediate"},
+                {q:"Who was Ruth's mother-in-law?",a:"Naomi",d:"intermediate"},
+                {q:"Who was the doubting disciple?",a:"Thomas",d:"intermediate"},
+                {q:"Who baptized Jesus?",a:"John the Baptist",d:"intermediate"},
+                {q:"Who climbed tree to see Jesus?",a:"Zacchaeus",d:"intermediate"},
+                {q:"Who was the first martyr?",a:"Stephen",d:"intermediate"},
+                // EXPERT (10)
+                {q:"Who was the weeping prophet?",a:"Jeremiah",d:"expert"},
+                {q:"Who was Abraham's first son?",a:"Ishmael",d:"expert"},
+                {q:"Who was David's best friend?",a:"Jonathan",d:"expert"},
+                {q:"Who was Moses' successor?",a:"Joshua",d:"expert"},
+                {q:"Who interpreted Pharaoh's dream?",a:"Joseph",d:"expert"},
+                {q:"Who was Esther's cousin?",a:"Mordecai",d:"expert"},
+                {q:"Who was the Queen of Sheba visiting?",a:"Solomon",d:"expert"},
+                {q:"Who was called to preach to Nineveh?",a:"Jonah",d:"expert"},
+                {q:"Who was the father of John Baptist?",a:"Zacharias",d:"expert"},
+                {q:"Who was healed of leprosy by Elisha?",a:"Naaman",d:"expert"}
+            ],
+            
+            placesQuiz: [
+                // BEGINNER (10)
+                {q:"Where was Jesus born?",a:"Bethlehem",d:"beginner"},
+                {q:"Where did Adam and Eve live?",a:"Garden of Eden",d:"beginner"},
+                {q:"Where was Jesus baptized?",a:"Jordan River",d:"beginner"},
+                {q:"Where did Moses receive commandments?",a:"Mount Sinai",d:"beginner"},
+                {q:"Where was Jesus crucified?",a:"Golgotha",d:"beginner"},
+                {q:"Where did Noah's ark land?",a:"Mount Ararat",d:"beginner"},
+                {q:"Where did Jesus grow up?",a:"Nazareth",d:"beginner"},
+                {q:"Where did Jonah try to flee?",a:"Tarshish",d:"beginner"},
+                {q:"Where was the temple built?",a:"Jerusalem",d:"beginner"},
+                {q:"Where did Jesus perform first miracle?",a:"Cana",d:"beginner"},
+                // INTERMEDIATE (10)
+                {q:"Where was Paul converted?",a:"Damascus",d:"intermediate"},
+                {q:"Where was Daniel thrown?",a:"Lions' Den",d:"intermediate"},
+                {q:"Where did Israelites cross on dry ground?",a:"Red Sea",d:"intermediate"},
+                {q:"Where was Jesus transfigured?",a:"Mount of Transfiguration",d:"intermediate"},
+                {q:"Where did David fight Goliath?",a:"Valley of Elah",d:"intermediate"},
+                {q:"Where was Pentecost celebrated?",a:"Jerusalem",d:"intermediate"},
+                {q:"Where was Paul shipwrecked?",a:"Malta",d:"intermediate"},
+                {q:"Where did Elijah have contest?",a:"Mount Carmel",d:"intermediate"},
+                {q:"Where was Jacob's ladder seen?",a:"Bethel",d:"intermediate"},
+                {q:"Where were disciples first called Christians?",a:"Antioch",d:"intermediate"},
+                // EXPERT (10)
+                {q:"Where was the ark of covenant captured?",a:"Ebenezer",d:"expert"},
+                {q:"Where did Ruth glean grain?",a:"Bethlehem",d:"expert"},
+                {q:"Where was Lazarus from?",a:"Bethany",d:"expert"},
+                {q:"Where did Jesus weep over?",a:"Jerusalem",d:"expert"},
+                {q:"Where was Saul made king?",a:"Gilgal",d:"expert"},
+                {q:"Where did Abraham almost sacrifice Isaac?",a:"Mount Moriah",d:"expert"},
+                {q:"Where was Jesus tempted?",a:"Wilderness",d:"expert"},
+                {q:"Where did Moses see burning bush?",a:"Mount Horeb",d:"expert"},
+                {q:"Where was Paul from?",a:"Tarsus",d:"expert"},
+                {q:"Where were Shadrach, Meshach, Abednego thrown?",a:"Fiery Furnace",d:"expert"}
+            ],
+            
+            storySequence: [
+                // BEGINNER (10)
+                {s:"Creation Story",e:["God created light","God created animals","God created man"],a:"1,2,3",d:"beginner"},
+                {s:"Noah's Ark",e:["God told Noah to build ark","Rain came 40 days","Ark landed on mountain"],a:"1,2,3",d:"beginner"},
+                {s:"David and Goliath",e:["David took 5 stones","David defeated Goliath","David became king"],a:"1,2,3",d:"beginner"},
+                {s:"Moses and Egypt",e:["Moses born","Moses led exodus","Moses received commandments"],a:"1,2,3",d:"beginner"},
+                {s:"Jesus Birth",e:["Angel visited Mary","Jesus born in Bethlehem","Wise men visited"],a:"1,2,3",d:"beginner"},
+                {s:"Jonah Story",e:["Jonah fled from God","Jonah swallowed by fish","Jonah preached to Nineveh"],a:"1,2,3",d:"beginner"},
+                {s:"Joseph Story",e:["Joseph sold by brothers","Joseph imprisoned","Joseph became ruler"],a:"1,2,3",d:"beginner"},
+                {s:"Daniel",e:["Daniel served king","Daniel prayed","Daniel thrown to lions"],a:"1,2,3",d:"beginner"},
+                {s:"Good Samaritan",e:["Man beaten by robbers","Priest passed by","Samaritan helped"],a:"1,2,3",d:"beginner"},
+                {s:"Prodigal Son",e:["Son left home","Son lost everything","Father welcomed son back"],a:"1,2,3",d:"beginner"},
+                // INTERMEDIATE (10)
+                {s:"Ruth's Story",e:["Ruth left Moab","Ruth gleaned grain","Ruth married Boaz"],a:"1,2,3",d:"intermediate"},
+                {s:"Esther",e:["Esther became queen","Haman plotted evil","Esther saved her people"],a:"1,2,3",d:"intermediate"},
+                {s:"Peter's Denial",e:["Jesus predicted denial","Peter denied 3 times","Peter wept bitterly"],a:"1,2,3",d:"intermediate"},
+                {s:"Jesus Crucifixion",e:["Jesus arrested","Jesus crucified","Jesus rose again"],a:"1,2,3",d:"intermediate"},
+                {s:"Paul's Conversion",e:["Paul persecuted Christians","Jesus appeared to Paul","Paul became apostle"],a:"1,2,3",d:"intermediate"},
+                {s:"Samson",e:["Samson had great strength","Delilah betrayed Samson","Samson destroyed temple"],a:"1,2,3",d:"intermediate"},
+                {s:"Abraham and Isaac",e:["God tested Abraham","Abraham took Isaac","Angel stopped Abraham"],a:"1,2,3",d:"intermediate"},
+                {s:"Elijah",e:["Elijah challenged prophets","Fire came from heaven","Prophets defeated"],a:"1,2,3",d:"intermediate"},
+                {s:"Job's Trial",e:["Job was righteous","Satan tested Job","God restored Job"],a:"1,2,3",d:"intermediate"},
+                {s:"Feeding 5000",e:["Crowd gathered","Boy gave loaves","All were fed"],a:"1,2,3",d:"intermediate"},
+                // EXPERT (10)
+                {s:"Tower of Babel",e:["People built tower","God confused language","People scattered"],a:"1,2,3",d:"expert"},
+                {s:"Jacob's Journey",e:["Jacob deceived father","Jacob fled","Jacob wrestled with God"],a:"1,2,3",d:"expert"},
+                {s:"Moses' Call",e:["Moses saw burning bush","Moses doubted","God sent Moses"],a:"1,2,3",d:"expert"},
+                {s:"Gideon",e:["Angel called Gideon","Gideon tested God","Gideon defeated enemy"],a:"1,2,3",d:"expert"},
+                {s:"Solomon's Wisdom",e:["Solomon asked wisdom","Two women came","Solomon judged wisely"],a:"1,2,3",d:"expert"},
+                {s:"Nehemiah",e:["Nehemiah heard report","Nehemiah returned","Wall rebuilt"],a:"1,2,3",d:"expert"},
+                {s:"Pentecost",e:["Disciples gathered","Holy Spirit came","Peter preached"],a:"1,2,3",d:"expert"},
+                {s:"Stephen",e:["Stephen preached","Leaders angry","Stephen martyred"],a:"1,2,3",d:"expert"},
+                {s:"Philip and Ethiopian",e:["Angel sent Philip","Philip explained Isaiah","Ethiopian baptized"],a:"1,2,3",d:"expert"},
+                {s:"Peter's Vision",e:["Peter saw vision","Peter preached to Gentiles","Gentiles received Spirit"],a:"1,2,3",d:"expert"}
+            ],
+            
+            numberMemory: [
+                // BEGINNER (10)
+                {q:"How many disciples did Jesus choose?",a:"12",d:"beginner"},
+                {q:"How many days did Jesus fast?",a:"40",d:"beginner"},
+                {q:"How many commandments did Moses receive?",a:"10",d:"beginner"},
+                {q:"How many days was Jonah in the fish?",a:"3",d:"beginner"},
+                {q:"How many days of creation?",a:"6",d:"beginner"},
+                {q:"How many plagues on Egypt?",a:"10",d:"beginner"},
+                {q:"How many sons did Jacob have?",a:"12",d:"beginner"},
+                {q:"How many people on Noah's ark?",a:"8",d:"beginner"},
+                {q:"How many stones did David take?",a:"5",d:"beginner"},
+                {q:"How many times did Peter deny Jesus?",a:"3",d:"beginner"},
+                // INTERMEDIATE (10)
+                {q:"How many years did Israelites wander?",a:"40",d:"intermediate"},
+                {q:"How many books in New Testament?",a:"27",d:"intermediate"},
+                {q:"How many apostles replaced Judas?",a:"1",d:"intermediate"},
+                {q:"How many days after resurrection to ascension?",a:"40",d:"intermediate"},
+                {q:"How many baskets after feeding 5000?",a:"12",d:"intermediate"},
+                {q:"How many lepers healed?",a:"10",d:"intermediate"},
+                {q:"How many chapters in Psalms?",a:"150",d:"intermediate"},
+                {q:"How old was Jesus at ministry start?",a:"30",d:"intermediate"},
+                {q:"How many pieces of silver for Judas?",a:"30",d:"intermediate"},
+                {q:"How many days did Lazarus lie in tomb?",a:"4",d:"intermediate"},
+                // EXPERT (10)
+                {q:"How many years did Methuselah live?",a:"969",d:"expert"},
+                {q:"How many books in the Bible?",a:"66",d:"expert"},
+                {q:"How many years to build Solomon's temple?",a:"7",d:"expert"},
+                {q:"How many generations Abraham to David?",a:"14",d:"expert"},
+                {q:"How many fish caught after resurrection?",a:"153",d:"expert"},
+                {q:"How many righteous needed to spare Sodom?",a:"10",d:"expert"},
+                {q:"How many times Naaman wash in Jordan?",a:"7",d:"expert"},
+                {q:"How many years Jacob served for Rachel?",a:"14",d:"expert"},
+                {q:"How many chapters in Isaiah?",a:"66",d:"expert"},
+                {q:"How many people on ship in Paul's shipwreck?",a:"276",d:"expert"}
+            ],
+            
+            parables: [
+                // BEGINNER (10)
+                {q:"Parable of the ___",a:"Sower",t:"Seeds falling on different soils",d:"beginner"},
+                {q:"Parable of the ___",a:"Lost Sheep",t:"Shepherd finding lost sheep",d:"beginner"},
+                {q:"Parable of the ___",a:"Prodigal Son",t:"Son returning to father",d:"beginner"},
+                {q:"Parable of the ___",a:"Good Samaritan",t:"Helping injured traveler",d:"beginner"},
+                {q:"Parable of the ___",a:"Mustard Seed",t:"Small seed growing large",d:"beginner"},
+                {q:"Parable of the ___",a:"Lost Coin",t:"Woman finding lost coin",d:"beginner"},
+                {q:"Parable of the ___",a:"Two Sons",t:"One obeys, one doesn't",d:"beginner"},
+                {q:"Parable of the ___",a:"Great Banquet",t:"Inviting guests to feast",d:"beginner"},
+                {q:"Parable of the ___",a:"Rich Fool",t:"Building bigger barns",d:"beginner"},
+                {q:"Parable of the ___",a:"Pharisee and Tax Collector",t:"Prayer and humility",d:"beginner"},
+                // INTERMEDIATE (10)
+                {q:"Parable of the ___",a:"Ten Virgins",t:"Being ready for bridegroom",d:"intermediate"},
+                {q:"Parable of the ___",a:"Talents",t:"Investing what we're given",d:"intermediate"},
+                {q:"Parable of the ___",a:"Wheat and Tares",t:"Good and bad growing together",d:"intermediate"},
+                {q:"Parable of the ___",a:"Pearl of Great Price",t:"Selling all for one pearl",d:"intermediate"},
+                {q:"Parable of the ___",a:"Unforgiving Servant",t:"Refusing to forgive debt",d:"intermediate"},
+                {q:"Parable of the ___",a:"Workers in Vineyard",t:"All receive same wage",d:"intermediate"},
+                {q:"Parable of the ___",a:"Hidden Treasure",t:"Finding treasure in field",d:"intermediate"},
+                {q:"Parable of the ___",a:"Wicked Tenants",t:"Tenants killing owner's son",d:"intermediate"},
+                {q:"Parable of the ___",a:"Fig Tree",t:"Looking for fruit",d:"intermediate"},
+                {q:"Parable of the ___",a:"Net",t:"Catching good and bad fish",d:"intermediate"},
+                // EXPERT (10)
+                {q:"Parable of the ___",a:"Persistent Widow",t:"Seeking justice from judge",d:"expert"},
+                {q:"Parable of the ___",a:"Shrewd Manager",t:"Managing master's accounts",d:"expert"},
+                {q:"Parable of the ___",a:"Rich Man and Lazarus",t:"Afterlife reversal",d:"expert"},
+                {q:"Parable of the ___",a:"Friend at Midnight",t:"Persistent knocking",d:"expert"},
+                {q:"Parable of the ___",a:"Pharisee's Dinner",t:"Choosing seat of honor",d:"expert"},
+                {q:"Parable of the ___",a:"Lost Sheep (extended)",t:"Leaving 99 for one",d:"expert"},
+                {q:"Parable of the ___",a:"Wedding Banquet",t:"Wedding garments required",d:"expert"},
+                {q:"Parable of the ___",a:"Unmerciful Servant",t:"Debt forgiveness refused",d:"expert"},
+                {q:"Parable of the ___",a:"Budding Fig Tree",t:"Signs of the times",d:"expert"},
+                {q:"Parable of the ___",a:"Faithful Steward",t:"Wise and faithful manager",d:"expert"}
+            ]
+        };
+
+        // Add placeholder activities for remaining 11 exercise types (30 each = 330 total)
+        const remainingExercises = ['prophets','miracles','timeline','wordRecall','psalmMemory','prayer','fruitSpirit','commandments','genealogy','beatitudes','disciples'];
+        
+        remainingExercises.forEach(ex => {
+            activities[ex] = [];
+            for (let i = 1; i <= 30; i++) {
+                const difficulty = i <= 10 ? 'beginner' : i <= 20 ? 'intermediate' : 'expert';
+                activities[ex].push({
+                    q: `${ex} activity ${i} (${difficulty})`,
+                    a: `answer${i}`,
+                    d: difficulty
+                });
+            }
+        });
+
+        // ===================================
+        // AUTHENTICATION
+        // ===================================
+        
+        function handleLogin() {
+            const username = document.getElementById('usernameInput').value.trim();
+            const password = document.getElementById('passwordInput').value.trim();
+            
+            if (!username) {
+                alert('Please enter a username');
+                return;
+            }
+            
+            // Check if user exists
+            if (users[username]) {
+                // Existing user
+                if (password && users[username].password !== password) {
+                    alert('Incorrect password');
+                    return;
+                }
+                currentUser = users[username];
+            } else {
+                // New user - create account
+                currentUser = {
+                    username: username,
+                    password: password || '',
+                    createdDate: new Date().toISOString(),
+                    accountType: 'trial', // trial, premium, lifetime
+                    trialStartDate: new Date().toISOString(),
+                    trialDays: 7,
+                    points: 0,
+                    streak: 0,
+                    completed: 0,
+                    lifetimeCode: null,
+                    progress: {}
+                };
+                users[username] = currentUser;
+                saveData();
+            }
+            
+            showDashboard();
+        }
+
+        function showDashboard() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('dashboardScreen').classList.remove('hidden');
+            
+            // Update welcome message
+            const t = translations[currentLanguage];
+            document.getElementById('welcomeMessage').textContent = `${t.welcome}, ${currentUser.username}!`;
+            
+            // Show lifetime badge if applicable
+            if (currentUser.accountType === 'lifetime') {
+                document.getElementById('lifetimeBadge').classList.remove('hidden');
+            }
+            
+            // Update stats
+            document.getElementById('statPoints').textContent = currentUser.points || 0;
+            document.getElementById('statStreak').textContent = currentUser.streak || 0;
+            document.getElementById('statCompleted').textContent = currentUser.completed || 0;
+            
+            // Show trial banner if in trial
+            if (currentUser.accountType === 'trial') {
+                const trialStart = new Date(currentUser.trialStartDate);
+                const now = new Date();
+                const daysPassed = Math.floor((now - trialStart) / (1000 * 60 * 60 * 24));
+                const daysLeft = 7 - daysPassed;
+                
+                if (daysLeft > 0) {
+                    const banner = document.getElementById('trialBanner');
+                    banner.textContent = `⏰ ${daysLeft} ${translations[currentLanguage].trialEnding}`;
+                    banner.classList.remove('hidden');
+                } else {
+                    const banner = document.getElementById('trialBanner');
+                    banner.textContent = translations[currentLanguage].trialExpired;
+                    banner.classList.remove('hidden');
+                }
+            }
+            
+            // Render exercises
+            renderExercises();
+        }
+
+        function renderExercises() {
+            const grid = document.getElementById('exerciseGrid');
+            grid.innerHTML = '';
+            
+            exerciseTypes.forEach((exercise, index) => {
+                const isPremium = currentUser.accountType === 'premium' || currentUser.accountType === 'lifetime';
+                const isTrial = currentUser.accountType === 'trial';
+                
+                // During trial: unlock first 3 exercises
+                const isUnlocked = isPremium || (isTrial && index < 3);
+                
+                const card = document.createElement('div');
+                card.className = `exercise-card ${!isUnlocked ? 'locked' : ''}`;
+                card.innerHTML = `
+                    <div class="exercise-icon">${exercise.icon}</div>
+                    <div class="exercise-title">${exercise.name}</div>
+                    <div class="exercise-count">30 activities</div>
+                    <div style="margin-top: 10px; font-size: 12px; color: #999;">${exercise.category}</div>
+                    ${!isUnlocked ? '<div style="margin-top: 10px; font-size: 24px;">🔒</div>' : ''}
+                `;
+                
+                if (isUnlocked) {
+                    card.onclick = () => startExercise(exercise.id);
+                } else {
+                    card.onclick = () => showUpgradePrompt();
+                }
+                
+                grid.appendChild(card);
+            });
+        }
+
+        function startExercise(exerciseId) {
+            currentExercise = exerciseId;
+            currentActivityIndex = 0;
+            currentScore = 0;
+            
+            document.getElementById('dashboardScreen').classList.add('hidden');
+            document.getElementById('activityScreen').classList.remove('hidden');
+            
+            loadActivity();
+        }
+
+        function loadActivity() {
+            const exerciseActivities = activities[currentExercise];
+            
+            if (!exerciseActivities || currentActivityIndex >= exerciseActivities.length) {
+                showResults();
+                return;
+            }
+            
+            const activity = exerciseActivities[currentActivityIndex];
+            const content = document.getElementById('activityContent');
+            
+            // Show different UI based on exercise type
+            if (currentExercise === 'fillBlank') {
+                content.innerHTML = `
+                    <span class="difficulty-badge difficulty-${activity.d}">${activity.d.toUpperCase()}</span>
+                    <div class="activity-question">${activity.v}</div>
+                    <input type="text" class="activity-input" id="answerInput" placeholder="Type your answer..." />
+                    <button class="btn btn-primary" onclick="checkAnswer()">${translations[currentLanguage].submit}</button>
+                    <div class="reference">${activity.r}</div>
+                    <div id="feedback"></div>
+                `;
+            } else if (currentExercise === 'trueFalse') {
+                content.innerHTML = `
+                    <span class="difficulty-badge difficulty-${activity.d}">${activity.d.toUpperCase()}</span>
+                    <div class="activity-question">${activity.q}</div>
+                    <button class="btn btn-success" style="width: 48%; display: inline-block;" onclick="checkAnswer('true')">✓ True</button>
+                    <button class="btn btn-warning" style="width: 48%; display: inline-block; margin-left: 4%;" onclick="checkAnswer('false')">✗ False</button>
+                    <div id="feedback"></div>
+                `;
+            } else {
+                content.innerHTML = `
+                    <span class="difficulty-badge difficulty-${activity.d}">${activity.d.toUpperCase()}</span>
+                    <div class="activity-question">${activity.q}</div>
+                    <input type="text" class="activity-input" id="answerInput" placeholder="Type your answer..." />
+                    <button class="btn btn-primary" onclick="checkAnswer()">${translations[currentLanguage].submit}</button>
+                    <div id="feedback"></div>
+                `;
+            }
+            
+            // Focus input if exists
+            const input = document.getElementById('answerInput');
+            if (input) input.focus();
+        }
+
+        function checkAnswer(providedAnswer) {
+            const activity = activities[currentExercise][currentActivityIndex];
+            const userAnswer = providedAnswer || document.getElementById('answerInput')?.value.trim().toLowerCase();
+            const correctAnswer = activity.a.toLowerCase();
+            
+            const isCorrect = userAnswer === correctAnswer;
+            const feedback = document.getElementById('feedback');
+            
+            if (isCorrect) {
+                feedback.className = 'feedback correct';
+                feedback.textContent = translations[currentLanguage].correct;
+                currentScore += 10;
+                currentUser.points += 10;
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `${translations[currentLanguage].incorrect} - ${activity.a}`;
+            }
+            
+            saveData();
+            
+            setTimeout(() => {
+                currentActivityIndex++;
+                if (currentActivityIndex < activities[currentExercise].length) {
+                    loadActivity();
+                } else {
+                    showResults();
+                }
+            }, 2000);
+        }
+
+        function showResults() {
+            currentUser.completed++;
+            saveData();
+            
+            const content = document.getElementById('activityContent');
+            content.innerHTML = `
+                <div style="text-align: center;">
+                    <h2 style="color: #764ba2; margin-bottom: 20px;">🎉 Exercise Complete!</h2>
+                    <div class="stat-value">${currentScore}</div>
+                    <div class="stat-label">Points Earned</div>
+                    <button class="btn btn-primary" onclick="exitActivity()" style="margin-top: 30px;">Back to Dashboard</button>
+                </div>
+            `;
+        }
+
+        function exitActivity() {
+            document.getElementById('activityScreen').classList.add('hidden');
+            document.getElementById('dashboardScreen').classList.remove('hidden');
+            showDashboard();
+        }
+
+        function showUpgradePrompt() {
+            alert('This exercise is locked. Please subscribe to access all activities!');
+        }
+
+        // ===================================
+        // LIFETIME CODE FUNCTIONS
+        // ===================================
+        function showLifetimeCodeModal() {
+            document.getElementById('lifetimeCodeModal').classList.remove('hidden');
+        }
+        
+        function closeLifetimeCodeModal() {
+            document.getElementById('lifetimeCodeModal').classList.add('hidden');
+            document.getElementById('lifetimeUsername').value = '';
+            document.getElementById('lifetimeCode').value = '';
+        }
+        
+        function activateLifetimeCode() {
+            const username = document.getElementById('lifetimeUsername').value.trim();
+            const code = document.getElementById('lifetimeCode').value.trim().toUpperCase();
+            
+            if (!username) {
+                alert('Please enter a username');
+                return;
+            }
+            
+            if (!code) {
+                alert('Please enter a lifetime code');
+                return;
+            }
+            
+            // Find the code
+            const codeObj = lifetimeCodes.find(c => c.code === code);
+            
+            if (!codeObj) {
+                alert('Invalid code. Please check and try again.');
+                return;
+            }
+            
+            if (codeObj.used) {
+                alert('This code has already been used.');
+                return;
+            }
+            
+            // Create or update user
+            if (!users[username]) {
+                users[username] = {
+                    username: username,
+                    password: '',
+                    createdDate: new Date().toISOString(),
+                    accountType: 'lifetime',
+                    lifetimeCode: code,
+                    points: 0,
+                    streak: 0,
+                    completed: 0,
+                    progress: {}
+                };
+            } else {
+                users[username].accountType = 'lifetime';
+                users[username].lifetimeCode = code;
+            }
+            
+            // Mark code as used
+            codeObj.used = true;
+            codeObj.usedBy = username;
+            codeObj.usedDate = new Date().toISOString();
+            
+            saveData();
+            
+            alert('✅ Lifetime access activated! You now have full access forever.');
+            closeLifetimeCodeModal();
+            
+            // Auto-login
+            currentUser = users[username];
+            showDashboard();
+        }
+
+        // ===================================
+        // SETTINGS FUNCTIONS
+        // ===================================
+        function showSettings() {
+            document.getElementById('settingsModal').classList.remove('hidden');
+            
+            // Update settings info
+            document.getElementById('settingsUsername').textContent = currentUser.username;
+            document.getElementById('settingsAccountType').textContent = 
+                currentUser.accountType === 'trial' ? 'Free Trial' :
+                currentUser.accountType === 'premium' ? 'Premium Member' :
+                currentUser.accountType === 'lifetime' ? '👑 Lifetime Member' : 'Unknown';
+            document.getElementById('settingsMemberSince').textContent = 
+                new Date(currentUser.createdDate).toLocaleDateString();
+            
+            // Set language selector
+            document.getElementById('settingsLanguageSelector').value = currentLanguage;
+            
+            // Update subscription section
+            const subSection = document.getElementById('subscriptionSection');
+            if (currentUser.accountType === 'trial') {
+                const trialStart = new Date(currentUser.trialStartDate);
+                const now = new Date();
+                const daysPassed = Math.floor((now - trialStart) / (1000 * 60 * 60 * 24));
+                const daysLeft = 7 - daysPassed;
+                
+                subSection.innerHTML = `
+                    <div style="background: #fff3cd; padding: 20px; border-radius: 10px; border: 2px solid #ffc107;">
+                        <p><strong>Trial Status:</strong> ${daysLeft > 0 ? `${daysLeft} days remaining` : 'Expired'}</p>
+                        <button class="btn btn-primary" style="width: 100%; margin-top: 15px;" onclick="upgradeAccount()">Upgrade to Premium</button>
+                    </div>
+                `;
+            } else if (currentUser.accountType === 'premium') {
+                subSection.innerHTML = `
+                    <div style="background: #d4edda; padding: 20px; border-radius: 10px; border: 2px solid #4caf50;">
+                        <p><strong>Status:</strong> Active Premium Member</p>
+                        <p><strong>Billing:</strong> $4.99/month</p>
+                    </div>
+                `;
+            } else if (currentUser.accountType === 'lifetime') {
+                subSection.innerHTML = `
+                    <div style="background: linear-gradient(135deg, #FFD700, #FFA500); padding: 20px; border-radius: 10px; border: 3px solid #FF8C00; color: white;">
+                        <p style="font-size: 24px; font-weight: bold; text-align: center;">👑 LIFETIME MEMBER 👑</p>
+                        <p style="text-align: center; margin-top: 10px;">Free Forever - Full Access</p>
+                        <p style="text-align: center; font-size: 12px; margin-top: 10px;">Code: ${currentUser.lifetimeCode || 'Direct Access'}</p>
+                    </div>
+                `;
+            }
+        }
+        
+        function closeSettings() {
+            document.getElementById('settingsModal').classList.add('hidden');
+        }
+        
+        function changeLanguageFromSettings() {
+            const newLang = document.getElementById('settingsLanguageSelector').value;
+            currentLanguage = newLang;
+            document.getElementById('topLanguageSelector').value = newLang;
+            updateLanguage();
+        }
+        
+        function upgradeAccount() {
+            alert('Redirecting to payment page... (Stripe integration)');
+            // In production, this would redirect to Stripe checkout
+        }
+
+        // ===================================
+        // ADMIN FUNCTIONS
+        // ===================================
+        function showAdminLogin() {
+            const password = prompt('Enter Admin Password:');
+            if (password === 'VV-ADMIN-2024') {
+                document.getElementById('adminModal').classList.remove('hidden');
+                loadAdminData();
+            } else if (password) {
+                alert('Incorrect password');
+            }
+        }
+        
+        function closeAdmin() {
+            document.getElementById('adminModal').classList.add('hidden');
+        }
+        
+        function showAdminTab(tab) {
+            // Hide all tabs
+            document.getElementById('adminCodesTab').classList.add('hidden');
+            document.getElementById('adminUsersTab').classList.add('hidden');
+            document.getElementById('adminDirectTab').classList.add('hidden');
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.admin-tab').forEach(btn => btn.classList.remove('active'));
+            
+            // Show selected tab
+            if (tab === 'codes') {
+                document.getElementById('adminCodesTab').classList.remove('hidden');
+                document.querySelectorAll('.admin-tab')[0].classList.add('active');
+                loadCodesTable();
+            } else if (tab === 'users') {
+                document.getElementById('adminUsersTab').classList.remove('hidden');
+                document.querySelectorAll('.admin-tab')[1].classList.add('active');
+                loadUserStats();
+            } else if (tab === 'direct') {
+                document.getElementById('adminDirectTab').classList.remove('hidden');
+                document.querySelectorAll('.admin-tab')[2].classList.add('active');
+            }
+        }
+        
+        function loadAdminData() {
+            loadCodesTable();
+            loadUserStats();
+        }
+        
+        function loadCodesTable() {
+            const tbody = document.getElementById('codesTableBody');
+            tbody.innerHTML = '';
+            
+            lifetimeCodes.forEach(code => {
+                const row = document.createElement('tr');
+                row.className = code.used ? 'code-used' : 'code-available';
+                row.innerHTML = `
+                    <td>${code.code}</td>
+                    <td>${code.used ? '🔴 Used' : '🟢 Available'}</td>
+                    <td>${code.usedBy || '-'}</td>
+                    <td>${code.usedDate ? new Date(code.usedDate).toLocaleDateString() : '-'}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        function loadUserStats() {
+            const userArray = Object.values(users);
+            document.getElementById('adminTotalUsers').textContent = userArray.length;
+            document.getElementById('adminTrialUsers').textContent = 
+                userArray.filter(u => u.accountType === 'trial').length;
+            document.getElementById('adminPremiumUsers').textContent = 
+                userArray.filter(u => u.accountType === 'premium').length;
+            document.getElementById('adminLifetimeUsers').textContent = 
+                userArray.filter(u => u.accountType === 'lifetime').length;
+        }
+        
+        function exportCodesToCSV() {
+            let csv = 'Code,Status,Used By,Date Used\n';
+            lifetimeCodes.forEach(code => {
+                csv += `${code.code},${code.used ? 'Used' : 'Available'},${code.usedBy || ''},${code.usedDate || ''}\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'versevault-lifetime-codes.csv';
+            a.click();
+            window.URL.revokeObjectURL(url);
+            
+            alert('✅ Codes exported to CSV!');
+        }
+        
+        function grantDirectAccess() {
+            const username = document.getElementById('directAccessUsername').value.trim();
+            
+            if (!username) {
+                alert('Please enter a username');
+                return;
+            }
+            
+            // Create or update user
+            if (!users[username]) {
+                users[username] = {
+                    username: username,
+                    password: '',
+                    createdDate: new Date().toISOString(),
+                    accountType: 'lifetime',
+                    lifetimeCode: 'DIRECT-ACCESS',
+                    directAccessGranted: new Date().toISOString(),
+                    points: 0,
+                    streak: 0,
+                    completed: 0,
+                    progress: {}
+                };
+            } else {
+                users[username].accountType = 'lifetime';
+                users[username].lifetimeCode = 'DIRECT-ACCESS';
+                users[username].directAccessGranted = new Date().toISOString();
+            }
+            
+            saveData();
+            
+            alert(`✅ Lifetime access granted to ${username}!\n\nThey can now log in with full access.`);
+            document.getElementById('directAccessUsername').value = '';
+            loadUserStats();
+        }
+
+        function signOut() {
+            currentUser = null;
+            document.getElementById('dashboardScreen').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+        }
+
+        function showHelp() {
+            alert('📚 Help & FAQ\n\n✓ Use Scripture memory exercises daily\n✓ Progress through beginner to expert levels\n✓ Track your streak and points\n✓ Access all 20 exercise types with premium\n\nFor support: contact Building On The Faith Ministry');
+        }
+
+        // Initialize
+        updateLanguage();
+    </script>
+</body>
+</html>
