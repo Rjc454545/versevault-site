@@ -1,0 +1,1828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VerseVault - Faith-Based Cognitive Wellness</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+    <script>
+        // Initialize EmailJS with your public key
+        emailjs.init("J6uqkUNXpWvW24wQj");
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 1200px;
+            width: 100%;
+            overflow: hidden;
+            border: 4px solid #FF8C00;
+            outline: 3px solid #FFD700;
+            outline-offset: -7px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .bible-icon {
+            font-size: 1.2em;
+        }
+
+        .scripture-ref {
+            font-size: 0.9em;
+            font-style: italic;
+            opacity: 0.95;
+            margin: 10px 0 5px 0;
+            font-weight: 300;
+        }
+
+        .tagline {
+            font-size: 1.1em;
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+
+        /* FIXED: Language Selector Alignment */
+        .language-selector {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: auto;
+            max-width: 200px;
+        }
+
+        .language-selector select {
+            padding: 8px 15px;
+            width: 100%;
+            border-radius: 8px;
+            border: 2px solid #FF8C00;
+            background: white;
+            color: #333;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .language-selector select:hover {
+            border-color: #FFD700;
+            box-shadow: 0 2px 8px rgba(255, 140, 0, 0.3);
+        }
+
+        .ministry-info {
+            font-size: 0.85em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Login Screen Styles */
+        .login-container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .login-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .tab-button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            background: #f0f0f0;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Dashboard Styles */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+
+        /* Exercise Grid */
+        .exercises-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .exercise-card {
+            background: white;
+            border: 3px solid #FF8C00;
+            border-radius: 15px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .exercise-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-color: #FFD700;
+        }
+
+        .exercise-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .exercise-name {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .exercise-progress {
+            font-size: 0.9em;
+            color: #666;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+
+        /* Activity Screen */
+        .activity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .level-indicator {
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .level-beginner {
+            background: #4ade80;
+            color: white;
+        }
+
+        .level-intermediate {
+            background: #fb923c;
+            color: white;
+        }
+
+        .level-expert {
+            background: #dc2626;
+            color: white;
+        }
+
+        .activity-content {
+            background: #f8f9fa;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        .question {
+            font-size: 1.4em;
+            color: #333;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .audio-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            justify-content: center;
+        }
+
+        .audio-button {
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .play-button {
+            background: #667eea;
+            color: white;
+        }
+
+        .play-button:hover {
+            background: #5568d3;
+            transform: scale(1.05);
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .option-button {
+            padding: 20px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            text-align: left;
+            transition: all 0.3s ease;
+        }
+
+        .option-button:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .option-button.correct {
+            border-color: #4ade80;
+            background: #f0fdf4;
+        }
+
+        .option-button.incorrect {
+            border-color: #ef4444;
+            background: #fef2f2;
+        }
+
+        .option-button:disabled {
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        /* Motivational Messages */
+        .motivation-message {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            animation: slideIn 0.5s ease;
+        }
+
+        .level-complete-celebration {
+            background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            margin: 20px 0;
+            animation: celebrate 0.6s ease;
+        }
+
+        .level-complete-celebration h2 {
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes celebrate {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .btn-secondary {
+            padding: 12px 24px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        /* Welcome Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10001;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 40px;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .modal-header h1 {
+            color: #764ba2;
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .benefit-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .benefit-icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .benefit-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .disclaimer-text {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .acceptance-checkbox {
+            margin: 30px 0;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .acceptance-checkbox input[type="checkbox"] {
+            margin-top: 4px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .accept-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .accept-btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .accept-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .exercises-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .language-selector {
+                position: static;
+                margin: 10px auto;
+                max-width: 200px;
+            }
+
+            .dashboard-header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Welcome & Disclaimer Modal -->
+    <div id="welcomeDisclaimerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1>📖 Welcome to VerseVault</h1>
+                <p style="color: #667eea; font-size: 18px; font-weight: bold;">Faith-Based Cognitive Wellness Application</p>
+                <p style="color: #666; font-size: 14px; margin-top: 10px;">Building On The Faith Ministry - Elder Robert Chalk Jr.</p>
+                <p class="scripture-ref" style="color: #764ba2; margin-top: 15px;">
+                    "Thy word have I hid in mine heart" - Psalm 119:11 (KJV)
+                </p>
+            </div>
+
+            <hr style="border: none; border-top: 2px solid #764ba2; margin: 30px 0;">
+
+            <!-- Benefits Section with Motivational Focus -->
+            <div style="margin-bottom: 30px;">
+                <h2 style="color: #764ba2; font-size: 24px; margin-bottom: 20px; text-align: center;">🧠 Transform Your Mind Through Faith</h2>
+                
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">✨</div>
+                        <div class="benefit-title">Build Confidence Daily</div>
+                        <p style="color: #666; font-size: 14px;">Receive encouraging compliments and positive reinforcement with every correct answer, inspiring you to grow stronger in faith and mind.</p>
+                    </div>
+
+                    <div class="benefit-card">
+                        <div class="benefit-icon">🎯</div>
+                        <div class="benefit-title">Celebrate Every Victory</div>
+                        <p style="color: #666; font-size: 14px;">Experience joy and excitement as you complete each level with uplifting messages that motivate you to keep learning and progressing.</p>
+                    </div>
+
+                    <div class="benefit-card">
+                        <div class="benefit-icon">💪</div>
+                        <div class="benefit-title">Strengthen Cognitive Health</div>
+                        <p style="color: #666; font-size: 14px;">Professionally designed activities targeting memory, focus, and mental clarity - specifically for those with Alzheimer's, Dementia, and cognitive concerns.</p>
+                    </div>
+
+                    <div class="benefit-card">
+                        <div class="benefit-icon">📖</div>
+                        <div class="benefit-title">630 Engaging Activities</div>
+                        <p style="color: #666; font-size: 14px;">21 diverse exercise types with progressive difficulty levels that keep you inspired, challenged, and eager to learn more Scripture.</p>
+                    </div>
+
+                    <div class="benefit-card">
+                        <div class="benefit-icon">🎤</div>
+                        <div class="benefit-title">Audio Learning Support</div>
+                        <p style="color: #666; font-size: 14px;">NEW! Listen to questions with natural voice narration, perfect for auditory learners and those who benefit from hearing Scripture aloud.</p>
+                    </div>
+
+                    <div class="benefit-card">
+                        <div class="benefit-icon">🌟</div>
+                        <div class="benefit-title">Positive Mindset Growth</div>
+                        <p style="color: #666; font-size: 14px;">Continuous encouragement helps you feel positive, capable, and excited about your spiritual and cognitive journey.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Disclaimer -->
+            <div class="disclaimer-text">
+                <h3 style="color: #856404; margin-bottom: 15px;">⚠️ Important Wellness Disclaimer</h3>
+                <p style="color: #856404; line-height: 1.6; margin-bottom: 10px;">
+                    <strong>THIS IS NOT MEDICAL TREATMENT.</strong> VerseVault is a faith-based wellness application designed to support cognitive engagement through Scripture. This application:
+                </p>
+                <ul style="color: #856404; margin-left: 20px; line-height: 1.8;">
+                    <li><strong>Is NOT a substitute</strong> for professional medical care, diagnosis, or treatment</li>
+                    <li><strong>Does NOT treat, cure, or prevent</strong> Alzheimer's, Dementia, or any medical condition</li>
+                    <li><strong>Should be used alongside</strong> (not instead of) proper medical care</li>
+                    <li><strong>Is for spiritual wellness and cognitive engagement</strong> through biblical activities</li>
+                </ul>
+                <p style="color: #856404; margin-top: 15px; font-weight: bold;">
+                    Always consult qualified healthcare professionals for medical advice, diagnosis, and treatment.
+                </p>
+            </div>
+
+            <div class="acceptance-checkbox">
+                <input type="checkbox" id="acceptTerms" onchange="toggleAcceptButton()" />
+                <label for="acceptTerms" style="color: #333; line-height: 1.6;">
+                    ✓ I understand this is a wellness application for spiritual growth and cognitive engagement, NOT medical treatment. I will consult healthcare professionals for medical needs.
+                </label>
+            </div>
+
+            <button id="acceptButton" class="accept-btn" onclick="acceptAndEnter()" disabled>
+                Enter VerseVault
+            </button>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Language Selector (Properly Aligned) -->
+        <div class="language-selector">
+            <select id="topLanguageSelector" onchange="changeLanguage(this.value)">
+                <option value="en">🇺🇸 English</option>
+                <option value="es">🇪🇸 Español</option>
+                <option value="fr">🇫🇷 Français</option>
+                <option value="pt">🇧🇷 Português</option>
+                <option value="zh">🇨🇳 中文</option>
+            </select>
+        </div>
+
+        <!-- Header -->
+        <div class="header">
+            <h1>
+                <span class="bible-icon">📖</span>
+                <span id="appTitle">VerseVault</span>
+            </h1>
+            <p class="scripture-ref" id="scriptureRef">"Thy word have I hid in mine heart" - Psalm 119:11 (KJV)</p>
+            <p class="tagline" id="tagline">Faith-Based Cognitive Wellness - 630 Activities • 21 Exercises</p>
+            <p class="ministry-info">Building On The Faith Ministry - Elder Robert Chalk Jr.</p>
+        </div>
+
+        <!-- Login Screen -->
+        <div id="loginScreen" class="content hidden">
+            <div class="login-container">
+                <div class="login-tabs">
+                    <button class="tab-button active" onclick="switchTab('signin')">Sign In</button>
+                    <button class="tab-button" onclick="switchTab('register')">Create Account</button>
+                    <button class="tab-button" onclick="switchTab('lifetime')">Lifetime Code</button>
+                </div>
+
+                <!-- Sign In Form -->
+                <div id="signinForm">
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" id="signinEmail" placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Password:</label>
+                        <input type="password" id="signinPassword" placeholder="Enter password">
+                    </div>
+                    <button class="btn-primary" onclick="signIn()">Sign In</button>
+                </div>
+
+                <!-- Register Form -->
+                <div id="registerForm" class="hidden">
+                    <div class="form-group">
+                        <label>Full Name:</label>
+                        <input type="text" id="registerName" placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" id="registerEmail" placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Password:</label>
+                        <input type="password" id="registerPassword" placeholder="Create password">
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="emailUpdates">
+                        <label for="emailUpdates">Send me ministry updates and encouragement</label>
+                    </div>
+                    <button class="btn-primary" onclick="register()">Create Account (7-Day Free Trial)</button>
+                </div>
+
+                <!-- Lifetime Code Form -->
+                <div id="lifetimeForm" class="hidden">
+                    <div class="form-group">
+                        <label>Full Name:</label>
+                        <input type="text" id="lifetimeName" placeholder="John Doe">
+                    </div>
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" id="lifetimeEmail" placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Lifetime Access Code:</label>
+                        <input type="text" id="lifetimeCode" placeholder="VV-LIFE-2024-XXXX" style="text-transform: uppercase;">
+                    </div>
+                    <button class="btn-primary" onclick="redeemLifetimeCode()">Redeem Code</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Screen -->
+        <div id="dashboardScreen" class="content hidden">
+            <div class="dashboard-header">
+                <div class="user-info">
+                    <div class="avatar">👤</div>
+                    <div>
+                        <h2 id="userName">Welcome!</h2>
+                        <p id="membershipStatus" style="color: #667eea;">Free Trial</p>
+                    </div>
+                </div>
+                <button class="btn-secondary" onclick="signOut()">Sign Out</button>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Points</div>
+                    <div class="stat-number" id="totalPoints">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Day Streak</div>
+                    <div class="stat-number" id="dayStreak">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Exercises Completed</div>
+                    <div class="stat-number" id="exercisesCompleted">0/21</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Activities Done</div>
+                    <div class="stat-number" id="activitiesDone">0/630</div>
+                </div>
+            </div>
+
+            <h3 style="margin: 30px 0 20px 0; color: #333;">Choose Your Exercise:</h3>
+            <div class="exercises-grid" id="exercisesGrid"></div>
+        </div>
+
+        <!-- Activity Screen -->
+        <div id="activityScreen" class="content hidden">
+            <div class="activity-header">
+                <div>
+                    <button class="btn-secondary" onclick="backToDashboard()">← Back to Exercises</button>
+                    <h2 id="currentExerciseName" style="margin-top: 10px;">Exercise Name</h2>
+                </div>
+                <div style="text-align: right;">
+                    <div id="levelIndicator" class="level-indicator">Level 1: Beginner</div>
+                    <div id="progressIndicator" style="margin-top: 8px; color: #666;">Activity 1/10</div>
+                </div>
+            </div>
+
+            <div id="activityContainer"></div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button id="nextActivityBtn" class="btn-secondary btn-next" onclick="nextActivity()" style="display: none;">
+                    Next Activity →
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== CONFIGURATION ====================
+        
+        const EMAILJS_SERVICE_ID = 'service_34bucn8';
+        
+        // Stripe Configuration
+        const stripe = Stripe('pk_live_51SHSek1ylIvYBzQH8GxBGmnLmrVtV49JgfwrqoOxSC7OkMsz4rgdOOQJB9zc9aH3KtnvOT3CodyeofTsQSr99m7H00QyjpJ2UZ');
+        
+        // 150 Lifetime Access Codes (Fresh - All Unused)
+        const LIFETIME_CODES = [];
+        for (let i = 1; i <= 150; i++) {
+            const code = `VV-LIFE-2024-${String(i).padStart(4, '0')}`;
+            LIFETIME_CODES.push({ code, used: false, usedBy: null, usedDate: null });
+        }
+
+        // ==================== LANGUAGE SYSTEM ====================
+        
+        let currentLanguage = 'en';
+        
+        const translations = {
+            en: {
+                appName: "VerseVault",
+                tagline: "Faith-Based Cognitive Wellness - 630 Activities • 21 Exercises",
+                scriptureRef: '"Thy word have I hid in mine heart" - Psalm 119:11 (KJV)',
+                welcome: "Welcome",
+                signIn: "Sign In",
+                createAccount: "Create Account",
+                lifetimeCode: "Lifetime Code"
+            },
+            es: {
+                appName: "VerseVault",
+                tagline: "Bienestar Cognitivo Basado en la Fe - 630 Actividades • 21 Ejercicios",
+                scriptureRef: '"En mi corazón he guardado tus dichos" - Salmos 119:11 (RVR)',
+                welcome: "Bienvenido",
+                signIn: "Iniciar Sesión",
+                createAccount: "Crear Cuenta",
+                lifetimeCode: "Código de por Vida"
+            },
+            fr: {
+                appName: "VerseVault",
+                tagline: "Bien-être Cognitif Basé sur la Foi - 630 Activités • 21 Exercices",
+                scriptureRef: '"Je serre ta parole dans mon cœur" - Psaumes 119:11 (LSG)',
+                welcome: "Bienvenue",
+                signIn: "Se Connecter",
+                createAccount: "Créer un Compte",
+                lifetimeCode: "Code à Vie"
+            },
+            pt: {
+                appName: "VerseVault",
+                tagline: "Bem-Estar Cognitivo Baseado na Fé - 630 Atividades • 21 Exercícios",
+                scriptureRef: '"Escondi a tua palavra no meu coração" - Salmos 119:11 (ARC)',
+                welcome: "Bem-vindo",
+                signIn: "Entrar",
+                createAccount: "Criar Conta",
+                lifetimeCode: "Código Vitalício"
+            },
+            zh: {
+                appName: "VerseVault",
+                tagline: "基于信仰的认知健康 - 630个活动 • 21个练习",
+                scriptureRef: '"我将你的话藏在心里" - 诗篇 119:11',
+                welcome: "欢迎",
+                signIn: "登录",
+                createAccount: "创建账户",
+                lifetimeCode: "终身代码"
+            }
+        };
+
+        function changeLanguage(lang) {
+            currentLanguage = lang;
+            const t = translations[lang];
+            
+            document.getElementById('appTitle').textContent = t.appName;
+            document.getElementById('tagline').textContent = t.tagline;
+            document.getElementById('scriptureRef').textContent = t.scriptureRef;
+            
+            // Sync settings language selector if it exists
+            const settingsLang = document.getElementById('settingsLanguageSelector');
+            if (settingsLang) {
+                settingsLang.value = lang;
+            }
+            
+            // Save preference
+            if (currentUser) {
+                currentUser.language = lang;
+                saveUserData();
+            }
+        }
+
+        // ==================== USER SYSTEM ====================
+        
+        let currentUser = null;
+        let allUsers = JSON.parse(localStorage.getItem('vv_users')) || [];
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.login-container > div > div').forEach(form => form.classList.add('hidden'));
+            
+            if (tab === 'signin') {
+                document.querySelector('.tab-button:nth-child(1)').classList.add('active');
+                document.getElementById('signinForm').classList.remove('hidden');
+            } else if (tab === 'register') {
+                document.querySelector('.tab-button:nth-child(2)').classList.add('active');
+                document.getElementById('registerForm').classList.remove('hidden');
+            } else if (tab === 'lifetime') {
+                document.querySelector('.tab-button:nth-child(3)').classList.add('active');
+                document.getElementById('lifetimeForm').classList.remove('hidden');
+            }
+        }
+
+        function register() {
+            const name = document.getElementById('registerName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim().toLowerCase();
+            const password = document.getElementById('registerPassword').value;
+            const emailUpdates = document.getElementById('emailUpdates').checked;
+
+            if (!name || !email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            if (allUsers.find(u => u.email === email)) {
+                alert('Email already registered. Please sign in instead.');
+                return;
+            }
+
+            const newUser = {
+                id: Date.now().toString(),
+                name: name,
+                email: email,
+                password: password,
+                membershipType: 'trial',
+                trialStartDate: new Date().toISOString(),
+                trialEndDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+                emailUpdates: emailUpdates,
+                joinDate: new Date().toISOString(),
+                totalPoints: 0,
+                dayStreak: 0,
+                lastActivityDate: null,
+                language: currentLanguage,
+                progress: {}
+            };
+
+            allUsers.push(newUser);
+            localStorage.setItem('vv_users', JSON.stringify(allUsers));
+
+            // Send welcome email if opted in
+            if (emailUpdates) {
+                sendWelcomeEmail(email, name);
+            }
+
+            alert(`🎉 Welcome ${name}! Your 7-day free trial has started. Explore all features!`);
+            currentUser = newUser;
+            showDashboard();
+        }
+
+        function signIn() {
+            const email = document.getElementById('signinEmail').value.trim().toLowerCase();
+            const password = document.getElementById('signinPassword').value;
+
+            if (!email || !password) {
+                alert('Please enter email and password');
+                return;
+            }
+
+            const user = allUsers.find(u => u.email === email && u.password === password);
+
+            if (!user) {
+                alert('Invalid email or password');
+                return;
+            }
+
+            currentUser = user;
+            showDashboard();
+        }
+
+        function redeemLifetimeCode() {
+            const name = document.getElementById('lifetimeName').value.trim();
+            const email = document.getElementById('lifetimeEmail').value.trim().toLowerCase();
+            const code = document.getElementById('lifetimeCode').value.trim().toUpperCase();
+
+            if (!name || !email || !code) {
+                alert('Please fill in all fields');
+                return;
+            }
+
+            // Get stored codes or initialize
+            let storedCodes = JSON.parse(localStorage.getItem('vv_lifetime_codes')) || LIFETIME_CODES;
+            
+            const codeEntry = storedCodes.find(c => c.code === code);
+
+            if (!codeEntry) {
+                alert('Invalid code. Please check and try again.');
+                return;
+            }
+
+            if (codeEntry.used) {
+                alert(`This code was already used by ${codeEntry.usedBy} on ${new Date(codeEntry.usedDate).toLocaleDateString()}`);
+                return;
+            }
+
+            // Mark code as used
+            codeEntry.used = true;
+            codeEntry.usedBy = email;
+            codeEntry.usedDate = new Date().toISOString();
+            localStorage.setItem('vv_lifetime_codes', JSON.stringify(storedCodes));
+
+            // Create or update user
+            let user = allUsers.find(u => u.email === email);
+            
+            if (user) {
+                user.membershipType = 'lifetime';
+                user.lifetimeCode = code;
+            } else {
+                user = {
+                    id: Date.now().toString(),
+                    name: name,
+                    email: email,
+                    password: 'LIFETIME_' + Math.random().toString(36).substring(7),
+                    membershipType: 'lifetime',
+                    lifetimeCode: code,
+                    joinDate: new Date().toISOString(),
+                    totalPoints: 0,
+                    dayStreak: 0,
+                    lastActivityDate: null,
+                    language: currentLanguage,
+                    progress: {}
+                };
+                allUsers.push(user);
+            }
+
+            localStorage.setItem('vv_users', JSON.stringify(allUsers));
+
+            alert(`🎉 Congratulations! Lifetime access activated for ${name}!`);
+            currentUser = user;
+            showDashboard();
+        }
+
+        function signOut() {
+            currentUser = null;
+            document.getElementById('dashboardScreen').classList.add('hidden');
+            document.getElementById('activityScreen').classList.add('hidden');
+            document.getElementById('loginScreen').classList.remove('hidden');
+        }
+
+        function sendWelcomeEmail(email, name) {
+            emailjs.send(EMAILJS_SERVICE_ID, 'welcome_template', {
+                to_email: email,
+                to_name: name,
+                from_name: 'VerseVault Team',
+                message: 'Welcome to VerseVault! Your 7-day free trial has started.'
+            }).then(
+                function(response) {
+                    console.log('Welcome email sent!', response);
+                },
+                function(error) {
+                    console.log('Email failed to send', error);
+                }
+            );
+        }
+
+        // ==================== EXERCISE DEFINITIONS ====================
+        
+        const exercises = [
+            {id: 'fillBlank', name: 'Fill in the Blank', icon: '📖', description: 'Complete Bible verses'},
+            {id: 'storySequence', name: 'Story Sequencing', icon: '📚', description: 'Order biblical events'},
+            {id: 'numberMemory', name: 'Number Memory', icon: '🔢', description: 'Recall biblical numbers'},
+            {id: 'verseMatch', name: 'Verse Matching', icon: '🔗', description: 'Match verses to references'},
+            {id: 'charRecognition', name: 'Character Recognition', icon: '👤', description: 'Identify Bible figures'},
+            {id: 'bookOrder', name: 'Book Order', icon: '📕', description: 'Arrange Bible books'},
+            {id: 'timeline', name: 'Timeline Challenge', icon: '⏰', description: 'Order events chronologically'},
+            {id: 'location', name: 'Location Memory', icon: '🗺️', description: 'Biblical places'},
+            {id: 'wordRecall', name: 'Word Recall', icon: '💭', description: 'Remember key words'},
+            {id: 'parable', name: 'Parable Matching', icon: '🌱', description: 'Match parables to lessons'},
+            {id: 'prophet', name: 'Prophet Identification', icon: '👨‍🦳', description: 'Recognize prophets'},
+            {id: 'miracle', name: 'Miracle Sequencing', icon: '✨', description: 'Order miracles of Jesus'},
+            {id: 'genealogy', name: 'Genealogy Memory', icon: '👨‍👩‍👧‍👦', description: 'Biblical family trees'},
+            {id: 'promise', name: 'Promise Recall', icon: '🤝', description: 'God\'s promises'},
+            {id: 'prayer', name: 'Prayer Elements', icon: '🙏', description: 'Components of prayer'},
+            {id: 'fruitSpirit', name: 'Fruit of Spirit', icon: '🍇', description: 'Galatians 5:22-23'},
+            {id: 'commandments', name: 'Commandment Recall', icon: '📜', description: 'The Ten Commandments'},
+            {id: 'psalm', name: 'Psalm Memory', icon: '🎵', description: 'Memorize Psalms'},
+            {id: 'wisdom', name: 'Wisdom Proverbs', icon: '🦉', description: 'Proverbs wisdom'},
+            {id: 'apostle', name: 'Apostle Identification', icon: '✝️', description: 'The 12 Apostles'},
+            {id: 'audioActivity', name: 'Audio Scripture', icon: '🎤', description: 'Listen and respond'} // NEW Exercise #21
+        ];
+
+        // ==================== MOTIVATIONAL MESSAGES ====================
+        
+        const encouragementMessages = [
+            "🌟 Excellent work! You're growing stronger in faith!",
+            "💪 Amazing! Your mind is sharp and your spirit is strong!",
+            "✨ Wonderful! God's word is alive in you!",
+            "🎯 Perfect! You're mastering Scripture beautifully!",
+            "🙌 Fantastic! Keep building on your faith!",
+            "💎 Brilliant! Your dedication is inspiring!",
+            "⭐ Outstanding! You're a true student of the Word!",
+            "🔥 Incredible! Your progress is remarkable!",
+            "🏆 Superb! You're becoming a Scripture expert!",
+            "💫 Magnificent! Your memory is getting sharper!"
+        ];
+
+        const levelCompleteMessages = [
+            {
+                title: "🎉 Level Complete!",
+                message: "You did it! Your dedication and faith are shining through. Ready for the next challenge?"
+            },
+            {
+                title: "🌟 Amazing Progress!",
+                message: "What a journey! You're growing in wisdom and knowledge. Let's continue!"
+            },
+            {
+                title: "💪 Level Mastered!",
+                message: "Incredible work! Your mind is sharp and your spirit is strong. Onward!"
+            },
+            {
+                title: "✨ Congratulations!",
+                message: "You've shown great perseverance! God's word is taking root in your heart!"
+            },
+            {
+                title: "🏆 Victory Achieved!",
+                message: "Excellent completion! You're building a strong foundation in Scripture!"
+            }
+        ];
+
+        function getRandomEncouragement() {
+            return encouragementMessages[Math.floor(Math.random() * encouragementMessages.length)];
+        }
+
+        function getRandomLevelComplete() {
+            return levelCompleteMessages[Math.floor(Math.random() * levelCompleteMessages.length)];
+        }
+
+        // ==================== ACTIVITY DATA ====================
+        
+        // Sample activities for each exercise (30 activities per exercise: 10 beginner, 10 intermediate, 10 expert)
+        const activityData = {
+            fillBlank: [
+                // BEGINNER (1-10)
+                {level: 1, question: "For God so loved the ___, that he gave his only begotten Son", answer: "world", options: ["world", "church", "people", "nation"]},
+                {level: 1, question: "The Lord is my ___, I shall not want", answer: "shepherd", options: ["shepherd", "friend", "guide", "father"]},
+                {level: 1, question: "In the beginning God created the heaven and the ___", answer: "earth", options: ["earth", "sea", "sky", "land"]},
+                {level: 1, question: "Thy word is a lamp unto my ___, and a light unto my path", answer: "feet", options: ["feet", "soul", "heart", "mind"]},
+                {level: 1, question: "Love thy ___ as thyself", answer: "neighbour", options: ["neighbour", "brother", "family", "friend"]},
+                {level: 1, question: "The wages of sin is ___", answer: "death", options: ["death", "pain", "sorrow", "loss"]},
+                {level: 1, question: "Jesus wept", answer: "wept", options: ["wept", "prayed", "spoke", "smiled"]},
+                {level: 1, question: "Ask, and it shall be given you; ___, and ye shall find", answer: "seek", options: ["seek", "knock", "pray", "hope"]},
+                {level: 1, question: "Be still, and know that I am ___", answer: "God", options: ["God", "Lord", "faithful", "present"]},
+                {level: 1, question: "I can do all things through ___ which strengtheneth me", answer: "Christ", options: ["Christ", "faith", "prayer", "God"]},
+                
+                // INTERMEDIATE (11-20)
+                {level: 2, question: "Trust in the LORD with all thine heart; and lean not unto thine own ___", answer: "understanding", options: ["understanding", "wisdom", "knowledge", "strength"]},
+                {level: 2, question: "The fear of the LORD is the beginning of ___", answer: "wisdom", options: ["wisdom", "knowledge", "understanding", "faith"]},
+                {level: 2, question: "Blessed are the ___ in spirit: for theirs is the kingdom of heaven", answer: "poor", options: ["poor", "meek", "pure", "humble"]},
+                {level: 2, question: "He that is without ___ among you, let him first cast a stone", answer: "sin", options: ["sin", "fault", "guilt", "blame"]},
+                {level: 2, question: "For where two or three are gathered together in my name, there am I in the ___ of them", answer: "midst", options: ["midst", "presence", "center", "company"]},
+                {level: 2, question: "A soft answer turneth away ___", answer: "wrath", options: ["wrath", "anger", "fury", "rage"]},
+                {level: 2, question: "The tongue is a fire, a world of ___", answer: "iniquity", options: ["iniquity", "evil", "wickedness", "sin"]},
+                {level: 2, question: "Greater love hath no man than this, that a man lay down his ___ for his friends", answer: "life", options: ["life", "soul", "spirit", "body"]},
+                {level: 2, question: "The fruit of the Spirit is love, joy, peace, longsuffering, gentleness, goodness, faith, Meekness, ___", answer: "temperance", options: ["temperance", "patience", "kindness", "humility"]},
+                {level: 2, question: "For the love of money is the root of all ___", answer: "evil", options: ["evil", "sin", "wickedness", "destruction"]},
+                
+                // EXPERT (21-30)
+                {level: 3, question: "Now faith is the substance of things hoped for, the ___ of things not seen", answer: "evidence", options: ["evidence", "proof", "assurance", "certainty"]},
+                {level: 3, question: "And we know that all things work together for good to them that love God, to them who are the called according to his ___", answer: "purpose", options: ["purpose", "plan", "will", "design"]},
+                {level: 3, question: "For by grace are ye saved through faith; and that not of yourselves: it is the ___ of God", answer: "gift", options: ["gift", "mercy", "grace", "blessing"]},
+                {level: 3, question: "Study to shew thyself approved unto God, a workman that needeth not to be ___, rightly dividing the word of truth", answer: "ashamed", options: ["ashamed", "afraid", "corrected", "blamed"]},
+                {level: 3, question: "For God hath not given us the spirit of fear; but of power, and of love, and of a ___ mind", answer: "sound", options: ["sound", "peaceful", "strong", "clear"]},
+                {level: 3, question: "Be not overcome of evil, but overcome evil with ___", answer: "good", options: ["good", "love", "faith", "prayer"]},
+                {level: 3, question: "If my people, which are called by my name, shall humble themselves, and pray, and seek my face, and turn from their wicked ways; then will I hear from heaven, and will forgive their sin, and will heal their ___", answer: "land", options: ["land", "people", "nation", "hearts"]},
+                {level: 3, question: "The steps of a good man are ___ by the LORD: and he delighteth in his way", answer: "ordered", options: ["ordered", "guided", "directed", "established"]},
+                {level: 3, question: "Let your light so shine before men, that they may see your good works, and glorify your Father which is in ___", answer: "heaven", options: ["heaven", "glory", "majesty", "holiness"]},
+                {level: 3, question: "For I know the thoughts that I think toward you, saith the LORD, thoughts of peace, and not of evil, to give you an expected ___", answer: "end", options: ["end", "future", "hope", "purpose"]}
+            ],
+            
+            storySequence: [
+                // BEGINNER (1-10)
+                {level: 1, story: "Creation", events: ["God created heaven and earth", "God created light", "God created man", "God rested"], correctOrder: [0,1,2,3]},
+                {level: 1, story: "Noah's Ark", events: ["God told Noah to build an ark", "The flood came", "Noah sent a dove", "Rainbow appeared"], correctOrder: [0,1,2,3]},
+                {level: 1, story: "David and Goliath", events: ["Goliath challenged Israel", "David volunteered to fight", "David chose five stones", "David defeated Goliath"], correctOrder: [0,1,2,3]},
+                {level: 1, story: "Jesus' Birth", events: ["Angel visited Mary", "Mary and Joseph traveled", "Jesus was born", "Wise men visited"], correctOrder: [0,1,2,3]},
+                {level: 1, story: "Feeding 5000", events: ["Jesus taught the crowd", "Boy offered loaves and fish", "Jesus blessed the food", "Everyone was fed"], correctOrder: [0,1,2,3]},
+                {level: 1, story: "Moses and Red Sea", events: ["Israelites left Egypt", "Pharaoh chased them", "Moses parted the sea", "Egyptians drowned"], correctOrder: [0,1,2,3]},
+                {level: 1, story: "Daniel in Lion's Den", events: ["Daniel prayed to God", "Daniel was arrested", "Daniel thrown to lions", "God protected Daniel"], correctOrder: [0,1,2,3]},
+                {level: 1, story: "Jonah and the Whale", events: ["God called Jonah", "Jonah ran away", "Whale swallowed Jonah", "Jonah preached to Nineveh"], correctOrder: [0,1,2,3]},
+                {level: 1, story: "Good Samaritan", events: ["Man was robbed", "Priest passed by", "Samaritan helped him", "Samaritan paid for care"], correctOrder: [0,1,2,3]},
+                {level: 1, story: "Prodigal Son", events: ["Son left home", "Son spent all money", "Son returned home", "Father celebrated"], correctOrder: [0,1,2,3]},
+                
+                // INTERMEDIATE (11-20)
+                {level: 2, story: "Abraham and Isaac", events: ["God tested Abraham", "Abraham took Isaac to mountain", "Angel stopped Abraham", "God provided a ram"], correctOrder: [0,1,2,3]},
+                {level: 2, story: "Jacob's Ladder", events: ["Jacob left home", "Jacob slept on stone", "Jacob dreamed of ladder", "Jacob made a vow"], correctOrder: [0,1,2,3]},
+                {level: 2, story: "Joseph's Journey", events: ["Brothers sold Joseph", "Joseph served in Egypt", "Joseph interpreted dreams", "Joseph saved Egypt"], correctOrder: [0,1,2,3]},
+                {level: 2, story: "Exodus Plagues", events: ["Moses demanded release", "God sent plagues", "Pharaoh refused", "Death of firstborn"], correctOrder: [0,1,2,3]},
+                {level: 2, story: "Joshua and Jericho", events: ["God gave instructions", "Army marched around city", "Trumpets blew", "Walls fell down"], correctOrder: [0,1,2,3]},
+                {level: 2, story: "Samson's Strength", events: ["Samson grew strong", "Delilah betrayed him", "Samson lost strength", "Samson destroyed temple"], correctOrder: [0,1,2,3]},
+                {level: 2, story: "Ruth and Naomi", events: ["Naomi lost family", "Ruth stayed with Naomi", "Ruth gleaned in fields", "Ruth married Boaz"], correctOrder: [0,1,2,3]},
+                {level: 2, story: "Elijah and Prophets", events: ["Elijah challenged prophets", "Altar was prepared", "Fire fell from heaven", "People believed God"], correctOrder: [0,1,2,3]},
+                {level: 2, story: "Esther Saves Jews", events: ["Esther became queen", "Haman plotted evil", "Esther revealed plot", "Jews were saved"], correctOrder: [0,1,2,3]},
+                {level: 2, story: "Jesus' Resurrection", events: ["Jesus was crucified", "Tomb was sealed", "Stone rolled away", "Jesus appeared alive"], correctOrder: [0,1,2,3]},
+                
+                // EXPERT (21-30)
+                {level: 3, story: "Paul's Conversion", events: ["Saul persecuted Christians", "Light blinded Saul", "Jesus spoke to Saul", "Saul became Paul"], correctOrder: [0,1,2,3]},
+                {level: 3, story: "Peter's Denial", events: ["Jesus predicted denial", "Peter followed Jesus", "Peter denied three times", "Rooster crowed"], correctOrder: [0,1,2,3]},
+                {level: 3, story: "Pentecost", events: ["Disciples waited", "Wind and fire appeared", "Disciples spoke languages", "3000 believed"], correctOrder: [0,1,2,3]},
+                {level: 3, story: "Stephen's Martyrdom", events: ["Stephen preached boldly", "Leaders arrested Stephen", "Stephen saw heaven", "Stephen was stoned"], correctOrder: [0,1,2,3]},
+                {level: 3, story: "Philip and Ethiopian", events: ["Angel sent Philip", "Philip met Ethiopian", "Philip explained Scripture", "Ethiopian was baptized"], correctOrder: [0,1,2,3]},
+                {level: 3, story: "Peter's Vision", events: ["Peter prayed on roof", "Peter saw vision", "Voice told him to eat", "Peter went to Gentiles"], correctOrder: [0,1,2,3]},
+                {level: 3, story: "Paul's Shipwreck", events: ["Storm arose", "Ship was damaged", "Angel appeared to Paul", "All reached land safely"], correctOrder: [0,1,2,3]},
+                {level: 3, story: "Revelation Vision", events: ["John on Patmos", "Voice spoke to John", "John saw Jesus", "John wrote messages"], correctOrder: [0,1,2,3]},
+                {level: 3, story: "Tower of Babel", events: ["People built tower", "God confused languages", "People scattered", "City was abandoned"], correctOrder: [0,1,2,3]},
+                {level: 3, story: "Last Supper", events: ["Jesus gathered disciples", "Jesus washed feet", "Jesus broke bread", "Jesus predicted betrayal"], correctOrder: [0,1,2,3]}
+            ],
+            
+            numberMemory: [
+                // BEGINNER (1-10)
+                {level: 1, question: "How many days did God take to create the world?", answer: "6", options: ["5", "6", "7", "8"]},
+                {level: 1, question: "How many apostles did Jesus choose?", answer: "12", options: ["10", "11", "12", "13"]},
+                {level: 1, question: "How many commandments did God give Moses?", answer: "10", options: ["8", "10", "12", "15"]},
+                {level: 1, question: "How many animals of each kind entered Noah's ark?", answer: "2", options: ["1", "2", "3", "4"]},
+                {level: 1, question: "How many books are in the New Testament?", answer: "27", options: ["24", "27", "30", "33"]},
+                {level: 1, question: "How many loaves did Jesus use to feed 5000?", answer: "5", options: ["3", "5", "7", "10"]},
+                {level: 1, question: "How many fish did Jesus use to feed 5000?", answer: "2", options: ["1", "2", "3", "5"]},
+                {level: 1, question: "How many sons did Jacob have?", answer: "12", options: ["10", "12", "14", "15"]},
+                {level: 1, question: "How many plagues did God send on Egypt?", answer: "10", options: ["7", "8", "10", "12"]},
+                {level: 1, question: "How many years did the Israelites wander in the wilderness?", answer: "40", options: ["30", "40", "50", "60"]},
+                
+                // INTERMEDIATE (11-20)
+                {level: 2, question: "How many pieces of silver did Judas receive for betraying Jesus?", answer: "30", options: ["20", "30", "40", "50"]},
+                {level: 2, question: "How many days was Jesus in the tomb before resurrection?", answer: "3", options: ["1", "2", "3", "4"]},
+                {level: 2, question: "How many days did Jesus fast in the wilderness?", answer: "40", options: ["30", "40", "50", "60"]},
+                {level: 2, question: "How old was Jesus when he began his ministry?", answer: "30", options: ["25", "30", "33", "35"]},
+                {level: 2, question: "How many tribes of Israel were there?", answer: "12", options: ["10", "12", "13", "14"]},
+                {level: 2, question: "How many times did Peter deny Jesus?", answer: "3", options: ["2", "3", "4", "5"]},
+                {level: 2, question: "How many days and nights did it rain during the flood?", answer: "40", options: ["30", "40", "50", "60"]},
+                {level: 2, question: "How many books are in the Old Testament?", answer: "39", options: ["35", "37", "39", "41"]},
+                {level: 2, question: "How many people were saved on Noah's ark?", answer: "8", options: ["6", "8", "10", "12"]},
+                {level: 2, question: "How many baskets of leftovers after feeding 5000?", answer: "12", options: ["10", "12", "14", "15"]},
+                
+                // EXPERT (21-30)
+                {level: 3, question: "How many generations from Abraham to David?", answer: "14", options: ["12", "14", "16", "18"]},
+                {level: 3, question: "How many years old was Abraham when Isaac was born?", answer: "100", options: ["90", "100", "110", "120"]},
+                {level: 3, question: "How many years did Solomon reign as king?", answer: "40", options: ["30", "40", "50", "60"]},
+                {level: 3, question: "How many chapters are in the book of Psalms?", answer: "150", options: ["120", "150", "180", "200"]},
+                {level: 3, question: "How many souls were added to the church at Pentecost?", answer: "3000", options: ["2000", "3000", "4000", "5000"]},
+                {level: 3, question: "How many years was Israel in Egyptian bondage?", answer: "430", options: ["400", "430", "450", "500"]},
+                {level: 3, question: "How many days did Jonah give Nineveh to repent?", answer: "40", options: ["30", "40", "50", "60"]},
+                {level: 3, question: "How many silver shekels did Joseph's brothers sell him for?", answer: "20", options: ["15", "20", "25", "30"]},
+                {level: 3, question: "How many men did Gideon have when he defeated Midian?", answer: "300", options: ["200", "300", "400", "500"]},
+                {level: 3, question: "How many years did Moses live?", answer: "120", options: ["100", "110", "120", "130"]}
+            ],
+
+            // NEW EXERCISE #21: AUDIO ACTIVITY
+            audioActivity: [
+                // BEGINNER (1-10) - Female Voice
+                {level: 1, voice: 'female', question: "Listen carefully: 'The Lord is my shepherd; I shall not want.' Who is your shepherd according to this verse?", answer: "The Lord", options: ["The Lord", "My family", "My pastor", "My friends"]},
+                {level: 1, voice: 'female', question: "Hear these words: 'For God so loved the world.' According to this, who did God love?", answer: "The world", options: ["The church", "The world", "Israel", "The saints"]},
+                {level: 1, voice: 'female', question: "Listen: 'Be still and know that I am God.' What should we do to know God?", answer: "Be still", options: ["Be busy", "Be still", "Be active", "Be worried"]},
+                {level: 1, voice: 'female', question: "Hear: 'Give us this day our daily bread.' What does this prayer ask for?", answer: "Daily bread", options: ["Wealth", "Daily bread", "Power", "Fame"]},
+                {level: 1, voice: 'female', question: "Listen carefully: 'Love thy neighbor as thyself.' Who should we love?", answer: "Our neighbor", options: ["Only family", "Our neighbor", "Only friends", "Only believers"]},
+                {level: 1, voice: 'female', question: "Hear these words: 'In the beginning God created the heaven and the earth.' Who created everything?", answer: "God", options: ["Angels", "Man", "God", "Nature"]},
+                {level: 1, voice: 'female', question: "Listen: 'Honour thy father and thy mother.' Who should we honor?", answer: "Parents", options: ["Teachers", "Parents", "Friends", "Leaders"]},
+                {level: 1, voice: 'female', question: "Hear: 'Ask, and it shall be given you.' What should we do to receive?", answer: "Ask", options: ["Demand", "Ask", "Work", "Wait"]},
+                {level: 1, voice: 'female', question: "Listen carefully: 'The Lord is good to all.' How is the Lord described?", answer: "Good", options: ["Strict", "Good", "Distant", "Harsh"]},
+                {level: 1, voice: 'female', question: "Hear: 'Trust in the Lord with all thine heart.' What should we give to the Lord?", answer: "All our heart", options: ["Some time", "All our heart", "Our money", "Our words"]},
+                
+                // INTERMEDIATE (11-20) - Male Voice
+                {level: 2, voice: 'male', question: "Listen to this wisdom: 'A soft answer turneth away wrath, but grievous words stir up anger.' What does a soft answer do?", answer: "Turns away wrath", options: ["Causes problems", "Turns away wrath", "Creates confusion", "Shows weakness"]},
+                {level: 2, voice: 'male', question: "Hear these words: 'Train up a child in the way he should go, and when he is old, he will not depart from it.' When we train children properly, what happens?", answer: "They remember training", options: ["They forget quickly", "They rebel", "They remember training", "Nothing changes"]},
+                {level: 2, voice: 'male', question: "Listen: 'The fear of the Lord is the beginning of wisdom.' What is the beginning of wisdom?", answer: "Fear of the Lord", options: ["Fear of the Lord", "Education", "Experience", "Intelligence"]},
+                {level: 2, voice: 'male', question: "Hear carefully: 'Greater love hath no man than this, that a man lay down his life for his friends.' What is the greatest love?", answer: "Laying down life", options: ["Giving money", "Laying down life", "Saying kind words", "Attending church"]},
+                {level: 2, voice: 'male', question: "Listen: 'The fruit of the Spirit is love, joy, peace, longsuffering, gentleness, goodness, faith.' Name one fruit of the Spirit.", answer: "Any correct fruit", options: ["Love", "Joy", "Peace", "Longsuffering"]},
+                {level: 2, voice: 'male', question: "Hear: 'Be not overcome of evil, but overcome evil with good.' How should we overcome evil?", answer: "With good", options: ["With anger", "With good", "With revenge", "With silence"]},
+                {level: 2, voice: 'male', question: "Listen carefully: 'For where two or three are gathered together in my name, there am I in the midst of them.' When Jesus is present among us?", answer: "When we gather", options: ["Only in church", "When we gather", "Only at prayer", "Only on Sunday"]},
+                {level: 2, voice: 'male', question: "Hear: 'Let your light so shine before men, that they may see your good works.' What should shine before others?", answer: "Our light", options: ["Our words", "Our light", "Our wealth", "Our knowledge"]},
+                {level: 2, voice: 'male', question: "Listen: 'Cast thy burden upon the Lord, and he shall sustain thee.' What should we do with our burdens?", answer: "Cast on the Lord", options: ["Hide them", "Cast on the Lord", "Bear them alone", "Ignore them"]},
+                {level: 2, voice: 'male', question: "Hear: 'Commit thy way unto the Lord; trust also in him; and he shall bring it to pass.' What should we commit to the Lord?", answer: "Our way", options: ["Our wishes", "Our way", "Our plans only", "Our doubts"]},
+                
+                // EXPERT (21-30) - Female Voice
+                {level: 3, voice: 'female', question: "Listen to this profound truth: 'Now faith is the substance of things hoped for, the evidence of things not seen.' Faith is the evidence of what?", answer: "Things not seen", options: ["Things not seen", "Things we touch", "Things we understand", "Things we control"]},
+                {level: 3, voice: 'female', question: "Hear carefully: 'For by grace are ye saved through faith; and that not of yourselves: it is the gift of God.' How are we saved?", answer: "By grace through faith", options: ["By our works", "By grace through faith", "By our efforts", "By our goodness"]},
+                {level: 3, voice: 'female', question: "Listen: 'Study to shew thyself approved unto God, a workman that needeth not to be ashamed.' What kind of workman should we be?", answer: "Not ashamed", options: ["Perfect", "Not ashamed", "Famous", "Popular"]},
+                {level: 3, voice: 'female', question: "Hear: 'For God hath not given us the spirit of fear; but of power, and of love, and of a sound mind.' What spirit has God given us?", answer: "Power, love, sound mind", options: ["Fear and worry", "Power, love, sound mind", "Confusion", "Weakness"]},
+                {level: 3, voice: 'female', question: "Listen carefully: 'And we know that all things work together for good to them that love God.' To whom do all things work for good?", answer: "Those who love God", options: ["Everyone", "Those who love God", "The wealthy", "The educated"]},
+                {level: 3, voice: 'female', question: "Hear: 'If my people, which are called by my name, shall humble themselves, and pray, and seek my face, and turn from their wicked ways; then will I hear from heaven.' What must God's people do first?", answer: "Humble themselves", options: ["Boast", "Humble themselves", "Complain", "Demand"]},
+                {level: 3, voice: 'female', question: "Listen: 'The steps of a good man are ordered by the Lord: and he delighteth in his way.' Who orders the steps of a good man?", answer: "The Lord", options: ["Himself", "Others", "The Lord", "Chance"]},
+                {level: 3, voice: 'female', question: "Hear: 'For I know the thoughts that I think toward you, saith the Lord, thoughts of peace, and not of evil, to give you an expected end.' What kind of thoughts does God have toward you?", answer: "Thoughts of peace", options: ["Thoughts of judgment", "Thoughts of peace", "Thoughts of punishment", "Thoughts of distance"]},
+                {level: 3, voice: 'female', question: "Listen carefully: 'But they that wait upon the Lord shall renew their strength; they shall mount up with wings as eagles.' What happens to those who wait on the Lord?", answer: "Renew their strength", options: ["Grow weary", "Renew their strength", "Lose hope", "Give up"]},
+                {level: 3, voice: 'female', question: "Hear: 'Delight thyself also in the Lord; and he shall give thee the desires of thine heart.' What should we do with the Lord?", answer: "Delight in Him", options: ["Fear Him only", "Delight in Him", "Avoid Him", "Question Him"]}
+            ]
+        };
+
+        // Initialize remaining exercises with sample data structure
+        ['verseMatch', 'charRecognition', 'bookOrder', 'timeline', 'location', 'wordRecall', 
+         'parable', 'prophet', 'miracle', 'genealogy', 'promise', 'prayer', 'fruitSpirit', 
+         'commandments', 'psalm', 'wisdom', 'apostle'].forEach(ex => {
+            activityData[ex] = [];
+            for (let i = 1; i <= 30; i++) {
+                const level = i <= 10 ? 1 : i <= 20 ? 2 : 3;
+                activityData[ex].push({
+                    level: level,
+                    question: `${ex} activity ${i} - Level ${level}`,
+                    answer: "Correct Answer",
+                    options: ["Correct Answer", "Option 2", "Option 3", "Option 4"]
+                });
+            }
+        });
+
+        // ==================== DASHBOARD FUNCTIONS ====================
+        
+        let currentExercise = null;
+        let currentActivityIndex = 0;
+        let currentLevel = 1;
+        let levelActivitiesCompleted = 0;
+
+        function showDashboard() {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('activityScreen').classList.add('hidden');
+            document.getElementById('dashboardScreen').classList.remove('hidden');
+
+            // Update user info
+            document.getElementById('userName').textContent = `Welcome, ${currentUser.name}!`;
+            document.getElementById('membershipStatus').textContent = 
+                currentUser.membershipType === 'lifetime' ? '⭐ Lifetime Member' :
+                currentUser.membershipType === 'trial' ? '🎁 Free Trial' : '💎 Premium Member';
+
+            // Update stats
+            document.getElementById('totalPoints').textContent = currentUser.totalPoints || 0;
+            document.getElementById('dayStreak').textContent = currentUser.dayStreak || 0;
+            
+            // Calculate completed exercises (all 30 activities done)
+            const completed = exercises.filter(ex => {
+                const progress = currentUser.progress[ex.id] || {completed: []};
+                return progress.completed.length >= 30;
+            }).length;
+            document.getElementById('exercisesCompleted').textContent = `${completed}/21`;
+            
+            // Calculate total activities completed
+            const totalActivities = exercises.reduce((sum, ex) => {
+                const progress = currentUser.progress[ex.id] || {completed: []};
+                return sum + progress.completed.length;
+            }, 0);
+            document.getElementById('activitiesDone').textContent = `${totalActivities}/630`;
+
+            // Render exercises
+            renderExercises();
+
+            // Sync language
+            if (currentUser.language) {
+                changeLanguage(currentUser.language);
+                document.getElementById('topLanguageSelector').value = currentUser.language;
+            }
+        }
+
+        function renderExercises() {
+            const grid = document.getElementById('exercisesGrid');
+            grid.innerHTML = '';
+
+            exercises.forEach(exercise => {
+                const progress = currentUser.progress[exercise.id] || {completed: [], level: 1};
+                const totalActivities = 30;
+                const completed = progress.completed.length;
+                const percentage = (completed / totalActivities * 100).toFixed(0);
+
+                const card = document.createElement('div');
+                card.className = 'exercise-card';
+                card.onclick = () => startExercise(exercise.id);
+
+                card.innerHTML = `
+                    <div class="exercise-icon">${exercise.icon}</div>
+                    <div class="exercise-name">${exercise.name}</div>
+                    <p style="color: #666; font-size: 0.9em; margin: 10px 0;">${exercise.description}</p>
+                    <div class="exercise-progress">
+                        Level ${progress.level || 1} • ${completed}/30 completed
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${percentage}%"></div>
+                    </div>
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        // ==================== EXERCISE & ACTIVITY FUNCTIONS ====================
+        
+        function startExercise(exerciseId) {
+            currentExercise = exerciseId;
+            
+            // Get or initialize progress
+            if (!currentUser.progress[exerciseId]) {
+                currentUser.progress[exerciseId] = {
+                    completed: [],
+                    level: 1
+                };
+            }
+
+            const progress = currentUser.progress[exerciseId];
+            currentLevel = progress.level || 1;
+            
+            // Find next uncompleted activity in current level
+            const activities = activityData[exerciseId].filter(a => a.level === currentLevel);
+            const levelStart = (currentLevel - 1) * 10;
+            const completedInLevel = progress.completed.filter(i => i >= levelStart && i < levelStart + 10).length;
+            
+            currentActivityIndex = levelStart + completedInLevel;
+            levelActivitiesCompleted = completedInLevel;
+
+            // Show activity screen
+            document.getElementById('dashboardScreen').classList.add('hidden');
+            document.getElementById('activityScreen').classList.remove('hidden');
+
+            // Update exercise name
+            const exerciseInfo = exercises.find(e => e.id === exerciseId);
+            document.getElementById('currentExerciseName').textContent = exerciseInfo.name;
+
+            loadActivity();
+        }
+
+        function loadActivity() {
+            const activities = activityData[currentExercise];
+            const activity = activities[currentActivityIndex];
+
+            if (!activity) {
+                backToDashboard();
+                return;
+            }
+
+            // Update level indicator
+            const levelNames = ['Beginner', 'Intermediate', 'Expert'];
+            const levelClasses = ['level-beginner', 'level-intermediate', 'level-expert'];
+            const indicator = document.getElementById('levelIndicator');
+            indicator.textContent = `Level ${activity.level}: ${levelNames[activity.level - 1]}`;
+            indicator.className = 'level-indicator ' + levelClasses[activity.level - 1];
+
+            // Update progress indicator
+            document.getElementById('progressIndicator').textContent = 
+                `Activity ${levelActivitiesCompleted + 1}/10 in ${levelNames[activity.level - 1]}`;
+
+            // Render activity based on type
+            const container = document.getElementById('activityContainer');
+            
+            if (currentExercise === 'audioActivity') {
+                renderAudioActivity(activity, container);
+            } else if (currentExercise === 'storySequence') {
+                renderStorySequence(activity, container);
+            } else {
+                renderStandardActivity(activity, container);
+            }
+
+            // Hide next button initially
+            document.getElementById('nextActivityBtn').style.display = 'none';
+        }
+
+        function renderAudioActivity(activity, container) {
+            container.innerHTML = `
+                <div class="activity-content">
+                    <div class="audio-controls">
+                        <button class="audio-button play-button" onclick="playAudio('${activity.question}', '${activity.voice}')">
+                            🔊 Play Question
+                        </button>
+                    </div>
+                    <div class="question">${activity.question}</div>
+                    <div class="options-grid">
+                        ${activity.options.map((opt, i) => `
+                            <button class="option-button" onclick="checkAnswer('${opt}', '${activity.answer}', ${i})" id="option${i}">
+                                ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        function playAudio(text, voice) {
+            if ('speechSynthesis' in window) {
+                // Cancel any ongoing speech
+                window.speechSynthesis.cancel();
+
+                const utterance = new SpeechSynthesisUtterance(text);
+                
+                // Set voice based on level
+                const voices = window.speechSynthesis.getVoices();
+                if (voice === 'female') {
+                    const femaleVoice = voices.find(v => v.name.includes('Female') || v.name.includes('Samantha') || v.name.includes('Victoria'));
+                    if (femaleVoice) utterance.voice = femaleVoice;
+                } else if (voice === 'male') {
+                    const maleVoice = voices.find(v => v.name.includes('Male') || v.name.includes('Daniel') || v.name.includes('Alex'));
+                    if (maleVoice) utterance.voice = maleVoice;
+                }
+
+                utterance.rate = 0.9; // Slightly slower for clarity
+                utterance.pitch = 1;
+                utterance.volume = 1;
+
+                window.speechSynthesis.speak(utterance);
+            } else {
+                alert('Sorry, your browser does not support audio playback. Please try a different browser.');
+            }
+        }
+
+        function renderStorySequence(activity, container) {
+            const shuffled = [...activity.events].sort(() => Math.random() - 0.5);
+            
+            container.innerHTML = `
+                <div class="activity-content">
+                    <div class="question">Put these events from "${activity.story}" in the correct order (drag to reorder):</div>
+                    <div id="eventsList" style="display: grid; gap: 10px; margin-top: 20px;">
+                        ${shuffled.map((event, i) => `
+                            <div class="option-button" draggable="true" data-event="${event}" style="cursor: move;">
+                                ${i + 1}. ${event}
+                            </div>
+                        `).join('')}
+                    </div>
+                    <button class="btn-primary" onclick="checkSequence()" style="margin-top: 20px;">Check Order</button>
+                </div>
+            `;
+
+            // Add drag and drop functionality
+            const eventsList = document.getElementById('eventsList');
+            let draggedElement = null;
+
+            eventsList.querySelectorAll('.option-button').forEach(item => {
+                item.addEventListener('dragstart', function() {
+                    draggedElement = this;
+                    setTimeout(() => this.style.opacity = '0.5', 0);
+                });
+
+                item.addEventListener('dragend', function() {
+                    setTimeout(() => this.style.opacity = '1', 0);
+                });
+
+                item.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                });
+
+                item.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    if (this !== draggedElement) {
+                        let allItems = [...eventsList.querySelectorAll('.option-button')];
+                        let draggedIndex = allItems.indexOf(draggedElement);
+                        let droppedIndex = allItems.indexOf(this);
+                        
+                        if (draggedIndex < droppedIndex) {
+                            this.parentNode.insertBefore(draggedElement, this.nextSibling);
+                        } else {
+                            this.parentNode.insertBefore(draggedElement, this);
+                        }
+                        
+                        // Renumber
+                        eventsList.querySelectorAll('.option-button').forEach((item, i) => {
+                            const text = item.textContent.substring(item.textContent.indexOf('.') + 2);
+                            item.textContent = `${i + 1}. ${text}`;
+                        });
+                    }
+                });
+            });
+        }
+
+        window.checkSequence = function() {
+            const activities = activityData[currentExercise];
+            const activity = activities[currentActivityIndex];
+            const eventsList = document.getElementById('eventsList');
+            const currentOrder = [...eventsList.querySelectorAll('.option-button')].map(el => 
+                activity.events.indexOf(el.dataset.event)
+            );
+            
+            const isCorrect = JSON.stringify(currentOrder) === JSON.stringify(activity.correctOrder);
+            
+            if (isCorrect) {
+                showMotivation(getRandomEncouragement());
+                completeActivity();
+            } else {
+                showMotivation("❌ Not quite right. Try again! You can do this!", 'incorrect');
+            }
+        };
+
+        function renderStandardActivity(activity, container) {
+            container.innerHTML = `
+                <div class="activity-content">
+                    <div class="question">${activity.question}</div>
+                    <div class="options-grid">
+                        ${activity.options.map((opt, i) => `
+                            <button class="option-button" onclick="checkAnswer('${opt}', '${activity.answer}', ${i})" id="option${i}">
+                                ${opt}
+                            </button>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+
+        window.checkAnswer = function(selected, correct, index) {
+            const isCorrect = selected === correct;
+            const button = document.getElementById(`option${index}`);
+
+            // Disable all buttons
+            document.querySelectorAll('.option-button').forEach(btn => btn.disabled = true);
+
+            if (isCorrect) {
+                button.classList.add('correct');
+                showMotivation(getRandomEncouragement());
+                
+                // Award points
+                currentUser.totalPoints = (currentUser.totalPoints || 0) + 10;
+                
+                completeActivity();
+            } else {
+                button.classList.add('incorrect');
+                showMotivation("💪 Keep trying! You're learning and growing!", 'incorrect');
+                
+                // Re-enable buttons after 2 seconds
+                setTimeout(() => {
+                    document.querySelectorAll('.option-button').forEach(btn => {
+                        btn.disabled = false;
+                        btn.classList.remove('incorrect');
+                    });
+                }, 2000);
+            }
+        };
+
+        function showMotivation(message, type = 'success') {
+            const container = document.getElementById('activityContainer');
+            const existing = container.querySelector('.motivation-message');
+            if (existing) existing.remove();
+
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'motivation-message';
+            if (type === 'incorrect') {
+                msgDiv.style.background = 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)';
+            }
+            msgDiv.textContent = message;
+            container.insertBefore(msgDiv, container.firstChild);
+
+            setTimeout(() => msgDiv.remove(), 4000);
+        }
+
+        function completeActivity() {
+            // Mark activity as completed
+            if (!currentUser.progress[currentExercise].completed.includes(currentActivityIndex)) {
+                currentUser.progress[currentExercise].completed.push(currentActivityIndex);
+                levelActivitiesCompleted++;
+            }
+
+            // Update day streak
+            const today = new Date().toDateString();
+            if (currentUser.lastActivityDate !== today) {
+                currentUser.lastActivityDate = today;
+                currentUser.dayStreak = (currentUser.dayStreak || 0) + 1;
+            }
+
+            saveUserData();
+
+            // Check if level is complete (10 activities)
+            if (levelActivitiesCompleted >= 10) {
+                if (currentLevel < 3) {
+                    showLevelComplete();
+                } else {
+                    showExerciseComplete();
+                }
+            } else {
+                document.getElementById('nextActivityBtn').style.display = 'block';
+            }
+        }
+
+        function showLevelComplete() {
+            const container = document.getElementById('activityContainer');
+            const celebration = getRandomLevelComplete();
+            const nextLevel = currentLevel + 1;
+            const levelNames = ['Beginner', 'Intermediate', 'Expert'];
+
+            container.innerHTML = `
+                <div class="level-complete-celebration">
+                    <h2>${celebration.title}</h2>
+                    <p style="font-size: 1.2em; margin: 15px 0;">${celebration.message}</p>
+                    <p style="font-size: 1.5em; margin: 20px 0;">🎓 Level ${currentLevel} (${levelNames[currentLevel - 1]}) Complete!</p>
+                    <p style="margin: 15px 0;">Ready for Level ${nextLevel} (${levelNames[nextLevel - 1]})?</p>
+                    <button class="btn-primary" onclick="advanceToNextLevel()" style="margin-top: 20px; font-size: 1.1em;">
+                        ✨ Start Level ${nextLevel} ✨
+                    </button>
+                </div>
+            `;
+        }
+
+        function showExerciseComplete() {
+            const container = document.getElementById('activityContainer');
+            const celebration = getRandomLevelComplete();
+
+            container.innerHTML = `
+                <div class="level-complete-celebration">
+                    <h2>🏆 ${celebration.title} 🏆</h2>
+                    <p style="font-size: 1.3em; margin: 15px 0;">${celebration.message}</p>
+                    <p style="font-size: 1.6em; margin: 20px 0;">🎉 Exercise Mastered! 🎉</p>
+                    <p style="margin: 15px 0;">You've completed all 30 activities in this exercise!</p>
+                    <p style="font-size: 1.1em; margin: 10px 0;">💪 Your dedication is inspiring!</p>
+                    <button class="btn-primary" onclick="backToDashboard()" style="margin-top: 20px; font-size: 1.1em;">
+                        Continue Learning →
+                    </button>
+                </div>
+            `;
+        }
+
+        window.advanceToNextLevel = function() {
+            currentLevel++;
+            currentUser.progress[currentExercise].level = currentLevel;
+            levelActivitiesCompleted = 0;
+            currentActivityIndex = (currentLevel - 1) * 10;
+            saveUserData();
+            loadActivity();
+        };
+
+        window.nextActivity = function() {
+            currentActivityIndex++;
+            loadActivity();
+        };
+
+        function backToDashboard() {
+            currentExercise = null;
+            currentActivityIndex = 0;
+            showDashboard();
+        }
+
+        function saveUserData() {
+            const userIndex = allUsers.findIndex(u => u.id === currentUser.id);
+            if (userIndex !== -1) {
+                allUsers[userIndex] = currentUser;
+                localStorage.setItem('vv_users', JSON.stringify(allUsers));
+            }
+        }
+
+        // ==================== WELCOME MODAL FUNCTIONS ====================
+        
+        function toggleAcceptButton() {
+            const checkbox = document.getElementById('acceptTerms');
+            const button = document.getElementById('acceptButton');
+            button.disabled = !checkbox.checked;
+        }
+
+        function acceptAndEnter() {
+            localStorage.setItem('vv_disclaimer_accepted', 'true');
+            localStorage.setItem('vv_disclaimer_accepted_date', new Date().toISOString());
+            
+            document.getElementById('welcomeDisclaimerModal').style.display = 'none';
+            document.getElementById('loginScreen').classList.remove('hidden');
+        }
+
+        // ==================== INITIALIZATION ====================
+        
+        window.addEventListener('load', function() {
+            // Check if user accepted disclaimer
+            const disclaimerAccepted = localStorage.getItem('vv_disclaimer_accepted');
+            
+            if (disclaimerAccepted === 'true') {
+                document.getElementById('welcomeDisclaimerModal').style.display = 'none';
+                document.getElementById('loginScreen').classList.remove('hidden');
+            } else {
+                document.getElementById('welcomeDisclaimerModal').style.display = 'flex';
+                document.getElementById('loginScreen').classList.add('hidden');
+            }
+
+            // Load voices for Web Speech API
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.getVoices();
+            }
+        });
+
+        // Prevent form submission on enter key
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && e.target.tagName === 'INPUT') {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
