@@ -860,14 +860,15 @@
                             <line x1="27.5" y1="60" x2="27.5" y2="70" stroke="#8B4513" stroke-width="2.5"/>
                             <line x1="23" y1="65" x2="32" y2="65" stroke="#8B4513" stroke-width="2.5"/>
                         </svg>
-                        Welcome to VerseVault
-                    </h1>
-                    <p style="color: #667eea; font-size: 18px; font-weight: bold;">Faith-Based Cognitive Wellness Application</p>
-                    <p style="color: #666; font-size: 14px; margin-top: 10px;">Building On The Faith Ministry - Elder Robert Chalk Jr.</p>
+                        <p style="color: #666; font-size: 14px; margin-top: 10px;">Building On The Faith Ministry - Elder Robert Chalk Jr.</p>
+                    
+                    <!-- WELCOME AUDIO BUTTON -->
+                    <button onclick="playWelcomeAudio()" class="btn btn-primary" style="margin: 20px 0; font-size: 18px; padding: 15px 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: bold;">
+                        🎤 Hear Welcome Message
+                    </button>
                 </div>
 
                 <hr style="border: none; border-top: 2px solid #764ba2; margin: 30px 0;">
-
                 <!-- Compelling Benefits Section -->
                 <div style="margin-bottom: 30px;">
                     <h2 style="color: #764ba2; font-size: 24px; margin-bottom: 20px; text-align: center;">🧠 Why VerseVault? Proven Cognitive & Spiritual Benefits</h2>
@@ -1683,15 +1684,26 @@
         }
 
         // 150 Lifetime Access Codes (Fresh - All Unused)
-        const LIFETIME_CODES = [];
-        for (let i = 1; i <= 150; i++) {
-            const code = `VV-LIFE-2024-${String(i).padStart(4, '0')}`;
-            LIFETIME_CODES.push({ code, used: false, usedBy: null, usedDate: null });
-        }
-
-        // Initialize from localStorage
-        const storedCodes = localStorage.getItem('vv_lifetime_codes');
-        let lifetimeCodes = storedCodes ? JSON.parse(storedCodes) : LIFETIME_CODES;
+       function initializeLifetimeCodes() {
+    const stored = localStorage.getItem('vv_lifetime_codes');
+    if (stored) {
+        console.log('✅ Loading existing codes');
+        return JSON.parse(stored);
+    }
+    console.log('🆕 First time setup');
+    const fresh = [];
+    for (let i = 1; i <= 150; i++) {
+        fresh.push({ 
+            code: `VV-LIFE-2024-${String(i).padStart(4, '0')}`,
+            used: false, 
+            usedBy: null, 
+            usedDate: null 
+        });
+    }
+    localStorage.setItem('vv_lifetime_codes', JSON.stringify(fresh));
+    return fresh;
+}
+let lifetimeCodes = initializeLifetimeCodes();
         
         // SAFETY CHECK: If we don't have exactly 150 codes, regenerate fresh codes
         if (lifetimeCodes.length !== 150) {
