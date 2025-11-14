@@ -3777,6 +3777,7 @@ Elder Robert Chalk Jr.
             codeObj.used = true;
             codeObj.usedBy = username;
             codeObj.usedDate = new Date().toISOString();
+              saveData();
             
             // Send lifetime code confirmation email
             if (email) {
@@ -3786,7 +3787,7 @@ Elder Robert Chalk Jr.
             // Log email event for lifetime code redemption
             logEmailEvent('lifetime_code_redeemed', username, email);
             
-            saveData();
+          
             
             alert('✅ Lifetime access activated! You now have full access forever.');
             closeLifetimeCodeModal();
@@ -5682,3 +5683,4 @@ CSV FORMAT (Copy to Excel):
 
 </body>
 </html>
+
