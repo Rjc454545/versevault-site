@@ -3746,10 +3746,10 @@ Elder Robert Chalk Jr.
                 return;
             }
             
-            if (codeObj.used) {
-                alert('This code has already been used.');
-                return;
-            }
+          if (codeObj.used) {
+    alert(`❌ This code has already been used by: ${codeObj.usedBy}\n\nPlease contact support if you believe this is an error.\n\nEmail: buildingonthefaithmin@gmail.com`);
+    return;
+}
             
             // Create or update user
             if (!users[username]) {
@@ -5683,4 +5683,5 @@ CSV FORMAT (Copy to Excel):
 
 </body>
 </html>
+
 
