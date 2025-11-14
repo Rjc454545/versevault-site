@@ -4489,7 +4489,23 @@ Building On The Faith Ministry`);
             document.getElementById('directAccessUsername').value = '';
             loadUserStats();
         }
-
+// Welcome audio for opening screen and registration
+function playWelcomeAudio() {
+    if ('speechSynthesis' in window) {
+        const utterance = new SpeechSynthesisUtterance();
+        utterance.text = "Welcome to VerseVault. Thy word have I hid in mine heart, that I might not sin against thee. Psalm 119 verse 11.";
+        utterance.rate = 0.9;
+        utterance.pitch = 1.1;
+        utterance.volume = 1.0;
+        const voices = speechSynthesis.getVoices();
+        const femaleVoice = voices.find(v => v.name.includes('Female') || v.name.includes('Samantha') || v.name.includes('Victoria'));
+        if (femaleVoice) utterance.voice = femaleVoice;
+        speechSynthesis.speak(utterance);
+        console.log('🎤 Welcome audio played');
+    } else {
+        console.log('❌ speechSynthesis not supported');
+    }
+}
         function signOut() {
             currentUser = null;
             document.getElementById('dashboardScreen').classList.add('hidden');
@@ -5699,6 +5715,7 @@ CSV FORMAT (Copy to Excel):
 
 </body>
 </html>
+
 
 
 
