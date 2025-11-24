@@ -1712,22 +1712,38 @@
         // 5000 Lifetime Access Codes (Fresh - All Unused)
        function initializeLifetimeCodes() {
     const stored = localStorage.getItem('vv_lifetime_codes');
+    
     if (stored) {
-        console.log('✅ Loading existing codes');
-        return JSON.parse(stored);
+        console.log('✅ Loading existing codes from localStorage');
+        const codes = JSON.parse(stored);
+        console.log('📊 Loaded codes:', codes.length);
+        
+        // Count used vs unused
+        const usedCount = codes.filter(c => c.used).length;
+        const unusedCount = codes.length - usedCount;
+        console.log('💎 Available codes:', unusedCount);
+        console.log('🔒 Used codes:', usedCount);
+        
+        return codes;
     }
-    console.log('🆕 First time setup');
-    const fresh = [];
+    
+    console.log('🆕 FIRST TIME SETUP - Generating 5000 fresh codes');
+    const freshCodes = [];
+    
     for (let i = 1; i <= 5000; i++) {
-        fresh.push({ 
+        freshCodes.push({ 
             code: `VV-LIFE-2024-${String(i).padStart(4, '0')}`,
             used: false, 
             usedBy: null, 
             usedDate: null 
         });
     }
-    localStorage.setItem('vv_lifetime_codes', JSON.stringify(fresh));
-    return fresh;
+    
+    localStorage.setItem('vv_lifetime_codes', JSON.stringify(freshCodes));
+    console.log('✅ Generated and saved 5000 lifetime codes');
+    console.log('💎 All codes ready: VV-LIFE-2024-0001 through VV-LIFE-2024-5000');
+    
+    return freshCodes;
 }
 let lifetimeCodes = initializeLifetimeCodes();
         
@@ -6249,6 +6265,7 @@ CSV FORMAT (Copy to Excel):
 
 </body>
 </html>
+
 
 
 
