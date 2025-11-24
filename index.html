@@ -1,8 +1,3 @@
-Updated 11182025 index.html File
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -3993,14 +3988,114 @@ Elder Robert Chalk Jr.
         }
         
         function activateLifetimeCode() {
-            const username = document.getElementById('lifetimeUsername').value.trim();
-            const email = document.getElementById('lifetimeEmail').value.trim();
-            const code = document.getElementById('lifetimeCode').value.trim().toUpperCase();
-            
-            if (!username) {
-                alert('Please enter a username');
-                return;
-            }
+    const username = document.getElementById('lifetimeUsername').value.trim();
+    const email = document.getElementById('lifetimeEmail').value.trim();
+    const code = document.getElementById('lifetimeCode').value.trim().toUpperCase();
+    
+    console.log('💎 CODE REDEMPTION ATTEMPT');
+    console.log('👤 Username:', username);
+    console.log('🔑 Code:', code);
+    
+    if (!username || !email || !code) {
+        alert('⚠️ Please fill in all fields:\n• Username\n• Email\n• Lifetime Code');
+        return;
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        alert('⚠️ Please enter a valid email address');
+        return;
+    }
+    
+    console.log('🔍 Searching for code in database...');
+    console.log('📊 Total codes available:', lifetimeCodes.length);
+    
+    // CRITICAL FIX: Use findIndex to get the exact array position
+    const codeIndex = lifetimeCodes.findIndex(c => c.code === code);
+    
+    if (codeIndex === -1) {
+        alert(`❌ Invalid Code\n\nCode "${code}" not found in system.\n\nFormat: VV-LIFE-2024-0001`);
+        console.log('❌ Code not found in database');
+        return;
+    }
+    
+    const codeObj = lifetimeCodes[codeIndex];
+    console.log('✅ Code found at index:', codeIndex);
+    console.log('📋 Code details:', codeObj);
+    
+    if (codeObj.used) {
+        alert(`❌ Code Already Used\n\nThis code was redeemed by: ${codeObj.usedBy}\nDate: ${new Date(codeObj.usedDate).toLocaleString()}\n\nContact support if this is an error:\nbuildingonthefaithmin@gmail.com`);
+        console.log('❌ Code already used by:', codeObj.usedBy);
+        return;
+    }
+    
+    console.log('✅ Code is available - proceeding with activation');
+    
+    // Create or update user account
+    if (!users[username]) {
+        users[username] = {
+            username: username,
+            email: email,
+            password: '',
+            createdDate: new Date().toISOString(),
+            accountType: 'lifetime',
+            lifetimeCode: code,
+            emailOptIn: true,
+            points: 0,
+            streak: 0,
+            completed: 0,
+            progress: {}
+        };
+        console.log('✅ NEW lifetime user created:', username);
+    } else {
+        users[username].accountType = 'lifetime';
+        users[username].lifetimeCode = code;
+        users[username].email = email;
+        console.log('✅ EXISTING user upgraded to lifetime:', username);
+    }
+    
+    // CRITICAL FIX: Mark code as used by directly modifying the array element
+    lifetimeCodes[codeIndex].used = true;
+    lifetimeCodes[codeIndex].usedBy = username;
+    lifetimeCodes[codeIndex].usedDate = new Date().toISOString();
+    
+    console.log('✅ Code marked as USED in array:', lifetimeCodes[codeIndex]);
+    
+    // CRITICAL FIX: Save immediately and verify
+    const saveSuccess = saveData();
+    
+    if (!saveSuccess) {
+        alert('⚠️ WARNING: Save may have failed. Contact support immediately.');
+        console.error('❌ Save returned false');
+        return;
+    }
+    
+    // CRITICAL FIX: Double-check the save actually worked
+    const verifyCode = lifetimeCodes[codeIndex];
+    const verifyUser = users[username];
+    
+    console.log('🔍 POST-SAVE VERIFICATION:');
+    console.log('Code used status:', verifyCode.used);
+    console.log('Code used by:', verifyCode.usedBy);
+    console.log('User account type:', verifyUser.accountType);
+    console.log('User lifetime code:', verifyUser.lifetimeCode);
+    
+    if (!verifyCode.used || verifyUser.accountType !== 'lifetime') {
+        alert('⚠️ CRITICAL ERROR\n\nCode activation failed verification.\n\nPlease screenshot this message and contact:\nbuildingonthefaithmin@gmail.com');
+        console.error('❌ VERIFICATION FAILED - Data not saved correctly');
+        return;
+    }
+    
+    console.log('✅✅✅ ALL VERIFICATIONS PASSED - CODE SUCCESSFULLY ACTIVATED');
+    
+    closeLifetimeCodeModal();
+    showLifetimeSuccessModal(username, email, code);
+    
+    setTimeout(() => {
+        currentUser = users[username];
+        showDashboard();
+    }, 100);
+}
             
             if (!email) {
                 alert('Please enter an email address');
@@ -6131,6 +6226,7 @@ CSV FORMAT (Copy to Excel):
 
 </body>
 </html>
+
 
 
 
