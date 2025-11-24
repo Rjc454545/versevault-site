@@ -1767,11 +1767,34 @@ let lifetimeCodes = initializeLifetimeCodes();
         const storedUsers = localStorage.getItem('vv_users');
         let users = storedUsers ? JSON.parse(storedUsers) : {};
 
-        // Save data
-        function saveData() {
-            localStorage.setItem('vv_lifetime_codes', JSON.stringify(lifetimeCodes));
-            localStorage.setItem('vv_users', JSON.stringify(users));
+      // Save data with verification
+function saveData() {
+    try {
+        localStorage.setItem('vv_lifetime_codes', JSON.stringify(lifetimeCodes));
+        localStorage.setItem('vv_users', JSON.stringify(users));
+        
+        console.log('💾 SAVE COMPLETE');
+        console.log('📊 Codes saved:', lifetimeCodes.length);
+        console.log('👥 Users saved:', Object.keys(users).length);
+        
+        // Verify the save actually worked
+        const verifyCodesString = localStorage.getItem('vv_lifetime_codes');
+        const verifyUsersString = localStorage.getItem('vv_users');
+        
+        if (!verifyCodesString || !verifyUsersString) {
+            console.error('❌ VERIFICATION FAILED - Data not in localStorage');
+            return false;
         }
+        
+        console.log('✅ Save verified successfully');
+        return true;
+        
+    } catch (error) {
+        console.error('❌ SAVE ERROR:', error);
+        alert('ERROR: Could not save data. Contact support:\nbuildingonthefaithmin@gmail.com');
+        return false;
+    }
+}
         
         // ===================================
         // EMAIL TRACKING & AUTOMATION SYSTEM
@@ -6226,6 +6249,7 @@ CSV FORMAT (Copy to Excel):
 
 </body>
 </html>
+
 
 
 
