@@ -1693,6 +1693,7 @@
         const APP_VERSION = '2.3-STABLE'; // Updated: Fixed version control to preserve user data
         const storedVersion = localStorage.getItem('vv_app_version');
         if (storedVersion !== APP_VERSION) {
+        
             console.log(`App updated from ${storedVersion || 'initial'} to ${APP_VERSION}`);
             // Only update version marker - DO NOT DELETE USER DATA
             localStorage.setItem('vv_app_version', APP_VERSION);
@@ -5765,9 +5766,7 @@ Please use VerseVault wisely and consult healthcare professionals for medical gu
 
 Last Updated: October 2024`);
         }
-
-        // Function to handle welcome disclaimer agreement
-        function agreeToDisclaimer() {
+function agreeToDisclaimer() {
             // Hide welcome modal
             const welcomeModal = document.getElementById('welcomeDisclaimerModal');
             welcomeModal.style.display = 'none';
@@ -5779,6 +5778,8 @@ Last Updated: October 2024`);
             // Store agreement in localStorage so they don't see it again
             localStorage.setItem('vv_disclaimer_accepted', 'true');
         }
+        // Function to handle welcome disclaimer agreement
+        
         
         
         // ===================================
@@ -6265,6 +6266,7 @@ CSV FORMAT (Copy to Excel):
 
 </body>
 </html>
+
 
 
 
