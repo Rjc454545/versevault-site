@@ -5767,17 +5767,36 @@ Please use VerseVault wisely and consult healthcare professionals for medical gu
 Last Updated: October 2024`);
         }
 function agreeToDisclaimer() {
-            // Hide welcome modal
-            const welcomeModal = document.getElementById('welcomeDisclaimerModal');
+    console.log('🔵 Agree button clicked');
+    
+    try {
+        // Hide welcome modal
+        const welcomeModal = document.getElementById('welcomeDisclaimerModal');
+        if (welcomeModal) {
             welcomeModal.style.display = 'none';
-            
-            // Show login screen
-            const loginScreen = document.getElementById('loginScreen');
-            loginScreen.classList.remove('hidden');
-            
-            // Store agreement in localStorage so they don't see it again
-            localStorage.setItem('vv_disclaimer_accepted', 'true');
+            console.log('✅ Welcome modal hidden');
+        } else {
+            console.error('❌ Welcome modal not found');
         }
+        
+        // Show login screen
+        const loginScreen = document.getElementById('loginScreen');
+        if (loginScreen) {
+            loginScreen.classList.remove('hidden');
+            console.log('✅ Login screen shown');
+        } else {
+            console.error('❌ Login screen not found');
+        }
+        
+        // Store agreement
+        localStorage.setItem('vv_disclaimer_accepted', 'true');
+        console.log('✅ Agreement saved to localStorage');
+        
+    } catch (error) {
+        console.error('❌ Error in agreeToDisclaimer:', error);
+        alert('Error: ' + error.message);
+    }
+}
         // Function to handle welcome disclaimer agreement
         
         
@@ -6266,6 +6285,7 @@ CSV FORMAT (Copy to Excel):
 
 </body>
 </html>
+
 
 
 
