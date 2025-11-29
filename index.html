@@ -1420,7 +1420,23 @@
         // ADMIN AUTHENTICATION STATE
         // ===================================
         let isAdminAuthenticated = false; // Track if admin is logged in
-        
+         function agreeToDisclaimer() {
+            console.log('✅ Agree button clicked');
+            var welcomeModal = document.getElementById('welcomeDisclaimerModal');
+            var loginScreen = document.getElementById('loginScreen');
+            if (welcomeModal) {
+                welcomeModal.style.display = 'none';
+            }
+            if (loginScreen) {
+                loginScreen.classList.remove('hidden');
+                loginScreen.style.display = 'block';
+            }
+            localStorage.setItem('vv_disclaimer_accepted', 'true');
+        }
+
+        function playWelcomeAudio() {
+            alert('Audio coming soon!');
+        }
         // ===================================
         // STRIPE CONFIGURATION
         // ===================================
@@ -6285,6 +6301,7 @@ CSV FORMAT (Copy to Excel):
 
 </body>
 </html>
+
 
 
 
