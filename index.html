@@ -1814,7 +1814,37 @@ let lifetimeCodes = initializeLifetimeCodes();
             sendEmail(EMAILJS_TEMPLATES.welcome, params);
             trackEmailEvent('welcome_sent', { username, email });
         }
-        
+
+        // Send admin notification when new user registers
+function sendAdminRegistrationEmail(username, email, emailOptIn) {
+    const templateParams = {
+        to_email: 'buildingonthefaithmin@gmail.com',
+        user_name: 'Admin - New Registration Alert',
+        reply_to: 'buildingonthefaithmin@gmail.com',
+        message: `
+🆕 NEW USER REGISTRATION
+═══════════════════════════════════
+
+Username: ${username}
+Email: ${email}
+Email Opt-In: ${emailOptIn ? 'YES' : 'NO'}
+Registration Date: ${new Date().toLocaleString()}
+Account Type: Trial (7 days)
+Trial Expires: ${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString()}
+
+═══════════════════════════════════
+This user has been added to your system.
+        `
+    };
+    
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATES.welcome, templateParams)
+        .then(function(response) {
+            console.log('✅ Admin notification sent:', response.status);
+        })
+        .catch(function(error) {
+            console.error('❌ Admin notification failed:', error);
+        });
+}
         // Send Premium Thank You Email (after Premium purchase)
         function sendPremiumThankYouEmail(username, email) {
             const nextBillingDate = new Date();
@@ -6132,6 +6162,7 @@ CSV FORMAT (Copy to Excel):
 
 </body>
 </html>
+
 
 
 
