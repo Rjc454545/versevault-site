@@ -1817,21 +1817,21 @@ let lifetimeCodes = initializeLifetimeCodes();
 
         // Send admin notification when new user registers
 function sendAdminRegistrationEmail(username, email, emailOptIn) {
-    const templateParams = {
-        to_email: 'buildingonthefaithmin@gmail.com',
-        user_name: 'Admin - New Registration Alert',
-        reply_to: 'buildingonthefaithmin@gmail.com',
-        message: `
-🆕 NEW USER REGISTRATION
-═══════════════════════════════════
-
-Username: ${username}
-Email: ${email}
-Email Opt-In: ${emailOptIn ? 'YES' : 'NO'}
-Registration Date: ${new Date().toLocaleString()}
-Account Type: Trial (7 days)
-Trial Expires: ${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString()}
-
+    emailjs.send(
+        'service_34bucn8',
+        'versevault_welcome',
+        {
+            to_email: 'buildingonthefaithmin@gmail.com',
+            user_name: `NEW USER: ${username} | Email: ${email} | Opt-in: ${emailOptIn ? 'YES' : 'NO'}`,
+            from_name: 'VerseVault System',
+            reply_to: email
+        }
+    ).then(function(response) {
+        console.log('✅ Admin notification sent!', response.status);
+    }).catch(function(error) {
+        console.error('❌ Failed to send admin email:', error);
+    });
+}
 ═══════════════════════════════════
 This user has been added to your system.
         `
@@ -6162,6 +6162,7 @@ CSV FORMAT (Copy to Excel):
 
 </body>
 </html>
+
 
 
 
