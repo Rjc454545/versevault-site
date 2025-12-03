@@ -645,6 +645,48 @@ Updated 11182025 index.html File
         }
         
         @media (max-width: 768px) {
+            /* Landing Page Mobile Fixes */
+            #landingPage {
+                padding: 10px !important;
+                align-items: flex-start !important;
+            }
+            
+            #landingPage > div {
+                padding: 30px 20px !important;
+                margin: 10px auto !important;
+                border-radius: 20px !important;
+            }
+            
+            #landingPage h1 {
+                font-size: 32px !important;
+            }
+            
+            #landingPage h2 {
+                font-size: 22px !important;
+            }
+            
+            #landingPage h3 {
+                font-size: 24px !important;
+            }
+            
+            #landingPage h4 {
+                font-size: 18px !important;
+            }
+            
+            #landingPage p {
+                font-size: 16px !important;
+            }
+            
+            #landingPage button {
+                font-size: 22px !important;
+                padding: 20px 40px !important;
+            }
+            
+            /* Testimonial cards stack on mobile */
+            #landingPage .grid {
+                grid-template-columns: 1fr !important;
+            }
+            
             /* Reduce padding on mobile */
             body {
                 padding: 10px;
@@ -833,8 +875,8 @@ Updated 11182025 index.html File
     <div class="container">
         
         <!-- 🎨 LANDING PAGE - FIRST THING VISITORS SEE -->
-        <div id="landingPage" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #FF8E53 100%); display: flex; justify-content: center; align-items: center; z-index: 10002; overflow-y: auto; padding: 20px;">
-            <div style="background: white; border-radius: 30px; max-width: 1200px; width: 100%; padding: 60px 40px; box-shadow: 0 20px 80px rgba(0,0,0,0.4); animation: fadeIn 1s ease-in;">
+        <div id="landingPage" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #FF8E53 100%); display: flex; justify-content: center; align-items: flex-start; z-index: 10002; overflow-y: auto; padding: 20px;">
+            <div style="background: white; border-radius: 30px; max-width: 1200px; width: 100%; padding: 60px 40px; box-shadow: 0 20px 80px rgba(0,0,0,0.4); animation: fadeIn 1s ease-in; margin: 20px auto;">
                 
                 <!-- Hero Section -->
                 <div style="text-align: center; margin-bottom: 50px;">
@@ -863,17 +905,17 @@ Updated 11182025 index.html File
                             <rect x="56" y="28" width="36" height="52" fill="url(#bibleGradHero)" stroke="#4a5568" stroke-width="2" rx="3" filter="url(#shadowHero)"/>
                             <rect x="12" y="32" width="28" height="44" fill="url(#pageGradHero)" stroke="#e2b659" stroke-width="1.5"/>
                             <rect x="60" y="32" width="28" height="44" fill="url(#pageGradHero)" stroke="#e2b659" stroke-width="1.5"/>
-                            <line x1="15" y1="38" x2="37" y2="38" stroke="#764ba2" stroke-width="1.5" opacity="0.8"/>
-                            <line x1="15" y1="43" x2="37" y2="43" stroke="#667eea" stroke-width="1.5" opacity="0.7"/>
-                            <line x1="15" y1="48" x2="35" y2="48" stroke="#764ba2" stroke-width="1.5" opacity="0.7"/>
-                            <line x1="15" y1="53" x2="37" y2="53" stroke="#667eea" stroke-width="1.5" opacity="0.6"/>
-                            <line x1="15" y1="58" x2="33" y2="58" stroke="#764ba2" stroke-width="1.5" opacity="0.6"/>
-                            <line x1="15" y1="63" x2="37" y2="63" stroke="#667eea" stroke-width="1.5" opacity="0.5"/>
-                            <line x1="63" y1="38" x2="85" y2="38" stroke="#764ba2" stroke-width="1.5" opacity="0.8"/>
-                            <line x1="63" y1="43" x2="85" y2="43" stroke="#667eea" stroke-width="1.5" opacity="0.7"/>
-                            <line x1="63" y1="48" x2="83" y2="48" stroke="#764ba2" stroke-width="1.5" opacity="0.7"/>
-                            <line x1="63" y1="53" x2="85" y2="53" stroke="#667eea" stroke-width="1.5" opacity="0.6"/>
-                            <line x1="63" y1="58" x2="81" y2="58" stroke="#764ba2" stroke-width="1.5" opacity="0.6"/>
+                            <line x1="15" y1="38" x2="37" y2="38" stroke="#4a148c" stroke-width="2.5" opacity="1"/>
+                            <line x1="15" y1="43" x2="37" y2="43" stroke="#311b92" stroke-width="2.5" opacity="1"/>
+                            <line x1="15" y1="48" x2="35" y2="48" stroke="#4a148c" stroke-width="2.5" opacity="1"/>
+                            <line x1="15" y1="53" x2="37" y2="53" stroke="#311b92" stroke-width="2.5" opacity="1"/>
+                            <line x1="15" y1="58" x2="33" y2="58" stroke="#4a148c" stroke-width="2.5" opacity="1"/>
+                            <line x1="15" y1="63" x2="37" y2="63" stroke="#311b92" stroke-width="2.5" opacity="0.9"/>
+                            <line x1="63" y1="38" x2="85" y2="38" stroke="#4a148c" stroke-width="2.5" opacity="1"/>
+                            <line x1="63" y1="43" x2="85" y2="43" stroke="#311b92" stroke-width="2.5" opacity="1"/>
+                            <line x1="63" y1="48" x2="83" y2="48" stroke="#4a148c" stroke-width="2.5" opacity="1"/>
+                            <line x1="63" y1="53" x2="85" y2="53" stroke="#311b92" stroke-width="2.5" opacity="1"/>
+                            <line x1="63" y1="58" x2="81" y2="58" stroke="#4a148c" stroke-width="2.5" opacity="1"/>
                             <rect x="44" y="28" width="12" height="52" fill="url(#bibleGradHero)" stroke="#4a5568" stroke-width="1.5" filter="url(#shadowHero)"/>
                             <line x1="28" y1="54" x2="28" y2="68" stroke="#FFD700" stroke-width="3" filter="url(#shadowHero)"/>
                             <line x1="22" y1="61" x2="34" y2="61" stroke="#FFD700" stroke-width="3" filter="url(#shadowHero)"/>
@@ -987,7 +1029,7 @@ Updated 11182025 index.html File
                     <button onclick="startVerseVault()" style="background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 50%, #FFD93D 100%); color: white; border: none; padding: 25px 60px; font-size: 28px; font-weight: bold; border-radius: 50px; cursor: pointer; box-shadow: 0 15px 40px rgba(255, 107, 107, 0.4); animation: pulse 2s infinite; transition: all 0.3s;">
                         🚀 Start Your FREE 7-Day Trial!
                     </button>
-                    <p style="color: #999; margin-top: 20px; font-size: 16px;">✓ No credit card required • ✓ 3 exercises unlocked • ✓ 135 activities free</p>
+                    <p style="color: #333; margin-top: 20px; font-size: 16px;">✓ No credit card required • ✓ 3 exercises unlocked • ✓ 135 activities free</p>
                     <p style="color: #764ba2; margin-top: 15px; font-size: 18px; font-weight: 600;">Then just $4.99/month • Cancel anytime</p>
                 </div>
 
@@ -996,7 +1038,7 @@ Updated 11182025 index.html File
                     <p style="color: #666; font-size: 16px; margin-bottom: 10px;">
                         <strong>Building On The Faith Ministry</strong>
                     </p>
-                    <p style="color: #999; font-size: 14px;">
+                    <p style="color: #333; font-size: 14px;">
                         Founded by Elder Robert Chalk Jr. • St. Louis, Missouri
                     </p>
                 </div>
@@ -1083,19 +1125,19 @@ Updated 11182025 index.html File
                             <rect x="60" y="32" width="28" height="44" fill="url(#pageGradWelcome)" stroke="#e2b659" stroke-width="1.5"/>
                             
                             <!-- Visible Text Lines on Left Page (KJV style) -->
-                            <line x1="15" y1="38" x2="37" y2="38" stroke="#764ba2" stroke-width="1.5" opacity="0.8"/>
-                            <line x1="15" y1="43" x2="37" y2="43" stroke="#667eea" stroke-width="1.5" opacity="0.7"/>
-                            <line x1="15" y1="48" x2="35" y2="48" stroke="#764ba2" stroke-width="1.5" opacity="0.7"/>
-                            <line x1="15" y1="53" x2="37" y2="53" stroke="#667eea" stroke-width="1.5" opacity="0.6"/>
-                            <line x1="15" y1="58" x2="33" y2="58" stroke="#764ba2" stroke-width="1.5" opacity="0.6"/>
-                            <line x1="15" y1="63" x2="37" y2="63" stroke="#667eea" stroke-width="1.5" opacity="0.5"/>
+                            <line x1="15" y1="38" x2="37" y2="38" stroke="#4a148c" stroke-width="2.5" opacity="1"/>
+                            <line x1="15" y1="43" x2="37" y2="43" stroke="#311b92" stroke-width="2.5" opacity="1"/>
+                            <line x1="15" y1="48" x2="35" y2="48" stroke="#4a148c" stroke-width="2.5" opacity="1"/>
+                            <line x1="15" y1="53" x2="37" y2="53" stroke="#311b92" stroke-width="2.5" opacity="1"/>
+                            <line x1="15" y1="58" x2="33" y2="58" stroke="#4a148c" stroke-width="2.5" opacity="1"/>
+                            <line x1="15" y1="63" x2="37" y2="63" stroke="#311b92" stroke-width="2.5" opacity="1"/>
                             
                             <!-- Visible Text Lines on Right Page -->
-                            <line x1="63" y1="38" x2="85" y2="38" stroke="#764ba2" stroke-width="1.5" opacity="0.8"/>
-                            <line x1="63" y1="43" x2="85" y2="43" stroke="#667eea" stroke-width="1.5" opacity="0.7"/>
-                            <line x1="63" y1="48" x2="83" y2="48" stroke="#764ba2" stroke-width="1.5" opacity="0.7"/>
-                            <line x1="63" y1="53" x2="85" y2="53" stroke="#667eea" stroke-width="1.5" opacity="0.6"/>
-                            <line x1="63" y1="58" x2="81" y2="58" stroke="#764ba2" stroke-width="1.5" opacity="0.6"/>
+                            <line x1="63" y1="38" x2="85" y2="38" stroke="#4a148c" stroke-width="2.5" opacity="1"/>
+                            <line x1="63" y1="43" x2="85" y2="43" stroke="#311b92" stroke-width="2.5" opacity="1"/>
+                            <line x1="63" y1="48" x2="83" y2="48" stroke="#4a148c" stroke-width="2.5" opacity="1"/>
+                            <line x1="63" y1="53" x2="85" y2="53" stroke="#311b92" stroke-width="2.5" opacity="1"/>
+                            <line x1="63" y1="58" x2="81" y2="58" stroke="#4a148c" stroke-width="2.5" opacity="1"/>
                             
                             <!-- Center Binding with Gradient -->
                             <rect x="44" y="28" width="12" height="52" fill="url(#bibleGradWelcome)" stroke="#4a5568" stroke-width="1.5" filter="url(#shadowWelcome)"/>
@@ -1338,7 +1380,7 @@ Updated 11182025 index.html File
                     <button onclick="agreeToDisclaimer()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 18px 50px; font-size: 18px; border-radius: 30px; cursor: pointer; font-weight: bold; box-shadow: 0 5px 15px rgba(118, 75, 162, 0.4); margin-bottom: 15px;">
                         ✅ I AGREE - Continue to VerseVault
                     </button>
-                    <p style="color: #999; font-size: 13px; margin-top: 10px;">By clicking "I Agree" you accept all terms, disclaimers, and acknowledge this is not medical treatment.</p>
+                    <p style="color: #333; font-size: 13px; margin-top: 10px;">By clicking "I Agree" you accept all terms, disclaimers, and acknowledge this is not medical treatment.</p>
                 </div>
 
             </div>
@@ -1378,19 +1420,19 @@ Updated 11182025 index.html File
                         <rect x="60" y="32" width="28" height="44" fill="url(#pageGradLogin)" stroke="#e2b659" stroke-width="1.5"/>
                         
                         <!-- Visible Text Lines on Left Page (KJV style) -->
-                        <line x1="15" y1="38" x2="37" y2="38" stroke="#764ba2" stroke-width="1.5" opacity="0.8"/>
-                        <line x1="15" y1="43" x2="37" y2="43" stroke="#667eea" stroke-width="1.5" opacity="0.7"/>
-                        <line x1="15" y1="48" x2="35" y2="48" stroke="#764ba2" stroke-width="1.5" opacity="0.7"/>
-                        <line x1="15" y1="53" x2="37" y2="53" stroke="#667eea" stroke-width="1.5" opacity="0.6"/>
-                        <line x1="15" y1="58" x2="33" y2="58" stroke="#764ba2" stroke-width="1.5" opacity="0.6"/>
-                        <line x1="15" y1="63" x2="37" y2="63" stroke="#667eea" stroke-width="1.5" opacity="0.5"/>
+                        <line x1="15" y1="38" x2="37" y2="38" stroke="#4a148c" stroke-width="2.5" opacity="1"/>
+                        <line x1="15" y1="43" x2="37" y2="43" stroke="#311b92" stroke-width="2.5" opacity="1"/>
+                        <line x1="15" y1="48" x2="35" y2="48" stroke="#4a148c" stroke-width="2.5" opacity="1"/>
+                        <line x1="15" y1="53" x2="37" y2="53" stroke="#311b92" stroke-width="2.5" opacity="1"/>
+                        <line x1="15" y1="58" x2="33" y2="58" stroke="#4a148c" stroke-width="2.5" opacity="1"/>
+                        <line x1="15" y1="63" x2="37" y2="63" stroke="#311b92" stroke-width="2.5" opacity="1"/>
                         
                         <!-- Visible Text Lines on Right Page -->
-                        <line x1="63" y1="38" x2="85" y2="38" stroke="#764ba2" stroke-width="1.5" opacity="0.8"/>
-                        <line x1="63" y1="43" x2="85" y2="43" stroke="#667eea" stroke-width="1.5" opacity="0.7"/>
-                        <line x1="63" y1="48" x2="83" y2="48" stroke="#764ba2" stroke-width="1.5" opacity="0.7"/>
-                        <line x1="63" y1="53" x2="85" y2="53" stroke="#667eea" stroke-width="1.5" opacity="0.6"/>
-                        <line x1="63" y1="58" x2="81" y2="58" stroke="#764ba2" stroke-width="1.5" opacity="0.6"/>
+                        <line x1="63" y1="38" x2="85" y2="38" stroke="#4a148c" stroke-width="2.5" opacity="1"/>
+                        <line x1="63" y1="43" x2="85" y2="43" stroke="#311b92" stroke-width="2.5" opacity="1"/>
+                        <line x1="63" y1="48" x2="83" y2="48" stroke="#4a148c" stroke-width="2.5" opacity="1"/>
+                        <line x1="63" y1="53" x2="85" y2="53" stroke="#311b92" stroke-width="2.5" opacity="1"/>
+                        <line x1="63" y1="58" x2="81" y2="58" stroke="#4a148c" stroke-width="2.5" opacity="1"/>
                         
                         <!-- Center Binding with Gradient -->
                         <rect x="44" y="28" width="12" height="52" fill="url(#bibleGradLogin)" stroke="#4a5568" stroke-width="1.5" filter="url(#shadowLogin)"/>
@@ -1449,7 +1491,7 @@ Updated 11182025 index.html File
                 
                 <button class="btn btn-primary" style="width: 100%;" onclick="handleLogin()">Sign In / Register</button>
                 <button class="btn btn-success" style="width: 100%; margin-top: 10px;" onclick="showLifetimeCodeModal()">👑 Have a Lifetime Code?</button>
-                <p id="copyrightText" style="text-align: center; margin-top: 20px; font-size: 12px; color: #999; cursor: pointer; user-select: none;" onclick="handleCopyrightClick()">© 2024 Building On The Faith Ministry</p>
+                <p id="copyrightText" style="text-align: center; margin-top: 20px; font-size: 12px; color: #333; cursor: pointer; user-select: none;" onclick="handleCopyrightClick()">© 2024 Building On The Faith Ministry</p>
                 <p style="text-align: center; margin-top: 10px; font-size: 12px;">
                     <a href="#" onclick="showPrivacyPolicy(); return false;" style="color: #667eea; text-decoration: none;">Privacy Policy</a> | 
                     <a href="#" onclick="showTermsOfUse(); return false;" style="color: #667eea; text-decoration: none;">Terms of Use</a> | 
@@ -1692,19 +1734,19 @@ Updated 11182025 index.html File
                         <rect x="60" y="32" width="28" height="44" fill="url(#pageGradDash)" stroke="#e2b659" stroke-width="1.5"/>
                         
                         <!-- Visible Text Lines on Left Page (KJV style) -->
-                        <line x1="15" y1="38" x2="37" y2="38" stroke="#764ba2" stroke-width="1.5" opacity="0.8"/>
-                        <line x1="15" y1="43" x2="37" y2="43" stroke="#667eea" stroke-width="1.5" opacity="0.7"/>
-                        <line x1="15" y1="48" x2="35" y2="48" stroke="#764ba2" stroke-width="1.5" opacity="0.7"/>
-                        <line x1="15" y1="53" x2="37" y2="53" stroke="#667eea" stroke-width="1.5" opacity="0.6"/>
-                        <line x1="15" y1="58" x2="33" y2="58" stroke="#764ba2" stroke-width="1.5" opacity="0.6"/>
-                        <line x1="15" y1="63" x2="37" y2="63" stroke="#667eea" stroke-width="1.5" opacity="0.5"/>
+                        <line x1="15" y1="38" x2="37" y2="38" stroke="#4a148c" stroke-width="2.5" opacity="1"/>
+                        <line x1="15" y1="43" x2="37" y2="43" stroke="#311b92" stroke-width="2.5" opacity="1"/>
+                        <line x1="15" y1="48" x2="35" y2="48" stroke="#4a148c" stroke-width="2.5" opacity="1"/>
+                        <line x1="15" y1="53" x2="37" y2="53" stroke="#311b92" stroke-width="2.5" opacity="1"/>
+                        <line x1="15" y1="58" x2="33" y2="58" stroke="#4a148c" stroke-width="2.5" opacity="1"/>
+                        <line x1="15" y1="63" x2="37" y2="63" stroke="#311b92" stroke-width="2.5" opacity="1"/>
                         
                         <!-- Visible Text Lines on Right Page -->
-                        <line x1="63" y1="38" x2="85" y2="38" stroke="#764ba2" stroke-width="1.5" opacity="0.8"/>
-                        <line x1="63" y1="43" x2="85" y2="43" stroke="#667eea" stroke-width="1.5" opacity="0.7"/>
-                        <line x1="63" y1="48" x2="83" y2="48" stroke="#764ba2" stroke-width="1.5" opacity="0.7"/>
-                        <line x1="63" y1="53" x2="85" y2="53" stroke="#667eea" stroke-width="1.5" opacity="0.6"/>
-                        <line x1="63" y1="58" x2="81" y2="58" stroke="#764ba2" stroke-width="1.5" opacity="0.6"/>
+                        <line x1="63" y1="38" x2="85" y2="38" stroke="#4a148c" stroke-width="2.5" opacity="1"/>
+                        <line x1="63" y1="43" x2="85" y2="43" stroke="#311b92" stroke-width="2.5" opacity="1"/>
+                        <line x1="63" y1="48" x2="83" y2="48" stroke="#4a148c" stroke-width="2.5" opacity="1"/>
+                        <line x1="63" y1="53" x2="85" y2="53" stroke="#311b92" stroke-width="2.5" opacity="1"/>
+                        <line x1="63" y1="58" x2="81" y2="58" stroke="#4a148c" stroke-width="2.5" opacity="1"/>
                         
                         <!-- Center Binding with Gradient -->
                         <rect x="44" y="28" width="12" height="52" fill="url(#bibleGradDash)" stroke="#4a5568" stroke-width="1.5" filter="url(#shadowDash)"/>
@@ -4088,7 +4130,7 @@ Elder Robert Chalk Jr.
                     <div class="exercise-icon">${exercise.icon}</div>
                     <div class="exercise-title">${exercise.name}</div>
                     <div class="exercise-count">${activityCount} activities</div>
-                    <div style="margin-top: 10px; font-size: 12px; color: #999;">${exercise.category}</div>
+                    <div style="margin-top: 10px; font-size: 12px; color: #333;">${exercise.category}</div>
                     ${!isUnlocked ? '<div style="margin-top: 10px; font-size: 24px;">🔒</div>' : ''}
                 `;
                 
@@ -5638,15 +5680,25 @@ Elder Robert Chalk Jr.
 function playWelcomeAudio() {
     if ('speechSynthesis' in window) {
         const utterance = new SpeechSynthesisUtterance();
-        utterance.text = "Welcome to VerseVault. Thy word have I hid in mine heart, that I might not sin against thee. Psalm 119 verse 11.";
+        utterance.text = "Back at It! Welcome to VerseVault. Thy word have I hid in mine heart, that I might not sin against thee. Psalm 119 verse 11. Experience the renewing of your mind is at reach!";
         utterance.rate = 0.9;
         utterance.pitch = 1.1;
         utterance.volume = 1.0;
-        const voices = speechSynthesis.getVoices();
-        const femaleVoice = voices.find(v => v.name.includes('Female') || v.name.includes('Samantha') || v.name.includes('Victoria'));
-        if (femaleVoice) utterance.voice = femaleVoice;
-        speechSynthesis.speak(utterance);
-        console.log('🎤 Welcome audio played');
+        
+        // Wait for voices to load
+        const setVoice = () => {
+            const voices = speechSynthesis.getVoices();
+            const femaleVoice = voices.find(v => v.name.includes('Female') || v.name.includes('Samantha') || v.name.includes('Victoria') || v.name.includes('Zira'));
+            if (femaleVoice) utterance.voice = femaleVoice;
+            speechSynthesis.speak(utterance);
+            console.log('🎤 Welcome audio played');
+        };
+        
+        if (speechSynthesis.getVoices().length > 0) {
+            setVoice();
+        } else {
+            speechSynthesis.onvoiceschanged = setVoice;
+        }
     } else {
         console.log('❌ speechSynthesis not supported');
     }
@@ -6900,7 +6952,7 @@ CSV FORMAT (Copy to Excel):
                         <button type="button" class="nps-button" data-value="9">9</button>
                         <button type="button" class="nps-button" data-value="10">10</button>
                     </div>
-                    <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: #999;">
+                    <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: #333;">
                         <span>Not likely</span>
                         <span>Very likely</span>
                     </div>
@@ -7049,7 +7101,7 @@ CSV FORMAT (Copy to Excel):
                 <div class="survey-question">
                     <h3>Your Email:</h3>
                     <input type="email" id="surveyEmail" name="email" placeholder="your@email.com" required style="margin-bottom: 0;">
-                    <p style="font-size: 12px; color: #999; margin-top: 5px;">We'll only use this to follow up on your feedback</p>
+                    <p style="font-size: 12px; color: #333; margin-top: 5px;">We'll only use this to follow up on your feedback</p>
                 </div>
 
                 <!-- Submit Buttons -->
@@ -7075,9 +7127,3 @@ CSV FORMAT (Copy to Excel):
 
 </body>
 </html>
-
-
-
-
-
-
