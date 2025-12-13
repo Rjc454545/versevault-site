@@ -1037,6 +1037,36 @@
         }
         
         @media (max-width: 768px) {
+            /* Cover Page Mobile Optimization */
+            .cover-content h1 {
+                font-size: 40px !important;
+                white-space: nowrap;
+                overflow: visible;
+            }
+            
+            .cover-content .tagline {
+                font-size: 18px !important;
+                line-height: 1.5;
+            }
+            
+            .cover-content .sub-tagline {
+                font-size: 16px !important;
+            }
+            
+            .cover-logo img {
+                width: 300px !important;
+                max-width: 90% !important;
+            }
+            
+            .cover-button {
+                font-size: 18px !important;
+                padding: 15px 40px !important;
+            }
+            
+            #coverPage {
+                padding-top: 20px;
+            }
+            
             /* Reduce padding on mobile */
             body {
                 padding: 10px;
@@ -1216,6 +1246,31 @@
             font-size: 18px;
             margin-top: 15px;
             border: 3px solid #FF8C00;
+        }
+        
+        /* Extra small mobile devices */
+        @media (max-width: 480px) {
+            .cover-content h1 {
+                font-size: 32px !important;
+                white-space: nowrap;
+            }
+            
+            .cover-content .tagline {
+                font-size: 16px !important;
+            }
+            
+            .cover-content .sub-tagline {
+                font-size: 14px !important;
+            }
+            
+            .cover-logo img {
+                width: 280px !important;
+            }
+            
+            .cover-button {
+                font-size: 16px !important;
+                padding: 12px 30px !important;
+            }
         }
     </style>
 </head>
@@ -1600,6 +1655,7 @@
                 <div class="admin-tabs">
                     <button class="admin-tab active" onclick="showAdminTab('codes')">Lifetime Codes</button>
                     <button class="admin-tab" onclick="showAdminTab('users')">User Statistics</button>
+                    <button class="admin-tab" onclick="showAdminTab('create')">➕ Create Account</button>
                     <button class="admin-tab" onclick="showAdminTab('direct')">Direct Access</button>
                     <button class="admin-tab" onclick="showAdminTab('emails')">📧 Email Marketing</button>
                 </div>
@@ -1652,6 +1708,47 @@
                             <div class="stat-value" id="adminLifetimeUsers">0</div>
                             <div class="stat-label">Lifetime Members</div>
                         </div>
+                    </div>
+                </div>
+                
+                <div id="adminCreateTab" class="admin-content hidden">
+                    <h3 style="color: #FF8C00; margin-bottom: 15px;">➕ Create Lifetime Account</h3>
+                    <p style="margin-bottom: 20px; font-size: 18px; color: #000; font-weight: 600;">Create lifetime accounts for ministry partners, church members, or special cases WITHOUT requiring a code:</p>
+                    
+                    <div style="background: white; padding: 25px; border-radius: 15px; border: 3px solid #FFD700; margin-bottom: 20px;">
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 8px; color: #000; font-weight: 700; font-size: 20px;">Full Name</label>
+                            <input type="text" id="adminCreateName" placeholder="Enter their full name" style="width: 100%; padding: 15px; border: 3px solid #000; border-radius: 10px; font-size: 20px; font-weight: 600;" />
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 8px; color: #000; font-weight: 700; font-size: 20px;">Email Address</label>
+                            <input type="email" id="adminCreateEmail" placeholder="Enter their email address" style="width: 100%; padding: 15px; border: 3px solid #000; border-radius: 10px; font-size: 20px; font-weight: 600;" />
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; margin-bottom: 8px; color: #000; font-weight: 700; font-size: 20px;">
+                                <input type="checkbox" id="adminSendWelcomeEmail" checked style="width: 25px; height: 25px; margin-right: 10px; vertical-align: middle;">
+                                Send Welcome Email with Login Credentials
+                            </label>
+                        </div>
+                        
+                        <button class="btn btn-success" style="width: 100%; font-size: 22px; padding: 18px; background: linear-gradient(135deg, #FFD700 0%, #FF8C00 100%); color: #000; border: 3px solid #000; font-weight: 900;" onclick="createLifetimeAccount()">
+                            ✨ Create Lifetime Account
+                        </button>
+                    </div>
+                    
+                    <div id="createAccountResult" style="display: none; padding: 20px; border-radius: 10px; margin-top: 20px; font-size: 20px; font-weight: 700;"></div>
+                    
+                    <div style="background: #FFD700; padding: 20px; border-radius: 10px; border: 3px solid #FF8C00; margin-top: 20px;">
+                        <h4 style="color: #000; margin-bottom: 10px; font-weight: 900; font-size: 22px;">📋 How This Works:</h4>
+                        <ul style="color: #000; font-size: 18px; font-weight: 700; line-height: 1.8;">
+                            <li>System creates account with auto-generated secure password</li>
+                            <li>Grants LIFETIME access (no payment, no code needed)</li>
+                            <li>Optionally sends welcome email with login credentials</li>
+                            <li>User can log in immediately and use all 945 activities</li>
+                            <li>You maintain full control - can view/manage from User Statistics tab</li>
+                        </ul>
                     </div>
                 </div>
                 
@@ -5129,6 +5226,7 @@ Elder Robert Chalk Jr.
             // Hide all tabs
             document.getElementById('adminCodesTab').classList.add('hidden');
             document.getElementById('adminUsersTab').classList.add('hidden');
+            document.getElementById('adminCreateTab').classList.add('hidden');
             document.getElementById('adminDirectTab').classList.add('hidden');
             document.getElementById('adminEmailsTab').classList.add('hidden');
             
@@ -5144,12 +5242,15 @@ Elder Robert Chalk Jr.
                 document.getElementById('adminUsersTab').classList.remove('hidden');
                 document.querySelectorAll('.admin-tab')[1].classList.add('active');
                 loadUserStats();
+            } else if (tab === 'create') {
+                document.getElementById('adminCreateTab').classList.remove('hidden');
+                document.querySelectorAll('.admin-tab')[2].classList.add('active');
             } else if (tab === 'direct') {
                 document.getElementById('adminDirectTab').classList.remove('hidden');
-                document.querySelectorAll('.admin-tab')[2].classList.add('active');
+                document.querySelectorAll('.admin-tab')[3].classList.add('active');
             } else if (tab === 'emails') {
                 document.getElementById('adminEmailsTab').classList.remove('hidden');
-                document.querySelectorAll('.admin-tab')[3].classList.add('active');
+                document.querySelectorAll('.admin-tab')[4].classList.add('active');
             }
         }
         
@@ -5336,6 +5437,147 @@ Elder Robert Chalk Jr.
             document.getElementById('directAccessUsername').value = '';
             loadUserStats();
         }
+        
+        function createLifetimeAccount() {
+            const name = document.getElementById('adminCreateName').value.trim();
+            const email = document.getElementById('adminCreateEmail').value.trim();
+            const sendEmail = document.getElementById('adminSendWelcomeEmail').checked;
+            const resultDiv = document.getElementById('createAccountResult');
+            
+            // Validation
+            if (!name) {
+                resultDiv.style.display = 'block';
+                resultDiv.style.background = '#dc2626';
+                resultDiv.style.color = 'white';
+                resultDiv.innerHTML = '❌ Please enter a full name';
+                return;
+            }
+            
+            if (!email || !email.includes('@')) {
+                resultDiv.style.display = 'block';
+                resultDiv.style.background = '#dc2626';
+                resultDiv.style.color = 'white';
+                resultDiv.innerHTML = '❌ Please enter a valid email address';
+                return;
+            }
+            
+            // Generate secure random password
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz23456789!@#$%';
+            let password = '';
+            for (let i = 0; i < 12; i++) {
+                password += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            
+            // Create username from email
+            const username = email.toLowerCase();
+            
+            // Check if user already exists
+            if (users[username]) {
+                resultDiv.style.display = 'block';
+                resultDiv.style.background = '#ffc107';
+                resultDiv.style.color = '#000';
+                resultDiv.innerHTML = '⚠️ Account with this email already exists!';
+                return;
+            }
+            
+            // Create the account
+            users[username] = {
+                username: username,
+                email: email,
+                name: name,
+                password: password,
+                createdDate: new Date().toISOString(),
+                accountType: 'lifetime',
+                lifetimeCode: 'ADMIN-CREATED',
+                adminCreated: true,
+                adminCreatedDate: new Date().toISOString(),
+                points: 0,
+                streak: 0,
+                completed: 0,
+                progress: {}
+            };
+            
+            saveData();
+            
+            // Send welcome email if checked
+            if (sendEmail) {
+                sendLifetimeAccountEmail(name, email, password);
+            }
+            
+            // Show success message
+            resultDiv.style.display = 'block';
+            resultDiv.style.background = '#4CAF50';
+            resultDiv.style.color = 'white';
+            resultDiv.innerHTML = `
+                ✅ <strong>Lifetime Account Created Successfully!</strong><br><br>
+                <strong>Name:</strong> ${name}<br>
+                <strong>Email:</strong> ${email}<br>
+                <strong>Password:</strong> ${password}<br><br>
+                ${sendEmail ? '📧 Welcome email sent with login credentials!' : '⚠️ Make sure to share these credentials with the user!'}
+            `;
+            
+            // Clear form
+            document.getElementById('adminCreateName').value = '';
+            document.getElementById('adminCreateEmail').value = '';
+            
+            // Refresh user stats
+            loadUserStats();
+        }
+        
+        function sendLifetimeAccountEmail(name, email, password) {
+            // Send email using EmailJS
+            const templateParams = {
+                to_email: email,
+                to_name: name,
+                from_name: 'Elder Robert Chalk Jr.',
+                subject: '🎉 Your VerseVault Lifetime Account is Ready!',
+                message: `
+Dear ${name},
+
+Welcome to the VerseVault family! 
+
+Elder Robert Chalk Jr. from Building On The Faith Ministry has created a LIFETIME ACCESS account for you!
+
+Your Login Credentials:
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+Email: ${email}
+Password: ${password}
+━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎁 What You Get:
+✅ Lifetime Access (No payment ever needed!)
+✅ All 945 Scripture-based cognitive activities
+✅ 21 different exercise types
+✅ Progress tracking and achievements
+✅ Audio features for accessibility
+
+🚀 Get Started:
+1. Visit: www.getversevault.com
+2. Click "Sign In"
+3. Enter your email and password above
+4. Start strengthening your mind and spirit!
+
+💡 Tip: You can change your password after logging in from the Settings screen.
+
+This is a gift from our ministry to help you strengthen both mind and spirit through God's Word.
+
+Blessings,
+Elder Robert Chalk Jr.
+Building On The Faith Ministry
+buildingonthefaithmin@gmail.com
+
+"Thy word have I hid in mine heart, that I might not sin against thee." - Psalm 119:11
+                `
+            };
+            
+            emailjs.send('service_34bucn8', 'template_xb50wzo', templateParams)
+                .then(function(response) {
+                    console.log('✅ Welcome email sent successfully!', response);
+                }, function(error) {
+                    console.log('❌ Email send failed:', error);
+                });
+        }
+        
 // Welcome audio for opening screen and registration
 function playWelcomeAudio() {
     if ('speechSynthesis' in window) {
