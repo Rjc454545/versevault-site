@@ -3157,57 +3157,424 @@ Elder Robert Chalk Jr.
                 {instruction:"TRUE OR FALSE",q:"The Lord's Prayer is in Matthew",a:"true",r:"Matthew 6:9-13",d:"advanced"}
             ],
             
-            multipleChoice: [
-                // BEGINNER (15)
-                {instruction:"MULTIPLE CHOICE",q:"Who built the ark?",o:["Noah","Moses","Abraham","David"],a:"Noah",r:"Genesis 6:14",d:"beginner"},
-                {instruction:"MULTIPLE CHOICE",q:"Who was swallowed by a great fish?",o:["Jonah","Daniel","Peter","John"],a:"Jonah",r:"Jonah 1:17",d:"beginner"},
-                {instruction:"MULTIPLE CHOICE",q:"Who was Jesus' mother?",o:["Mary","Martha","Elizabeth","Ruth"],a:"Mary",r:"Luke 1:27",d:"beginner"},
-                {instruction:"MULTIPLE CHOICE",q:"Where was Jesus born?",o:["Bethlehem","Nazareth","Jerusalem","Egypt"],a:"Bethlehem",r:"Luke 2:4-7",d:"beginner"},
-                {instruction:"MULTIPLE CHOICE",q:"Who fought Goliath?",o:["David","Saul","Jonathan","Samuel"],a:"David",r:"1 Samuel 17:49-50",d:"beginner"},
-                {instruction:"MULTIPLE CHOICE",q:"How many apostles did Jesus choose?",o:["12","7","10","5"],a:"12",r:"Matthew 10:1",d:"beginner"},
-                {instruction:"MULTIPLE CHOICE",q:"Who led Israel out of Egypt?",o:["Moses","Aaron","Joshua","David"],a:"Moses",r:"Exodus 3:10",d:"beginner"},
-                {instruction:"MULTIPLE CHOICE",q:"What did God create first?",o:["Light","Earth","Sky","Water"],a:"Light",r:"Genesis 1:3",d:"beginner"},
-                {instruction:"MULTIPLE CHOICE",q:"Who was the first man?",o:["Adam","Noah","Abraham","Moses"],a:"Adam",r:"Genesis 2:7",d:"beginner"},
-                {instruction:"MULTIPLE CHOICE",q:"Who denied Jesus three times?",o:["Peter","John","James","Thomas"],a:"Peter",r:"Matthew 26:34,69-75",d:"beginner"},
-                {instruction:"MULTIPLE CHOICE",q:"What did Jesus turn water into?",o:["Wine","Bread","Fish","Milk"],a:"Wine",r:"John 2:9",d:"beginner"},
-                {instruction:"MULTIPLE CHOICE",q:"Who was the first woman?",o:["Eve","Sarah","Mary","Ruth"],a:"Eve",r:"Genesis 3:20",d:"beginner"},
-                {instruction:"MULTIPLE CHOICE",q:"What did God create on the first day?",o:["Light","Land","Sky","Animals"],a:"Light",r:"Genesis 1:3",d:"beginner"},
-                {instruction:"MULTIPLE CHOICE",q:"Who killed Goliath?",o:["David","Saul","Jonathan","Samuel"],a:"David",r:"1 Samuel 17:50",d:"beginner"},
-                {instruction:"MULTIPLE CHOICE",q:"Who was raised from the dead by Jesus?",o:["Lazarus","Peter","John","James"],a:"Lazarus",r:"John 11:43-44",d:"beginner"},
-                // INTERMEDIATE (15)
-                {q:"Who was known for wisdom?",o:["Solomon","David","Samuel","Isaiah"],a:"Solomon",d:"intermediate"},
-                {q:"Who was thrown in a lion's den?",o:["Daniel","David","Joseph","Samson"],a:"Daniel",d:"intermediate"},
-                {q:"How many days did Jesus fast?",o:["40","30","50","70"],a:"40",d:"intermediate"},
-                {q:"Who walked on water?",o:["Jesus","Peter","Both","Neither"],a:"Both",d:"intermediate"},
-                {q:"Who was the first king of Israel?",o:["Saul","David","Solomon","Samuel"],a:"Saul",d:"intermediate"},
-                {q:"What was Paul's original name?",o:["Saul","Simon","Stephen","Samuel"],a:"Saul",d:"intermediate"},
-                {q:"Who was a tax collector?",o:["Matthew","Mark","Luke","John"],a:"Matthew",d:"intermediate"},
-                {q:"Where did Jesus perform his first miracle?",o:["Cana","Nazareth","Bethlehem","Capernaum"],a:"Cana",d:"intermediate"},
-                {q:"Who betrayed Jesus?",o:["Judas","Peter","Thomas","Matthew"],a:"Judas",d:"intermediate"},
-                {q:"Who was Moses' brother?",o:["Aaron","Joshua","Caleb","Hur"],a:"Aaron",d:"intermediate"},
-                {q:"Which sea did Moses part?",o:["Red Sea","Dead Sea","Jordan River","Nile River"],a:"Red Sea",d:"intermediate"},
-                {q:"Who was the mother of Samuel?",o:["Hannah","Sarah","Rachel","Rebecca"],a:"Hannah",d:"intermediate"},
-                {q:"How many sons did Jacob have?",o:["12","10","7","15"],a:"12",d:"intermediate"},
-                {q:"Who wrote most New Testament books?",o:["Paul","Peter","John","James"],a:"Paul",d:"intermediate"},
-                {q:"Who was swallowed by the earth?",o:["Korah","Dathan","Abiram","All three"],a:"All three",d:"intermediate"},
-                // EXPERT (15)
-                {q:"How many books are in the New Testament?",o:["27","39","66","22"],a:"27",d:"advanced"},
-                {q:"Who wrote most of the Psalms?",o:["David","Solomon","Moses","Asaph"],a:"David",d:"advanced"},
-                {q:"What is the shortest verse in the Bible?",o:["Jesus wept","God is love","Pray always","Be still"],a:"Jesus wept",d:"advanced"},
-                {q:"Who lived 969 years?",o:["Methuselah","Adam","Noah","Seth"],a:"Methuselah",d:"advanced"},
-                {q:"How many plagues on Egypt?",o:["10","7","12","40"],a:"10",d:"advanced"},
-                {q:"Who was a judge and prophet?",o:["Samuel","Saul","David","Solomon"],a:"Samuel",d:"advanced"},
-                {q:"What is the last book of Bible?",o:["Revelation","Jude","3 John","Acts"],a:"Revelation",d:"advanced"},
-                {q:"Who wrote Revelation?",o:["John","Paul","Peter","James"],a:"John",d:"advanced"},
-                {q:"How many days was Lazarus dead?",o:["4","3","7","2"],a:"4",d:"advanced"},
-                {q:"Who climbed a tree to see Jesus?",o:["Zacchaeus","Peter","John","James"],a:"Zacchaeus",d:"advanced"},
-                {q:"Who was sold for 30 pieces of silver?",o:["Jesus","Joseph","Peter","John"],a:"Jesus",d:"advanced"},
-                {q:"Who had a coat of many colors?",o:["Joseph","David","Solomon","Samuel"],a:"Joseph",d:"advanced"},
-                {q:"How many books did Moses write?",o:["5","7","10","3"],a:"5",d:"advanced"},
-                {q:"Who was the oldest person in Bible?",o:["Methuselah","Adam","Noah","Abraham"],a:"Methuselah",d:"advanced"},
-                {q:"What mountain did Moses receive commandments?",o:["Sinai","Carmel","Zion","Horeb"],a:"Sinai",d:"advanced"}
+      multipleChoice: [
+                // SALVATION & REDEMPTION (10 Questions)
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "For God so loved the world, that he gave his only begotten ___",
+                    o: ["Prophet", "Son", "Angel", "Servant"],
+                    a: "Son",
+                    r: "John 3:16",
+                    d: "intermediate",
+                    fullVerse: "For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "For all have sinned, and come short of the ___ of God",
+                    o: ["Glory", "Kingdom", "Mercy", "Blessing"],
+                    a: "Glory",
+                    r: "Romans 3:23",
+                    d: "intermediate",
+                    fullVerse: "For all have sinned, and come short of the glory of God."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "For the wages of sin is death; but the gift of God is ___ life",
+                    o: ["Abundant", "Eternal", "Peaceful", "Righteous"],
+                    a: "Eternal",
+                    r: "Romans 6:23",
+                    d: "intermediate",
+                    fullVerse: "For the wages of sin is death; but the gift of God is eternal life through Jesus Christ our Lord."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "If we confess our sins, he is faithful and just to ___ us our sins",
+                    o: ["Remember", "Forgive", "Record", "Judge"],
+                    a: "Forgive",
+                    r: "1 John 1:9",
+                    d: "intermediate",
+                    fullVerse: "If we confess our sins, he is faithful and just to forgive us our sins, and to cleanse us from all unrighteousness."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "There is no other ___ under heaven given among men whereby we must be saved",
+                    o: ["Name", "Power", "Way", "Prophet"],
+                    a: "Name",
+                    r: "Acts 4:12",
+                    d: "advanced",
+                    fullVerse: "Neither is there salvation in any other: for there is none other name under heaven given among men, whereby we must be saved."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "If thou shalt confess with thy mouth the Lord Jesus and believe in thine heart, thou shalt be ___",
+                    o: ["Blessed", "Saved", "Healed", "Prospered"],
+                    a: "Saved",
+                    r: "Romans 10:9",
+                    d: "intermediate",
+                    fullVerse: "That if thou shalt confess with thy mouth the Lord Jesus, and shalt believe in thine heart that God hath raised him from the dead, thou shalt be saved."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "For by grace are ye saved through ___; and that not of yourselves",
+                    o: ["Works", "Faith", "Prayer", "Obedience"],
+                    a: "Faith",
+                    r: "Ephesians 2:8",
+                    d: "intermediate",
+                    fullVerse: "For by grace are ye saved through faith; and that not of yourselves: it is the gift of God."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "As many as received him, to them gave he power to become the ___ of God",
+                    o: ["Servants", "Friends", "Sons", "Disciples"],
+                    a: "Sons",
+                    r: "John 1:12",
+                    d: "intermediate",
+                    fullVerse: "But as many as received him, to them gave he power to become the sons of God, even to them that believe on his name."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "Whosoever shall call upon the name of the Lord shall be ___",
+                    o: ["Heard", "Saved", "Blessed", "Answered"],
+                    a: "Saved",
+                    r: "Romans 10:13",
+                    d: "beginner",
+                    fullVerse: "For whosoever shall call upon the name of the Lord shall be saved."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "Jesus saith unto him, I am the way, the truth, and the ___",
+                    o: ["Light", "Life", "Love", "Lord"],
+                    a: "Life",
+                    r: "John 14:6",
+                    d: "beginner",
+                    fullVerse: "Jesus saith unto him, I am the way, the truth, and the life: no man cometh unto the Father, but by me."
+                },
+
+                // FAITH & TRUST (8 Questions)
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "Now faith is the substance of things hoped for, the evidence of things not ___",
+                    o: ["Understood", "Seen", "Known", "Revealed"],
+                    a: "Seen",
+                    r: "Hebrews 11:1",
+                    d: "intermediate",
+                    fullVerse: "Now faith is the substance of things hoped for, the evidence of things not seen."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "Trust in the Lord with all thine heart; and lean not unto thine own ___",
+                    o: ["Strength", "Wisdom", "Understanding", "Knowledge"],
+                    a: "Understanding",
+                    r: "Proverbs 3:5",
+                    d: "beginner",
+                    fullVerse: "Trust in the Lord with all thine heart; and lean not unto thine own understanding."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "But without faith it is impossible to ___ him",
+                    o: ["Please", "Know", "Serve", "Worship"],
+                    a: "Please",
+                    r: "Hebrews 11:6",
+                    d: "intermediate",
+                    fullVerse: "But without faith it is impossible to please him: for he that cometh to God must believe that he is."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "So then faith cometh by hearing, and hearing by the word of ___",
+                    o: ["Prophets", "God", "Prayer", "Wisdom"],
+                    a: "God",
+                    r: "Romans 10:17",
+                    d: "intermediate",
+                    fullVerse: "So then faith cometh by hearing, and hearing by the word of God."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "For we walk by ___, not by sight",
+                    o: ["Faith", "Hope", "Love", "Truth"],
+                    a: "Faith",
+                    r: "2 Corinthians 5:7",
+                    d: "beginner",
+                    fullVerse: "For we walk by faith, not by sight."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "If ye have faith as a grain of ___ seed",
+                    o: ["Wheat", "Barley", "Mustard", "Corn"],
+                    a: "Mustard",
+                    r: "Matthew 17:20",
+                    d: "intermediate",
+                    fullVerse: "If ye have faith as a grain of mustard seed, ye shall say unto this mountain, Remove hence to yonder place; and it shall remove."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "The just shall live by ___",
+                    o: ["Works", "Faith", "Law", "Prayer"],
+                    a: "Faith",
+                    r: "Romans 1:17",
+                    d: "intermediate",
+                    fullVerse: "For therein is the righteousness of God revealed from faith to faith: as it is written, The just shall live by faith."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "If thou canst believe, all things are ___ to him that believeth",
+                    o: ["Possible", "Given", "Revealed", "Known"],
+                    a: "Possible",
+                    r: "Mark 9:23",
+                    d: "beginner",
+                    fullVerse: "Jesus said unto him, If thou canst believe, all things are possible to him that believeth."
+                },
+
+                // LOVE & COMPASSION (7 Questions)
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "God is ___; and he that dwelleth in love dwelleth in God",
+                    o: ["Light", "Love", "Truth", "Peace"],
+                    a: "Love",
+                    r: "1 John 4:16",
+                    d: "beginner",
+                    fullVerse: "God is love; and he that dwelleth in love dwelleth in God, and God in him."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "A new commandment I give unto you, That ye ___ one another",
+                    o: ["Serve", "Love", "Help", "Teach"],
+                    a: "Love",
+                    r: "John 13:34",
+                    d: "beginner",
+                    fullVerse: "A new commandment I give unto you, That ye love one another; as I have loved you, that ye also love one another."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "And now abideth faith, hope, charity, these three; but the greatest of these is ___",
+                    o: ["Faith", "Hope", "Charity", "Peace"],
+                    a: "Charity",
+                    r: "1 Corinthians 13:13",
+                    d: "intermediate",
+                    fullVerse: "And now abideth faith, hope, charity, these three; but the greatest of these is charity."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "Beloved, let us love one another: for love is of ___",
+                    o: ["Heaven", "God", "Faith", "Christ"],
+                    a: "God",
+                    r: "1 John 4:7",
+                    d: "beginner",
+                    fullVerse: "Beloved, let us love one another: for love is of God; and every one that loveth is born of God, and knoweth God."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "Thou shalt love thy neighbour as ___",
+                    o: ["Thyself", "God", "Christ", "Heaven"],
+                    a: "Thyself",
+                    r: "Matthew 22:39",
+                    d: "beginner",
+                    fullVerse: "And the second is like unto it, Thou shalt love thy neighbour as thyself."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "Charity suffereth long, and is ___; charity envieth not",
+                    o: ["Patient", "Kind", "Gentle", "Merciful"],
+                    a: "Kind",
+                    r: "1 Corinthians 13:4",
+                    d: "intermediate",
+                    fullVerse: "Charity suffereth long, and is kind; charity envieth not; charity vaunteth not itself, is not puffed up."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "For God so loved the ___, that he gave his only begotten Son",
+                    o: ["Church", "World", "People", "Saints"],
+                    a: "World",
+                    r: "John 3:16",
+                    d: "beginner",
+                    fullVerse: "For God so loved the world, that he gave his only begotten Son, that whosoever believeth in him should not perish, but have everlasting life."
+                },
+
+                // WISDOM & KNOWLEDGE (7 Questions)
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "The fear of the Lord is the beginning of ___",
+                    o: ["Faith", "Wisdom", "Knowledge", "Understanding"],
+                    a: "Wisdom",
+                    r: "Proverbs 9:10",
+                    d: "intermediate",
+                    fullVerse: "The fear of the Lord is the beginning of wisdom: and the knowledge of the holy is understanding."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "If any of you lack wisdom, let him ask of ___",
+                    o: ["God", "Elders", "Teachers", "Scripture"],
+                    a: "God",
+                    r: "James 1:5",
+                    d: "intermediate",
+                    fullVerse: "If any of you lack wisdom, let him ask of God, that giveth to all men liberally, and upbraideth not; and it shall be given him."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "The entrance of thy words giveth ___; it giveth understanding unto the simple",
+                    o: ["Peace", "Light", "Hope", "Truth"],
+                    a: "Light",
+                    r: "Psalm 119:130",
+                    d: "intermediate",
+                    fullVerse: "The entrance of thy words giveth light; it giveth understanding unto the simple."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "Thy word is a lamp unto my feet, and a ___ unto my path",
+                    o: ["Guide", "Light", "Truth", "Way"],
+                    a: "Light",
+                    r: "Psalm 119:105",
+                    d: "beginner",
+                    fullVerse: "Thy word is a lamp unto my feet, and a light unto my path."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "For the Lord giveth wisdom: out of his mouth cometh knowledge and ___",
+                    o: ["Truth", "Understanding", "Peace", "Power"],
+                    a: "Understanding",
+                    r: "Proverbs 2:6",
+                    d: "intermediate",
+                    fullVerse: "For the Lord giveth wisdom: out of his mouth cometh knowledge and understanding."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "Get wisdom, get understanding: forget it not; neither ___ from the words of my mouth",
+                    o: ["Turn", "Decline", "Depart", "Leave"],
+                    a: "Decline",
+                    r: "Proverbs 4:5",
+                    d: "advanced",
+                    fullVerse: "Get wisdom, get understanding: forget it not; neither decline from the words of my mouth."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "In all thy ways acknowledge him, and he shall ___ thy paths",
+                    o: ["Guide", "Direct", "Bless", "Make"],
+                    a: "Direct",
+                    r: "Proverbs 3:6",
+                    d: "intermediate",
+                    fullVerse: "In all thy ways acknowledge him, and he shall direct thy paths."
+                },
+
+                // PRAYER & WORSHIP (6 Questions)
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "Pray without ___",
+                    o: ["Stopping", "Ceasing", "Ending", "Doubting"],
+                    a: "Ceasing",
+                    r: "1 Thessalonians 5:17",
+                    d: "beginner",
+                    fullVerse: "Pray without ceasing."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "Ask, and it shall be given you; seek, and ye shall ___",
+                    o: ["Know", "Find", "Receive", "Understand"],
+                    a: "Find",
+                    r: "Matthew 7:7",
+                    d: "beginner",
+                    fullVerse: "Ask, and it shall be given you; seek, and ye shall find; knock, and it shall be opened unto you."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "The effectual fervent prayer of a righteous man availeth ___",
+                    o: ["Much", "Always", "Greatly", "Forever"],
+                    a: "Much",
+                    r: "James 5:16",
+                    d: "intermediate",
+                    fullVerse: "The effectual fervent prayer of a righteous man availeth much."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "Call unto me, and I will answer thee, and shew thee great and ___ things",
+                    o: ["Wonderful", "Mighty", "Glorious", "Marvelous"],
+                    a: "Mighty",
+                    r: "Jeremiah 33:3",
+                    d: "intermediate",
+                    fullVerse: "Call unto me, and I will answer thee, and shew thee great and mighty things, which thou knowest not."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "In every thing by prayer and supplication with ___ let your requests be made known",
+                    o: ["Faith", "Thanksgiving", "Praise", "Worship"],
+                    a: "Thanksgiving",
+                    r: "Philippians 4:6",
+                    d: "intermediate",
+                    fullVerse: "Be careful for nothing; but in every thing by prayer and supplication with thanksgiving let your requests be made known unto God."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "When thou prayest, enter into thy ___, and when thou hast shut thy door, pray",
+                    o: ["Heart", "Closet", "Room", "Temple"],
+                    a: "Closet",
+                    r: "Matthew 6:6",
+                    d: "intermediate",
+                    fullVerse: "But thou, when thou prayest, enter into thy closet, and when thou hast shut thy door, pray to thy Father which is in secret."
+                },
+
+                // STRENGTH & COURAGE (7 Questions)
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "I can do all things through Christ which ___ me",
+                    o: ["Guides", "Strengtheneth", "Helps", "Saves"],
+                    a: "Strengtheneth",
+                    r: "Philippians 4:13",
+                    d: "beginner",
+                    fullVerse: "I can do all things through Christ which strengtheneth me."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "Be strong and of a good courage; be not afraid, neither be thou ___",
+                    o: ["Worried", "Dismayed", "Troubled", "Fearful"],
+                    a: "Dismayed",
+                    r: "Joshua 1:9",
+                    d: "intermediate",
+                    fullVerse: "Be strong and of a good courage; be not afraid, neither be thou dismayed: for the Lord thy God is with thee."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "The Lord is my ___ and my salvation; whom shall I fear?",
+                    o: ["Shepherd", "Light", "Strength", "Rock"],
+                    a: "Light",
+                    r: "Psalm 27:1",
+                    d: "intermediate",
+                    fullVerse: "The Lord is my light and my salvation; whom shall I fear? the Lord is the strength of my life; of whom shall I be afraid?"
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "But they that wait upon the Lord shall renew their ___",
+                    o: ["Faith", "Strength", "Hope", "Spirit"],
+                    a: "Strength",
+                    r: "Isaiah 40:31",
+                    d: "beginner",
+                    fullVerse: "But they that wait upon the Lord shall renew their strength; they shall mount up with wings as eagles."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "For God hath not given us the spirit of fear; but of power, love, and a sound ___",
+                    o: ["Heart", "Mind", "Spirit", "Soul"],
+                    a: "Mind",
+                    r: "2 Timothy 1:7",
+                    d: "intermediate",
+                    fullVerse: "For God hath not given us the spirit of fear; but of power, and of love, and of a sound mind."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "The Lord is my rock, and my fortress, and my ___",
+                    o: ["Saviour", "Deliverer", "Protector", "Shield"],
+                    a: "Deliverer",
+                    r: "Psalm 18:2",
+                    d: "intermediate",
+                    fullVerse: "The Lord is my rock, and my fortress, and my deliverer; my God, my strength, in whom I will trust."
+                },
+                {
+                    instruction: "MULTIPLE CHOICE",
+                    q: "What time I am afraid, I will trust in ___",
+                    o: ["God", "Thee", "Prayer", "Faith"],
+                    a: "Thee",
+                    r: "Psalm 56:3",
+                    d: "beginner",
+                    fullVerse: "What time I am afraid, I will trust in thee."
+                }
             ],
-            
             characterQuiz: [
                 // BEGINNER (15)
                 {q:"Who was the first man created?",a:"Adam",d:"beginner"},
