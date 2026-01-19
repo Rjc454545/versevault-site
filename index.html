@@ -2435,88 +2435,100 @@ let lifetimeCodes = initializeLifetimeCodes();
         // Initialize users object
         let users = {};
         
-        // ===================================
-        // FIREBASE DATA SYNC FUNCTIONS
-        // ===================================
-        
-        // Load all data from Firebase on startup
-        function loadDataFromFirebase() {
-            console.log('🔄 Loading data from Firebase...');
-            
-            // Load users
-            database.ref('users').once('value', (snapshot) => {
-                if (snapshot.exists()) {
-                    users = snapshot.val();
-                    console.log('✅ Users loaded from Firebase:', Object.keys(users).length);
-                } else {
-                    console.log('📭 No users in Firebase yet');
-                }
-            });
-            
-            // Load lifetime codes
-            database.ref('lifetimeCodes').once('value', (snapshot) => {
-                if (snapshot.exists()) {
-                    const firebaseCodes = snapshot.val();
-                    if (Array.isArray(firebaseCodes)) {
-                        lifetimeCodes = firebaseCodes;
-                        console.log('✅ Lifetime codes loaded from Firebase:', lifetimeCodes.length);
-                    }
-                } else {
-                    console.log('📭 No lifetime codes in Firebase, using local codes');
-                    // Save current codes to Firebase
-                    database.ref('lifetimeCodes').set(lifetimeCodes);
-                }
-            });
-        }
-        
-        // Save data to Firebase (replaces localStorage)
-        function saveData() {
-            // Save to Firebase
-            database.ref('users').set(users).then(() => {
-                console.log('✅ Users saved to Firebase');
-            }).catch((error) => {
-                console.error('❌ Error saving users to Firebase:', error);
-            });
-            
-            database.ref('lifetimeCodes').set(lifetimeCodes).then(() => {
-                console.log('✅ Lifetime codes saved to Firebase');
-            }).catch((error) => {
-                console.error('❌ Error saving codes to Firebase:', error);
-            });
-            
-            // Also keep localStorage as backup
+  // ===================================
+// FIREBASE DATA SYNC FUNCTIONS
+// ===================================
+
+// Convert array to object for Firebase
+function arrayToObject(arr) {
+    const obj = {};
+    arr.forEach((item, index) => {
+        obj[index] = item;
+    });
+    return obj;
+}
+
+// Convert object back to array
+function objectToArray(obj) {
+    if (!obj) return [];
+    return Object.keys(obj).map(key => obj[key]);
+}
+
+// Load all data from Firebase on startup
+function loadDataFromFirebase() {
+    console.log('🔄 Loading data from Firebase...');
+    
+    // Load users
+    database.ref('users').once('value', (snapshot) => {
+        if (snapshot.exists()) {
+            users = snapshot.val();
+            console.log('✅ Users loaded from Firebase:', Object.keys(users).length);
+            // Save to localStorage as backup
             localStorage.setItem('vv_users', JSON.stringify(users));
+        } else {
+            console.log('📭 No users in Firebase, loading from localStorage');
+            const storedUsers = localStorage.getItem('vv_users');
+            users = storedUsers ? JSON.parse(storedUsers) : {};
+        }
+    });
+    
+    // Load lifetime codes
+    database.ref('lifetimeCodes').once('value', (snapshot) => {
+        if (snapshot.exists()) {
+            const firebaseCodesObj = snapshot.val();
+            lifetimeCodes = objectToArray(firebaseCodesObj);
+            console.log('✅ Lifetime codes loaded from Firebase:', lifetimeCodes.length);
+            // Save to localStorage as backup
             localStorage.setItem('vv_lifetime_codes', JSON.stringify(lifetimeCodes));
+        } else {
+            console.log('📭 No lifetime codes in Firebase, using local codes');
+            // Save current codes to Firebase
+            const codesObj = arrayToObject(lifetimeCodes);
+            database.ref('lifetimeCodes').set(codesObj);
         }
+    });
+}
+
+// Save data to Firebase (replaces localStorage)
+function saveData() {
+    // Convert arrays to objects for Firebase
+    const usersObj = users; // Already an object
+    const codesObj = arrayToObject(lifetimeCodes);
+    
+    // Save to Firebase
+    database.ref('users').set(usersObj).then(() => {
+        console.log('✅ Users saved to Firebase');
+    }).catch((error) => {
+        console.error('❌ Error saving users to Firebase:', error);
+    });
+    
+    database.ref('lifetimeCodes').set(codesObj).then(() => {
+        console.log('✅ Lifetime codes saved to Firebase');
+    }).catch((error) => {
+        console.error('❌ Error saving codes to Firebase:', error);
+    });
+    
+    // Also keep localStorage as backup
+    localStorage.setItem('vv_users', JSON.stringify(users));
+    localStorage.setItem('vv_lifetime_codes', JSON.stringify(lifetimeCodes));
+}
+
+// Save individual user (more efficient for updates)
+function saveUser(username) {
+    if (users[username]) {
+        database.ref('users/' + username).set(users[username]).then(() => {
+            console.log('✅ User saved to Firebase:', username);
+        }).catch((error) => {
+            console.error('❌ Error saving user:', error);
+        });
         
-        // Save individual user (more efficient for updates)
-        function saveUser(username) {
-            if (users[username]) {
-                database.ref('users/' + username).set(users[username]).then(() => {
-                    console.log('✅ User saved to Firebase:', username);
-                }).catch((error) => {
-                    console.error('❌ Error saving user:', error);
-                });
-                
-                // Backup to localStorage
-                localStorage.setItem('vv_users', JSON.stringify(users));
-            }
-        }
-        
-        // Save lifetime codes
-        function saveLifetimeCodes() {
-            database.ref('lifetimeCodes').set(lifetimeCodes).then(() => {
-                console.log('✅ Lifetime codes saved to Firebase');
-            }).catch((error) => {
-                console.error('❌ Error saving codes:', error);
-            });
-            
-            // Backup to localStorage
-            localStorage.setItem('vv_lifetime_codes', JSON.stringify(lifetimeCodes));
-        }
-        
-        // Initialize Firebase data on page load
-        loadDataFromFirebase();
+        // Backup to localStorage
+        localStorage.setItem('vv_users', JSON.stringify(users));
+    }
+}
+
+// Initialize Firebase data on page load
+loadDataFromFirebase();
         
         // ===================================
         // EMAIL TRACKING & AUTOMATION SYSTEM
@@ -7767,4 +7779,5 @@ window.addEventListener('DOMContentLoaded', function() {
 </body>
 
 </html>
+
 
