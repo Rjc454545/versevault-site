@@ -26,8 +26,11 @@
             });
         })();
     </script>
-    
-   <!-- Firebase Integration -->
+
+    <!-- SheetJS for Excel Export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+ 
+    <!-- Firebase Integration -->
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <script>
@@ -995,8 +998,8 @@
             font-family: inherit;
             font-size: 16px;
             resize: vertical;
-        }
-        
+       }
+         
         /* Welcome Voice Controls */
         .voice-control {
             position: fixed;
@@ -1384,6 +1387,48 @@
                 0%, 100% { transform: scale(1); opacity: 0.9; }
                 50% { transform: scale(1.05); opacity: 1; }
             }
+            /* EMAIL STATISTICS STYLES */
+        .email-stats-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .email-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+        
+        .email-type-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
+            gap: 10px;
+            padding: 12px;
+            border-bottom: 1px solid #e5e7eb;
+            align-items: center;
+        }
+        
+        .email-type-row:hover {
+            background: #f9fafb;
+        }
+        
+        .email-stat-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .badge-sent { background: #dbeafe; color: #1e40af; }
+        .badge-delivered { background: #d1fae5; color: #065f46; }
+        .badge-opened { background: #fef3c7; color: #92400e; }
+        .badge-clicked { background: #e0e7ff; color: #3730a3; }
+        .badge-bounced { background: #fee2e2; color: #991b1b; }
         </style>
 
     </style>
@@ -1748,7 +1793,7 @@
                     <button class="admin-tab" onclick="showAdminTab('direct')">Direct Access</button>
                     <button class="admin-tab" onclick="showAdminTab('emails')">📧 Email Marketing</button>
                     <button class="admin-tab" onclick="showAdminTab('activity')">📊 Activity Dashboard</button>
-                </div>
+<button class="admin-tab" onclick="showAdminTab('emailStats')">📊 Email Statistics</button>                </div>
                 
                 <div id="adminCodesTab" class="admin-content">
                     <h3 style="color: #FF8C00; margin-bottom: 15px;">
@@ -1974,7 +2019,77 @@
                             </table>
                         </div>
                     </div>
+             <!-- EMAIL STATISTICS TAB -->
+                <div id="adminEmailStatsTab" class="admin-content hidden">
+                    <h3 style="color: #FF8C00; margin-bottom: 20px;">📈 Email Statistics Dashboard</h3>
                     
+                    <!-- Summary Cards -->
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px;">
+                        <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;">
+                            <div style="font-size: 36px; font-weight: bold;" id="totalEmailsSent">0</div>
+                            <div style="font-size: 14px; opacity: 0.9;">Total Sent</div>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;">
+                            <div style="font-size: 36px; font-weight: bold;" id="totalEmailsDelivered">0</div>
+                            <div style="font-size: 14px; opacity: 0.9;">Delivered</div>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;">
+                            <div style="font-size: 36px; font-weight: bold;" id="totalEmailsOpened">0</div>
+                            <div style="font-size: 14px; opacity: 0.9;">Opened</div>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;">
+                            <div style="font-size: 36px; font-weight: bold;" id="totalEmailsClicked">0</div>
+                            <div style="font-size: 14px; opacity: 0.9;">Clicked</div>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;">
+                            <div style="font-size: 36px; font-weight: bold;" id="totalEmailsBounced">0</div>
+                            <div style="font-size: 14px; opacity: 0.9;">Bounced</div>
+                        </div>
+                        <div style="background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); padding: 20px; border-radius: 12px; color: white; text-align: center;">
+                            <div style="font-size: 36px; font-weight: bold;" id="avgOpenRate">0%</div>
+                            <div style="font-size: 14px; opacity: 0.9;">Open Rate</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Email Type Breakdown -->
+                    <div style="background: white; padding: 25px; border-radius: 12px; margin-bottom: 25px; border: 2px solid #e5e7eb;">
+                        <h4 style="color: #667eea; margin-bottom: 20px;">📊 Breakdown by Email Type</h4>
+                        <div id="emailTypeBreakdown"></div>
+                    </div>
+                    
+                    <!-- Recent Email Activity -->
+                    <div style="background: white; padding: 25px; border-radius: 12px; margin-bottom: 25px; border: 2px solid #e5e7eb;">
+                        <h4 style="color: #667eea; margin-bottom: 20px;">📋 Recent Email Activity</h4>
+                        <div style="max-height: 400px; overflow-y: auto;">
+                            <table style="width: 100%; border-collapse: collapse;">
+                                <thead style="background: #f3f4f6; position: sticky; top: 0;">
+                                    <tr>
+                                        <th style="padding: 12px; text-align: left;">Date</th>
+                                        <th style="padding: 12px; text-align: left;">Type</th>
+                                        <th style="padding: 12px; text-align: left;">Recipient</th>
+                                        <th style="padding: 12px; text-align: left;">Status</th>
+                                        <th style="padding: 12px; text-align: left;">Opened</th>
+                                        <th style="padding: 12px; text-align: left;">Clicked</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentEmailActivity">
+                                    <tr><td colspan="6" style="text-align: center; padding: 20px; color: #999;">Loading...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Daily Statistics -->
+                    <div style="background: white; padding: 25px; border-radius: 12px; margin-bottom: 25px; border: 2px solid #e5e7eb;">
+                        <h4 style="color: #667eea; margin-bottom: 20px;">📅 Daily Email Statistics</h4>
+                        <div id="dailyEmailStats"></div>
+                    </div>
+                    
+                    <!-- Export Button -->
+                    <button class="btn btn-primary" style="width: 100%; font-size: 18px; padding: 15px;" onclick="exportEmailStatistics()">
+                        📥 Export to Excel
+                    </button>
+                </div>       
                     <button class="btn btn-primary" style="width: 100%; margin-top: 20px; font-size: 18px;" onclick="loadActivityDashboard()">🔄 Refresh Dashboard</button>
                 </div>
                 
@@ -2529,7 +2644,681 @@ function saveUser(username) {
 
 // Initialize Firebase data on page load
 loadDataFromFirebase();
+
+// ============================================
+// GETVERSEVAULT EMAIL STATISTICS TRACKING SYSTEM
+// Complete implementation for email analytics
+// ============================================
+
+// Email Statistics Storage Structure
+let emailStats = {
+    total: {
+        sent: 0,
+        delivered: 0,
+        opened: 0,
+        clicked: 0,
+        bounced: 0
+    },
+    byType: {
+        // Populated dynamically: welcome, premium, family, trial, lifetime, admin
+    },
+    recentActivity: [
+        // Array of email event objects
+    ],
+    dailyStats: {
+        // Format: 'YYYY-MM-DD': { sent, delivered, opened, clicked, bounced }
+    }
+};
+
+// ============================================
+// FIREBASE OPERATIONS
+// ============================================
+
+/**
+ * Load email statistics from Firebase
+ */
+function loadEmailStats() {
+    database.ref('emailStatistics').once('value', (snapshot) => {
+        if (snapshot.exists()) {
+            emailStats = snapshot.val();
+            console.log('📊 Email statistics loaded from Firebase');
+            
+            // Update dashboard if it's visible
+            if (window.updateEmailStatsDashboard) {
+                updateEmailStatsDashboard();
+            }
+        } else {
+            console.log('📊 Initializing new email statistics');
+            saveEmailStats();
+        }
+    }).catch((error) => {
+        console.error('❌ Error loading email statistics:', error);
+    });
+}
+
+/**
+ * Save email statistics to Firebase
+ */
+function saveEmailStats() {
+    database.ref('emailStatistics').set(emailStats)
+        .then(() => {
+            console.log('✅ Email statistics saved to Firebase');
+        })
+        .catch((error) => {
+            console.error('❌ Error saving email statistics:', error);
+        });
+}
+
+// ============================================
+// CORE TRACKING FUNCTIONS
+// ============================================
+
+/**
+ * Track email event and update statistics
+ * @param {string} eventType - Type of event (e.g., 'welcome_sent', 'email_opened')
+ * @param {object} eventData - Email data including recipient, username, etc.
+ */
+function trackEmailEvent(eventType, eventData) {
+    const timestamp = new Date().toISOString();
+    const emailType = eventData.emailType || extractEmailType(eventType);
+    
+    console.log(`📊 Tracking: ${eventType} for ${emailType}`);
+    
+    // Create detailed event record
+    const emailEvent = {
+        id: generateEmailId(),
+        timestamp: timestamp,
+        eventType: eventType,
+        emailType: emailType,
+        recipient: eventData.email || eventData.to_email || 'unknown',
+        username: eventData.username || eventData.user_name || 'unknown',
+        status: getStatusFromEvent(eventType),
+        opened: eventType.includes('opened'),
+        clicked: eventType.includes('clicked'),
+        openedAt: eventType.includes('opened') ? timestamp : null,
+        clickedAt: eventType.includes('clicked') ? timestamp : null,
+        bounced: eventType.includes('bounced'),
+        bouncedAt: eventType.includes('bounced') ? timestamp : null,
+        deliveredAt: eventType.includes('delivered') ? timestamp : null,
+        metadata: {
+            ...eventData,
+            userAgent: navigator.userAgent,
+            timestamp: timestamp
+        }
+    };
+    
+    // Update total statistics
+    updateTotalStats(eventType);
+    
+    // Update type-specific statistics
+    updateTypeStats(eventType, emailType);
+    
+    // Update daily statistics
+    updateDailyStats(eventType, timestamp);
+    
+    // Add to recent activity
+    addToRecentActivity(emailEvent);
+    
+    // Save to Firebase
+    saveEmailStats();
+    
+    // Update dashboard if visible
+    if (window.updateEmailStatsDashboard) {
+        updateEmailStatsDashboard();
+    }
+    
+    console.log(`✅ Event tracked: ${eventType} for ${emailType}`);
+}
+
+/**
+ * Update total statistics
+ */
+function updateTotalStats(eventType) {
+    if (eventType.includes('sent')) {
+        emailStats.total.sent++;
+    }
+    if (eventType.includes('delivered')) {
+        emailStats.total.delivered++;
+    }
+    if (eventType.includes('opened')) {
+        emailStats.total.opened++;
+    }
+    if (eventType.includes('clicked')) {
+        emailStats.total.clicked++;
+    }
+    if (eventType.includes('bounced')) {
+        emailStats.total.bounced++;
+    }
+}
+
+/**
+ * Update type-specific statistics
+ */
+function updateTypeStats(eventType, emailType) {
+    if (!emailStats.byType[emailType]) {
+        emailStats.byType[emailType] = {
+            sent: 0,
+            delivered: 0,
+            opened: 0,
+            clicked: 0,
+            bounced: 0
+        };
+    }
+    
+    if (eventType.includes('sent')) emailStats.byType[emailType].sent++;
+    if (eventType.includes('delivered')) emailStats.byType[emailType].delivered++;
+    if (eventType.includes('opened')) emailStats.byType[emailType].opened++;
+    if (eventType.includes('clicked')) emailStats.byType[emailType].clicked++;
+    if (eventType.includes('bounced')) emailStats.byType[emailType].bounced++;
+}
+
+/**
+ * Update daily statistics
+ */
+function updateDailyStats(eventType, timestamp) {
+    const dateKey = timestamp.split('T')[0]; // Format: YYYY-MM-DD
+    
+    if (!emailStats.dailyStats[dateKey]) {
+        emailStats.dailyStats[dateKey] = {
+            sent: 0,
+            delivered: 0,
+            opened: 0,
+            clicked: 0,
+            bounced: 0
+        };
+    }
+    
+    if (eventType.includes('sent')) emailStats.dailyStats[dateKey].sent++;
+    if (eventType.includes('delivered')) emailStats.dailyStats[dateKey].delivered++;
+    if (eventType.includes('opened')) emailStats.dailyStats[dateKey].opened++;
+    if (eventType.includes('clicked')) emailStats.dailyStats[dateKey].clicked++;
+    if (eventType.includes('bounced')) emailStats.dailyStats[dateKey].bounced++;
+}
+
+/**
+ * Add event to recent activity
+ */
+function addToRecentActivity(emailEvent) {
+    if (!emailStats.recentActivity) {
+        emailStats.recentActivity = [];
+    }
+    
+    // Add to beginning of array
+    emailStats.recentActivity.unshift(emailEvent);
+    
+    // Keep only last 1000 events to prevent database bloat
+    if (emailStats.recentActivity.length > 1000) {
+        emailStats.recentActivity = emailStats.recentActivity.slice(0, 1000);
+    }
+}
+
+// ============================================
+// HELPER FUNCTIONS
+// ============================================
+
+/**
+ * Generate unique email ID
+ */
+function generateEmailId() {
+    return 'email_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+}
+
+/**
+ * Extract email type from event name
+ */
+function extractEmailType(eventType) {
+    const lowerEvent = eventType.toLowerCase();
+    
+    if (lowerEvent.includes('welcome')) return 'welcome';
+    if (lowerEvent.includes('premium')) return 'premium';
+    if (lowerEvent.includes('family')) return 'family';
+    if (lowerEvent.includes('trial')) return 'trial';
+    if (lowerEvent.includes('lifetime')) return 'lifetime';
+    if (lowerEvent.includes('admin')) return 'admin';
+    if (lowerEvent.includes('survey')) return 'survey';
+    if (lowerEvent.includes('refer')) return 'refer';
+    
+    return 'other';
+}
+
+/**
+ * Get status from event type
+ */
+function getStatusFromEvent(eventType) {
+    const lowerEvent = eventType.toLowerCase();
+    
+    if (lowerEvent.includes('bounced')) return 'bounced';
+    if (lowerEvent.includes('clicked')) return 'clicked';
+    if (lowerEvent.includes('opened')) return 'opened';
+    if (lowerEvent.includes('delivered')) return 'delivered';
+    if (lowerEvent.includes('sent')) return 'sent';
+    
+    return 'unknown';
+}
+
+// ============================================
+// DASHBOARD UPDATE FUNCTIONS
+// ============================================
+
+/**
+ * Update the email statistics dashboard
+ */
+function updateEmailStatsDashboard() {
+    // Update total statistics cards
+    updateTotalStatCards();
+    
+    // Update email types breakdown
+    updateEmailTypesBreakdown();
+    
+    // Update recent activity table
+    updateRecentActivityTable();
+    
+    // Calculate and display weekly change
+    calculateWeeklyChange();
+}
+
+/**
+ * Update total statistics cards
+ */
+function updateTotalStatCards() {
+    const totalSentEl = document.getElementById('statTotalSent');
+    const totalDeliveredEl = document.getElementById('statTotalDelivered');
+    const totalOpenedEl = document.getElementById('statTotalOpened');
+    const totalClickedEl = document.getElementById('statTotalClicked');
+    const totalBouncedEl = document.getElementById('statTotalBounced');
+    
+    if (totalSentEl) totalSentEl.textContent = emailStats.total.sent || 0;
+    if (totalDeliveredEl) totalDeliveredEl.textContent = emailStats.total.delivered || 0;
+    if (totalOpenedEl) totalOpenedEl.textContent = emailStats.total.opened || 0;
+    if (totalClickedEl) totalClickedEl.textContent = emailStats.total.clicked || 0;
+    if (totalBouncedEl) totalBouncedEl.textContent = emailStats.total.bounced || 0;
+    
+    // Calculate and update rates
+    const deliveryRate = emailStats.total.sent > 0 
+        ? ((emailStats.total.delivered / emailStats.total.sent) * 100).toFixed(1)
+        : 0;
+    const openRate = emailStats.total.delivered > 0 
+        ? ((emailStats.total.opened / emailStats.total.delivered) * 100).toFixed(1)
+        : 0;
+    const clickRate = emailStats.total.opened > 0 
+        ? ((emailStats.total.clicked / emailStats.total.opened) * 100).toFixed(1)
+        : 0;
+    const bounceRate = emailStats.total.sent > 0 
+        ? ((emailStats.total.bounced / emailStats.total.sent) * 100).toFixed(1)
+        : 0;
+    
+    const deliveryRateEl = document.getElementById('statDeliveryRate');
+    const openRateEl = document.getElementById('statOpenRate');
+    const clickRateEl = document.getElementById('statClickRate');
+    const bounceRateEl = document.getElementById('statBounceRate');
+    
+    if (deliveryRateEl) deliveryRateEl.textContent = `${deliveryRate}% rate`;
+    if (openRateEl) openRateEl.textContent = `${openRate}% rate`;
+    if (clickRateEl) clickRateEl.textContent = `${clickRate}% rate`;
+    if (bounceRateEl) bounceRateEl.textContent = `${bounceRate}% rate`;
+}
+
+/**
+ * Update email types breakdown section
+ */
+function updateEmailTypesBreakdown() {
+    const container = document.getElementById('emailTypesBreakdown');
+    if (!container) return;
+    
+    container.innerHTML = '';
+    
+    const emailTypeNames = {
+        'welcome': 'Welcome Emails',
+        'premium': 'Premium Thanks',
+        'family': 'Family Welcome',
+        'trial': 'Trial Reminders',
+        'lifetime': 'Lifetime Codes',
+        'admin': 'Admin Notifications',
+        'survey': 'Survey Emails',
+        'refer': 'Referral Emails'
+    };
+    
+    for (const [type, stats] of Object.entries(emailStats.byType || {})) {
+        const openRate = stats.delivered > 0 
+            ? ((stats.opened / stats.delivered) * 100).toFixed(1)
+            : 0;
+        const clickRate = stats.opened > 0 
+            ? ((stats.clicked / stats.opened) * 100).toFixed(1)
+            : 0;
         
+        const card = document.createElement('div');
+        card.style.cssText = 'background: white; border: 2px solid #e0e0e0; border-radius: 12px; padding: 20px; transition: all 0.3s;';
+        card.onmouseover = function() { this.style.borderColor = '#667eea'; this.style.boxShadow = '0 5px 20px rgba(102, 126, 234, 0.2)'; };
+        card.onmouseout = function() { this.style.borderColor = '#e0e0e0'; this.style.boxShadow = 'none'; };
+        
+        card.innerHTML = `
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <div style="font-size: 18px; font-weight: bold; color: #333;">${emailTypeNames[type] || type}</div>
+                <div style="font-size: 24px; font-weight: bold; color: #667eea;">${stats.sent || 0}</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
+                <div style="text-align: center; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                    <div style="font-size: 12px; color: #666; margin-bottom: 5px;">Delivered</div>
+                    <div style="font-size: 20px; font-weight: bold; color: #333;">${stats.delivered || 0}</div>
+                </div>
+                <div style="text-align: center; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                    <div style="font-size: 12px; color: #666; margin-bottom: 5px;">Opened</div>
+                    <div style="font-size: 20px; font-weight: bold; color: #333;">${stats.opened || 0}</div>
+                </div>
+                <div style="text-align: center; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                    <div style="font-size: 12px; color: #666; margin-bottom: 5px;">Open Rate</div>
+                    <div style="font-size: 20px; font-weight: bold; color: #333;">${openRate}%</div>
+                </div>
+                <div style="text-align: center; padding: 10px; background: #f8f9fa; border-radius: 8px;">
+                    <div style="font-size: 12px; color: #666; margin-bottom: 5px;">Click Rate</div>
+                    <div style="font-size: 20px; font-weight: bold; color: #333;">${clickRate}%</div>
+                </div>
+            </div>
+        `;
+        
+        container.appendChild(card);
+    }
+    
+    if (Object.keys(emailStats.byType || {}).length === 0) {
+        container.innerHTML = '<div style="padding: 30px; text-align: center; color: #999;">No email types recorded yet</div>';
+    }
+}
+
+/**
+ * Update recent activity table
+ */
+function updateRecentActivityTable() {
+    const tbody = document.getElementById('recentActivityTableBody');
+    if (!tbody) return;
+    
+    tbody.innerHTML = '';
+    
+    const activities = emailStats.recentActivity || [];
+    const displayActivities = activities.slice(0, 50); // Show last 50
+    
+    if (displayActivities.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="7" style="padding: 30px; text-align: center; color: #999;">No email activity yet</td></tr>';
+        return;
+    }
+    
+    const statusColors = {
+        'sent': '#6c757d',
+        'delivered': '#17a2b8',
+        'opened': '#ffc107',
+        'clicked': '#667eea',
+        'bounced': '#dc3545'
+    };
+    
+    displayActivities.forEach(activity => {
+        const row = document.createElement('tr');
+        row.style.cssText = 'border-bottom: 1px solid #e0e0e0;';
+        row.onmouseover = function() { this.style.background = '#f8f9fa'; };
+        row.onmouseout = function() { this.style.background = 'transparent'; };
+        
+        const date = new Date(activity.timestamp);
+        const formattedDate = date.toLocaleString();
+        
+        row.innerHTML = `
+            <td style="padding: 15px;">${formattedDate}</td>
+            <td style="padding: 15px;">${activity.emailType}</td>
+            <td style="padding: 15px;">${activity.recipient || 'N/A'}</td>
+            <td style="padding: 15px;">${activity.username || 'N/A'}</td>
+            <td style="padding: 15px;">
+                <span style="padding: 6px 12px; background: ${statusColors[activity.status] || '#6c757d'}; color: white; border-radius: 20px; font-size: 12px; font-weight: bold; text-transform: uppercase;">
+                    ${activity.status}
+                </span>
+            </td>
+            <td style="padding: 15px; text-align: center;">${activity.opened ? '✅' : '❌'}</td>
+            <td style="padding: 15px; text-align: center;">${activity.clicked ? '✅' : '❌'}</td>
+        `;
+        
+        tbody.appendChild(row);
+    });
+}
+
+/**
+ * Calculate weekly change in emails sent
+ */
+function calculateWeeklyChange() {
+    const today = new Date();
+    const weekAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+    
+    let weekCount = 0;
+    const activities = emailStats.recentActivity || [];
+    
+    activities.forEach(activity => {
+        const activityDate = new Date(activity.timestamp);
+        if (activityDate >= weekAgo && activity.eventType.includes('sent')) {
+            weekCount++;
+        }
+    });
+    
+    const changeEl = document.getElementById('statTotalSentChange');
+    if (changeEl) {
+        changeEl.textContent = `+${weekCount} this week`;
+    }
+}
+
+// ============================================
+// EXCEL EXPORT FUNCTIONALITY
+// ============================================
+
+/**
+ * Export email statistics to Excel
+ */
+function exportEmailStatsToExcel() {
+    if (typeof XLSX === 'undefined') {
+        alert('Excel export library not loaded. Please refresh the page.');
+        return;
+    }
+    
+    const wb = XLSX.utils.book_new();
+    
+    // Sheet 1: Overall Statistics
+    const overallData = [
+        ['GetVerseVault Email Statistics Report'],
+        ['Building On The Faith Ministry'],
+        ['Generated:', new Date().toLocaleString()],
+        [''],
+        ['Overall Performance Metrics', '', ''],
+        ['Metric', 'Count', 'Percentage'],
+        ['Total Emails Sent', emailStats.total.sent, '100%'],
+        ['Successfully Delivered', emailStats.total.delivered, 
+         emailStats.total.sent > 0 ? ((emailStats.total.delivered / emailStats.total.sent) * 100).toFixed(2) + '%' : '0%'],
+        ['Emails Opened', emailStats.total.opened,
+         emailStats.total.delivered > 0 ? ((emailStats.total.opened / emailStats.total.delivered) * 100).toFixed(2) + '%' : '0%'],
+        ['Links Clicked', emailStats.total.clicked,
+         emailStats.total.opened > 0 ? ((emailStats.total.clicked / emailStats.total.opened) * 100).toFixed(2) + '%' : '0%'],
+        ['Bounced Emails', emailStats.total.bounced,
+         emailStats.total.sent > 0 ? ((emailStats.total.bounced / emailStats.total.sent) * 100).toFixed(2) + '%' : '0%']
+    ];
+    const ws1 = XLSX.utils.aoa_to_sheet(overallData);
+    XLSX.utils.book_append_sheet(wb, ws1, 'Overall Statistics');
+    
+    // Sheet 2: Email Types Breakdown
+    const typesData = [
+        ['Email Type Performance Breakdown'],
+        [''],
+        ['Email Type', 'Sent', 'Delivered', 'Opened', 'Clicked', 'Bounced', 'Delivery Rate', 'Open Rate', 'Click Rate']
+    ];
+    
+    for (const [type, stats] of Object.entries(emailStats.byType || {})) {
+        const deliveryRate = stats.sent > 0 
+            ? ((stats.delivered / stats.sent) * 100).toFixed(2) + '%'
+            : '0%';
+        const openRate = stats.delivered > 0 
+            ? ((stats.opened / stats.delivered) * 100).toFixed(2) + '%'
+            : '0%';
+        const clickRate = stats.opened > 0 
+            ? ((stats.clicked / stats.opened) * 100).toFixed(2) + '%'
+            : '0%';
+            
+        typesData.push([
+            type.charAt(0).toUpperCase() + type.slice(1),
+            stats.sent || 0,
+            stats.delivered || 0,
+            stats.opened || 0,
+            stats.clicked || 0,
+            stats.bounced || 0,
+            deliveryRate,
+            openRate,
+            clickRate
+        ]);
+    }
+    const ws2 = XLSX.utils.aoa_to_sheet(typesData);
+    XLSX.utils.book_append_sheet(wb, ws2, 'Email Types');
+    
+    // Sheet 3: Recent Activity
+    const activityData = [
+        ['Recent Email Activity Log'],
+        [''],
+        ['Timestamp', 'Email Type', 'Recipient Email', 'Username', 'Status', 'Opened', 'Clicked', 'Bounced']
+    ];
+    
+    (emailStats.recentActivity || []).forEach(activity => {
+        activityData.push([
+            new Date(activity.timestamp).toLocaleString(),
+            activity.emailType,
+            activity.recipient || 'N/A',
+            activity.username || 'N/A',
+            activity.status,
+            activity.opened ? 'Yes' : 'No',
+            activity.clicked ? 'Yes' : 'No',
+            activity.bounced ? 'Yes' : 'No'
+        ]);
+    });
+    const ws3 = XLSX.utils.aoa_to_sheet(activityData);
+    XLSX.utils.book_append_sheet(wb, ws3, 'Recent Activity');
+    
+    // Sheet 4: Daily Statistics
+    const dailyData = [
+        ['Daily Email Statistics'],
+        [''],
+        ['Date', 'Sent', 'Delivered', 'Opened', 'Clicked', 'Bounced', 'Delivery Rate', 'Open Rate']
+    ];
+    
+    // Sort dates in descending order
+    const sortedDates = Object.keys(emailStats.dailyStats || {}).sort().reverse();
+    
+    sortedDates.forEach(date => {
+        const stats = emailStats.dailyStats[date];
+        const deliveryRate = stats.sent > 0 
+            ? ((stats.delivered / stats.sent) * 100).toFixed(2) + '%'
+            : '0%';
+        const openRate = stats.delivered > 0 
+            ? ((stats.opened / stats.delivered) * 100).toFixed(2) + '%'
+            : '0%';
+            
+        dailyData.push([
+            date,
+            stats.sent || 0,
+            stats.delivered || 0,
+            stats.opened || 0,
+            stats.clicked || 0,
+            stats.bounced || 0,
+            deliveryRate,
+            openRate
+        ]);
+    });
+    const ws4 = XLSX.utils.aoa_to_sheet(dailyData);
+    XLSX.utils.book_append_sheet(wb, ws4, 'Daily Statistics');
+    
+    // Generate filename with current date
+    const filename = `GetVerseVault_Email_Statistics_${new Date().toISOString().split('T')[0]}.xlsx`;
+    
+    // Write and download file
+    XLSX.writeFile(wb, filename);
+    
+    // Show success notification
+    if (window.showNotification) {
+        showNotification('Email statistics exported to Excel successfully!', 'success');
+    } else {
+        alert('Email statistics exported to Excel successfully!');
+    }
+    
+    console.log('📊 Excel export completed:', filename);
+}
+
+// ============================================
+// NAVIGATION FUNCTIONS
+// ============================================
+
+/**
+ * Show email statistics dashboard page
+ */
+function showEmailStatsDashboard() {
+    if (window.hideAllPages) {
+        hideAllPages();
+    }
+    
+    const emailStatsPage = document.getElementById('emailStatsPage');
+    if (emailStatsPage) {
+        emailStatsPage.classList.remove('hidden');
+        loadEmailStats();
+        updateEmailStatsDashboard();
+    } else {
+        console.error('❌ Email stats page not found');
+    }
+}
+
+/**
+ * Navigate back to admin panel
+ */
+function navigateToAdminPanel() {
+    if (window.hideAllPages) {
+        hideAllPages();
+    }
+    
+    const adminPage = document.getElementById('adminPage');
+    if (adminPage) {
+        adminPage.classList.remove('hidden');
+    }
+}
+
+// ============================================
+// INITIALIZATION
+// ============================================
+
+/**
+ * Initialize email statistics system
+ */
+function initializeEmailStats() {
+    console.log('📧 Initializing Email Statistics System...');
+    
+    // Load existing statistics from Firebase
+    loadEmailStats();
+    
+    console.log('✅ Email Statistics System initialized');
+}
+
+// Auto-initialize when script loads (if Firebase is ready)
+if (typeof database !== 'undefined') {
+    initializeEmailStats();
+} else {
+    // Wait for Firebase to initialize
+    window.addEventListener('load', () => {
+        if (typeof database !== 'undefined') {
+            initializeEmailStats();
+        } else {
+            console.error('❌ Firebase database not available for email statistics');
+        }
+    });
+}
+
+// ============================================
+// EXPORT FOR EXTERNAL USE
+// ============================================
+
+// Make functions available globally
+window.trackEmailEvent = trackEmailEvent;
+window.loadEmailStats = loadEmailStats;
+window.saveEmailStats = saveEmailStats;
+window.updateEmailStatsDashboard = updateEmailStatsDashboard;
+window.exportEmailStatsToExcel = exportEmailStatsToExcel;
+window.showEmailStatsDashboard = showEmailStatsDashboard;
+
+console.log('📧 Email Statistics Tracking System loaded successfully!');
+
         // ===================================
         // EMAIL TRACKING & AUTOMATION SYSTEM
         // ===================================
@@ -5911,7 +6700,7 @@ Elder Robert Chalk Jr.
             document.getElementById('adminDirectTab').classList.add('hidden');
             document.getElementById('adminEmailsTab').classList.add('hidden');
             document.getElementById('adminActivityTab').classList.add('hidden');
-            
+            document.getElementById('adminEmailStatsTab').classList.add('hidden');            
             // Remove active class from all buttons
             document.querySelectorAll('.admin-tab').forEach(btn => btn.classList.remove('active'));
             
@@ -5938,6 +6727,10 @@ Elder Robert Chalk Jr.
                 document.querySelectorAll('.admin-tab')[5].classList.add('active');
                 loadActivityDashboard();
             }
+            } else if (tab === 'emailStats') {
+                document.getElementById('adminEmailStatsTab').classList.remove('hidden');
+                document.querySelectorAll('.admin-tab')[6].classList.add('active');
+                loadEmailStatistics();
         }
         
         function loadActivityDashboard() {
@@ -7779,6 +8572,7 @@ window.addEventListener('DOMContentLoaded', function() {
 </body>
 
 </html>
+
 
 
 
